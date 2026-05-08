@@ -3,117 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Михаил Вещев | Sound Production</title>
+    <title>Михаил Вещев | Sound Portfolio</title>
     <style>
         :root {
             --bg: #ffffff;
             --text: #000000;
             --accent: #e60000;
+            --gray: #f4f4f4;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.1;
-            overflow-x: hidden;
+            line-height: 1.4;
         }
+
+        /* Навигация */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 5vw;
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.9);
+            z-index: 100;
+            border-bottom: 2px solid #000;
+        }
+        nav a { text-decoration: none; color: #000; font-weight: 900; text-transform: uppercase; font-size: 14px; margin-left: 20px; }
+
+        /* Шапка */
         .hero {
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 5vw;
+            align-items: center;
+            padding: 0 5vw;
             position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid #000;
         }
-        /* Тот самый авангардный стиль */
         .photo-bg {
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 50vw;
-            height: 100vh;
+            top: 0; right: 0;
+            width: 50vw; height: 100%;
             background: url('DSC07225.jpg') center/cover no-repeat;
             filter: grayscale(1) contrast(1.2);
             z-index: -1;
-            opacity: 0.8;
-            mask-image: linear-gradient(to left, black, transparent);
-            -webkit-mask-image: linear-gradient(to left, black, transparent);
+            mask-image: linear-gradient(to left, black 60%, transparent);
+            -webkit-mask-image: linear-gradient(to left, black 60%, transparent);
         }
-        .red-stripe {
-            position: absolute;
-            background: var(--accent);
-            width: 150vw;
-            height: 8vh;
-            top: 40%;
-            left: -10vw;
-            transform: rotate(-5deg);
-            z-index: 0;
+        .hero-text h1 { font-size: 8vw; line-height: 0.8; text-transform: uppercase; letter-spacing: -3px; }
+        .hero-text p { font-size: 1.5vw; font-weight: 700; margin-top: 20px; text-transform: uppercase; background: #000; color: #fff; display: inline-block; padding: 5px 15px; }
+
+        /* Секции */
+        section { padding: 100px 5vw; border-bottom: 1px solid #eee; }
+        h2 { font-size: 40px; text-transform: uppercase; font-weight: 900; margin-bottom: 50px; position: relative; display: inline-block; }
+        h2::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 8px; background: var(--accent); z-index: -1; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .card { border: 3px solid #000; padding: 30px; transition: 0.3s; }
+        .card:hover { background: var(--accent); color: #fff; transform: translateY(-5px); }
+        .card h3 { text-transform: uppercase; margin-bottom: 15px; font-size: 24px; }
+        .card ul { list-style: square; padding-left: 20px; }
+
+        /* О себе / Образование */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+        .education { background: var(--gray); padding: 40px; border-left: 10px solid var(--accent); }
+
+        footer { padding: 50px 5vw; background: #000; color: #fff; text-align: center; }
+        .cta-btn { 
+            display: inline-block; background: var(--accent); color: #fff; 
+            padding: 20px 40px; text-decoration: none; font-weight: 900; 
+            text-transform: uppercase; margin-top: 30px; font-size: 20px;
         }
-        h1 {
-            font-size: 12vw;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -0.5vw;
-            z-index: 1;
-            line-height: 0.85;
-        }
-        .subtitle {
-            font-size: 1.5vw;
-            font-weight: 700;
-            margin-top: 2rem;
-            text-transform: uppercase;
-            max-width: 40vw;
-            z-index: 1;
-        }
-        .slogan {
-            background: #000;
-            color: #fff;
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 2.5vw;
-            font-weight: 900;
-            margin-top: 3rem;
-            text-transform: uppercase;
-            z-index: 1;
-        }
-        .contact-btn {
-            margin-top: 4rem;
-            display: inline-block;
-            border: 5px solid #000;
-            padding: 1.5rem 3rem;
-            text-decoration: none;
-            color: #000;
-            font-weight: 900;
-            text-transform: uppercase;
-            transition: 0.3s;
-            z-index: 1;
-        }
-        .contact-btn:hover {
-            background: #000;
-            color: #fff;
-        }
+
         @media (max-width: 768px) {
-            h1 { font-size: 18vw; }
-            .photo-bg { width: 100vw; opacity: 0.3; }
-            .subtitle { font-size: 4vw; max-width: 80vw; }
-            .slogan { font-size: 6vw; }
+            .hero-text h1 { font-size: 15vw; }
+            .about-grid { grid-template-columns: 1fr; }
+            .photo-bg { width: 100vw; opacity: 0.2; }
         }
     </style>
 </head>
 <body>
-    <div class="photo-bg"></div>
-    <div class="red-stripe"></div>
-    
-    <section class="hero">
-        <h1>МИХАИЛ<br>ВЕЩЕВ</h1>
-        <p class="subtitle">Sound Design / Post-Production / Music Production / Notation / Cinematic Music</p>
-        
-        <div>
-            <p class="slogan">АРАНЖИРОВКА. ЗВУК.<br>ДОРОГО.</p>
-        </div>
 
-        <a href="https://t.me/mishocheks" class="contact-btn">ОБСУДИТЬ ПРОЕКТ</a>
-    </section>
+<nav>
+    <div style="font-weight: 900;">MV.SOUND</div>
+    <div>
+        <a href="#about">Обо мне</a>
+        <a href="#services">Услуги</a>
+        <a href="#contact">Контакт</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="photo-bg"></div>
+    <div class="hero-text">
+        <h1>МИХАИЛ<br>ВЕЩЕВ</h1>
+        <p>Sound Design & Music Production</p>
+        <br>
+        <a href="#contact" class="cta-btn">Работать со мной</a>
+    </div>
+</section>
+
+<section id="about">
+    <h2>Опыт и Образование</h2>
+    <div class="about-grid">
+        <div class="education">
+            <h3>Гнесинский колледж</h3>
+            <p>Специальность: Музыкальное звукооператорское мастерство.</p>
+            <br>
+            <p>Ученик <b>Андрея Зубца</b> (эпические аранжировки, кино). База от топ-преподавателей: Сергей Алексеев (VI SOUND) и Александр Волков (Радио «Орфей»).</p>
+        </div>
+        <div>
+            <p><b>Кисловодская филармония:</b> Запись и сведение академических коллективов.</p>
+            <br>
+            <p><b>Радио «Орфей»:</b> Студийная работа во «Дворце на Яузе».</p>
+            <br>
+            <p>Специализируюсь на создании глубокого коммерческого пространства и ювелирном монтаже аудио.</p>
+        </div>
+    </div>
+</section>
+
+<section id="services">
+    <h2>Что я делаю</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Production</h3>
+            <ul>
+                <li>Аранжировка любой сложности</li>
+                <li>Оркестровая и гибридная музыка</li>
+                <li>Сведение и Мастеринг</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Post-Production</h3>
+            <ul>
+                <li>Звук для Reels / Shorts / TikTok</li>
+                <li>ADR и чистка диалогов</li>
+                <li>Sound Design для кино</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Жанры</h3>
+            <ul>
+                <li>Cinematic / Epic</li>
+                <li>Pop / Hip-Hop</li>
+                <li>D&B / UK Garage / Breakcore</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="contact" style="text-align: center; background: var(--gray);">
+    <h2>Есть проект?</h2>
+    <p>Создаю звук, который работает на ваш имидж. Качественно. Дорого.</p>
+    <a href="https://t.me/mishocheks" class="cta-btn" target="_blank">Написать в Telegram</a>
+</section>
+
+<footer>
+    <p>© 2026 МИХАИЛ ВЕЩЕВ. SOUND ENGINEER & PRODUCER</p>
+</footer>
+
 </body>
 </html>
