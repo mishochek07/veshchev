@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Михаил Вещев | Sound Production</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #000000;
+            --accent: #e60000;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.1;
+            overflow-x: hidden;
+        }
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5vw;
+            position: relative;
+        }
+        /* Тот самый авангардный стиль */
+        .photo-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50vw;
+            height: 100vh;
+            background: url('DSC07225.jpg') center/cover no-repeat;
+            filter: grayscale(1) contrast(1.2);
+            z-index: -1;
+            opacity: 0.8;
+            mask-image: linear-gradient(to left, black, transparent);
+            -webkit-mask-image: linear-gradient(to left, black, transparent);
+        }
+        .red-stripe {
+            position: absolute;
+            background: var(--accent);
+            width: 150vw;
+            height: 8vh;
+            top: 40%;
+            left: -10vw;
+            transform: rotate(-5deg);
+            z-index: 0;
+        }
+        h1 {
+            font-size: 12vw;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5vw;
+            z-index: 1;
+            line-height: 0.85;
+        }
+        .subtitle {
+            font-size: 1.5vw;
+            font-weight: 700;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            max-width: 40vw;
+            z-index: 1;
+        }
+        .slogan {
+            background: #000;
+            color: #fff;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 2.5vw;
+            font-weight: 900;
+            margin-top: 3rem;
+            text-transform: uppercase;
+            z-index: 1;
+        }
+        .contact-btn {
+            margin-top: 4rem;
+            display: inline-block;
+            border: 5px solid #000;
+            padding: 1.5rem 3rem;
+            text-decoration: none;
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: 0.3s;
+            z-index: 1;
+        }
+        .contact-btn:hover {
+            background: #000;
+            color: #fff;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 18vw; }
+            .photo-bg { width: 100vw; opacity: 0.3; }
+            .subtitle { font-size: 4vw; max-width: 80vw; }
+            .slogan { font-size: 6vw; }
+        }
+    </style>
+</head>
+<body>
+    <div class="photo-bg"></div>
+    <div class="red-stripe"></div>
+    
+    <section class="hero">
+        <h1>МИХАИЛ<br>ВЕЩЕВ</h1>
+        <p class="subtitle">Sound Design / Post-Production / Music Production / Notation / Cinematic Music</p>
+        
+        <div>
+            <p class="slogan">АРАНЖИРОВКА. ЗВУК.<br>ДОРОГО.</p>
+        </div>
+
+        <a href="https://t.me/твой_ник" class="contact-btn">ОБСУДИТЬ ПРОЕКТ</a>
+    </section>
+</body>
+</html>
