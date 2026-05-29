@@ -53,25 +53,41 @@ body {
 
   overflow-x: hidden;
 
-  filter: grayscale(1) saturate(0.35) contrast(1.05);
+  body::after {
+
+  content: '';
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+  z-index: 999;
+
+  backdrop-filter:
+    grayscale(1)
+    saturate(0.45)
+    brightness(0.9);
+
+  opacity: 1;
 
   transition:
-    filter 1.4s ease,
-    background 1.4s ease;
+    opacity 1.4s ease,
+    backdrop-filter 1.4s ease;
 
 }
 
-  body.music-active {
+}
 
-  filter:
+body.music-active::after {
+
+  opacity: 0;
+
+  backdrop-filter:
     grayscale(0)
-    saturate(1.2)
-    contrast(1.08);
+    saturate(1.4)
+    brightness(1.05);
 
-  background:
-    radial-gradient(circle at top left, rgba(110,140,255,0.12), transparent 35%),
-    radial-gradient(circle at bottom right, rgba(255,120,180,0.10), transparent 35%),
-    #05070b;
+}
 
 }
 
@@ -234,13 +250,14 @@ nav a:hover {
 
   opacity: 1;
 
-  transform: scale(1.2);
+  transform: scale(1.35);
 
   background:
     radial-gradient(circle,
-    rgba(110,140,255,0.25),
-    rgba(255,120,180,0.18),
-    transparent 65%);
+    rgba(120,140,255,0.45),
+    rgba(255,0,140,0.30),
+    rgba(0,255,220,0.22),
+    transparent 70%);
 
 }
   
@@ -983,6 +1000,31 @@ footer {
 
 }
 
+  body.music-active .card {
+
+  border-color: rgba(120,140,255,0.25);
+
+  box-shadow:
+    0 0 60px rgba(120,140,255,0.14),
+    0 0 120px rgba(255,0,140,0.08);
+
+}
+
+body.music-active .hero-photo {
+
+  box-shadow:
+    0 0 120px rgba(120,140,255,0.18),
+    0 0 220px rgba(255,0,140,0.12);
+
+}
+
+body.music-active .section-title {
+
+  text-shadow:
+    0 0 24px rgba(120,140,255,0.22);
+
+}
+  
 </style>
 </head>
 <body>
