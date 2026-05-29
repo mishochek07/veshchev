@@ -1673,21 +1673,17 @@ const observer = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.fade').forEach(el => observer.observe(el));
 
-/* ===== SOUNDS ===== */
+/* ===== AUDIO ===== */
 
-const hoverSound = document.getElementById('hoverSound');
-const resultSound = document.getElementById('resultSound');
+const hoverSound = new Audio('hover.mp3');
+const resultSound = new Audio('result.mp3');
 
-function playHover(){
+hoverSound.volume = 0.12;
+resultSound.volume = 0.22;
 
-  hoverSound.currentTime = 0;
-  hoverSound.volume = 0.12;
+/* ===== CLICK SOUNDS ===== */
 
-  hoverSound.play();
-
-}
-
-document.addEventListener('mouseover', e => {
+document.addEventListener('click', e => {
 
   if(
     e.target.closest('.project-card') ||
@@ -1695,7 +1691,10 @@ document.addEventListener('mouseover', e => {
     e.target.closest('.btn') ||
     e.target.closest('.currency-switcher button')
   ){
-    playHover();
+
+    hoverSound.currentTime = 0;
+    hoverSound.play();
+
   }
 
 });
@@ -1721,16 +1720,12 @@ const symbols = {
 
 function setCurrency(currency){
 
-  playHover();
-
   currentCurrency = currency;
   updatePrice();
 
 }
 
 function nextStep(step, basePrice = null){
-
-  playHover();
 
   if(basePrice !== null){
     currentPrice = basePrice;
@@ -1766,8 +1761,6 @@ function finishQuiz(multiplier){
   /* ===== RESULT SOUND ===== */
 
   resultSound.currentTime = 0;
-  resultSound.volume = 0.22;
-
   resultSound.play();
 
   const texts = [
