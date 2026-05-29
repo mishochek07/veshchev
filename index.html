@@ -868,6 +868,17 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+  .project-card:active, .options button:active, .btn:active {
+  transform: scale(0.97) translateY(0);
+  transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+  nav {
+  position: fixed; /* Чтобы навигация всегда была под рукой */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease;
+}
+.nav-hidden {
+  transform: translateY(-100%);
+}
   
 </style>
 </head>
@@ -1284,6 +1295,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('pause', handleStop, true);
   document.addEventListener('ended', handleStop, true);
+});
+  
+  let lastScrollY = window.scrollY;
+const navbar = document.querySelector('nav');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > lastScrollY && window.scrollY > 100) {
+    navbar.classList.add('nav-hidden');
+  } else {
+    navbar.classList.remove('nav-hidden');
+  }
+  lastScrollY = window.scrollY;
 });
   
 </script>
