@@ -55,6 +55,7 @@ background:
   filter 2s ease;
   position: relative;
 }
+  isolation:isolate;
 
 }
 
@@ -71,14 +72,14 @@ body::before {
 }
   
 nav {
-  position: fixed;
+  position:relative;
   top: 0;
   width: 100%;
   padding: 24px 6vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000;
+  z-index:10;
   backdrop-filter: blur(16px);
   background: rgba(5,7,11,0.55);
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -226,6 +227,8 @@ nav a:hover {
   
 section {
   padding: 120px 6vw;
+  position:relative;
+z-index:2;
 }
 
 .section-title {
@@ -1039,7 +1042,7 @@ body::after{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:-2;
+  z-index:0;
 
   background:
     radial-gradient(circle at 20% 30%, rgba(255,210,140,0.18), transparent 35%),
@@ -1052,7 +1055,7 @@ body::after{
     opacity 2.8s ease,
     filter 2.8s ease;
 
-  filter:blur(60px);
+  mix-blend-mode:soft-light;
 }
 
 body.music-active::after{
