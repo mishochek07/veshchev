@@ -1304,33 +1304,76 @@ url('aggressive.jpg') center/cover;
 
 </div>
 
-    <div class="quiz-step" id="step3">
+   <div class="quiz-step" id="step3">
 
-      <div class="question-label">
-        [ 03 / DELIVERY MODE ]
-      </div>
+<h3>Насколько всё срочно?</h3>
 
-      <h3>
-        Насколько срочно?
-      </h3>
+<div class="options cards-mode">
 
-      <div class="options">
+<button class="project-card"
+onclick="finishQuiz(1)"
+style="
+background:
+linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
+url('normal.jpg') center/cover;
+">
 
-        <button onclick="finishQuiz(1)">
-          💤 Не очень срочно
-        </button>
+<div class="project-card-content">
+<h4>Standard</h4>
+<p>careful / cinematic / detailed</p>
+</div>
 
-        <button onclick="finishQuiz(1.2)">
-          ⏱️ Нужно быстро
-        </button>
+</button>
 
-        <button onclick="finishQuiz(1.5)">
-          🔥 DEADLINE MODE
-        </button>
+<button class="project-card"
+onclick="finishQuiz(1.25)"
+style="
+background:
+linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
+url('fast.jpg') center/cover;
+">
 
-      </div>
+<div class="project-card-content">
+<h4>Fast</h4>
+<p>tight deadline / intense workflow</p>
+</div>
 
-    </div>
+</button>
+
+<button class="project-card"
+onclick="finishQuiz(1.55)"
+style="
+background:
+linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
+url('urgent.jpg') center/cover;
+">
+
+<div class="project-card-content">
+<h4>URGENT</h4>
+<p>sleep is optional / export at 4am</p>
+</div>
+
+</button>
+
+</div>
+
+<div style="
+margin-top:28px;
+padding:24px;
+border-radius:24px;
+background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.08);
+color:rgba(255,255,255,0.72);
+line-height:1.8;
+">
+
+⚡ Fast turnaround available.<br>
+🌙 Night sessions supported.<br>
+🎧 Cinematic polish included by default.
+
+</div>
+
+</div>
 
     <div class="result" id="result">
 
