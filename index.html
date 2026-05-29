@@ -706,12 +706,33 @@ audio {
   cursor:pointer;
 }
 
-.quiz-step {
-  display:none;
+.quiz-step{
+  position:absolute;
+  inset:0;
+
+  opacity:0;
+
+  transform:
+    translateY(40px)
+    scale(.98);
+
+  pointer-events:none;
+
+  transition:
+    opacity .9s cubic-bezier(.19,1,.22,1),
+    transform .9s cubic-bezier(.19,1,.22,1);
 }
 
-.quiz-step.active {
-  display:block;
+.quiz-step.active{
+  position:relative;
+
+  opacity:1;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  pointer-events:auto;
 }
 
 .result.active {
@@ -1069,6 +1090,7 @@ body.music-active::after{
   margin-top: 60px;
   position: relative;
   overflow: visible;
+  min-height: 760px;
 }
 
 .float-icon{
