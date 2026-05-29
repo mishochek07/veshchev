@@ -836,26 +836,31 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   transform: translateY(10px);
 }
 
-/* УМНЫЙ АТМОСФЕРНЫЙ ОВЕРЛЕЙ ДЛЯ МУЗЫКИ */
+  /* ИСПРАВЛЕННЫЙ ВАРИАНТ С ПЛАВНЫМ ЗАТУХАНИЕМ БЕЗ ПРЫЖКОВ */
 .music-ambient-glow {
   position: fixed;
   inset: 0;
-  /* Дорогой спектр оттенков: фиолетовый, глубокий синий, индиго, тёмный изумруд */
   background: linear-gradient(135deg, #2b1c47, #0f2342, #3a1c31, #122b28, #1a162b);
   background-size: 400% 400%;
-  z-index: 99999; /* Кладись поверх всего */
-  pointer-events: none; /* Пропускай клики сквозь себя */
-  opacity: 0; /* Изначально выключен */
-  /* Режим смешивания, который сохранит твою вёрстку, но окрасит тёмные участки и glow-эффекты */
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
   mix-blend-mode: screen; 
+  
+  /* ВАЖНО: Анимация теперь привязана СЮДА на постоянку, чтобы она не сбрасывалась */
+  animation: dynamicRainbow 20s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  
+  /* Но когда музыки нет — мы её СТАВИМ НА ПАУЗУ, чтобы не жрала ресурсы процессора */
+  animation-play-state: paused;
+  
   transition: opacity 2.5s ease-in-out;
   will-change: opacity, background-position;
 }
 
-/* Когда музыка играет, плавно зажигаем и запускаем перелив */
+/* Когда музыка играет — просто плавно зажигаем слой и запускаем ход анимации */
 .music-ambient-glow.active {
-  opacity: 0.65; /* Яркость перелива (можно сделать 0.8, если захочешь сочнее) */
-  animation: dynamicRainbow 20s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  opacity: 0.65;
+  animation-play-state: running; /* Анимация пошла дальше с того же места */
 }
 
 @keyframes dynamicRainbow {
