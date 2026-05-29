@@ -879,6 +879,128 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 .nav-hidden {
   transform: translateY(-100%);
 }
+
+  .custom-player {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 14px 18px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.custom-player:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 225, 178, 0.15);
+}
+
+.play-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--glow);
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  flex-shrink: 0;
+}
+
+.play-btn:hover {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 8px var(--glow));
+}
+
+.play-icon {
+  font-size: 14px;
+  margin-left: 2px; /* Сдвиг для идеальной центровки треугольника */
+}
+
+.player-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.track-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.progress {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--glow), #ffffff);
+  transition: width 0.1s linear;
+}
+
+/* Скрываем нативный плеер */
+.audio-element {
+  display: none;
+}
+
+  @media (pointer: fine) {
+  /* Скрываем дефолтный курсор у всей страницы */
+  body, a, button, .project-card, .progress-bar {
+    cursor: none !important;
+  }
+
+  .custom-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--glow);
+    position: fixed;
+    pointer-events: none;
+    z-index: 999999;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease;
+  }
+
+  .custom-cursor-outline {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 225, 178, 0.4);
+    position: fixed;
+    pointer-events: none;
+    z-index: 999998;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    /* Плавное изменение размеров при ховере */
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                background-color 0.3s ease, 
+                border-color 0.3s ease;
+    will-change: top, left;
+  }
+
+  /* Состояние при наведении на интерактивные объекты */
+  .custom-cursor-outline.hovered {
+    width: 55px;
+    height: 55px;
+    background-color: rgba(255, 225, 178, 0.06);
+    border-color: var(--glow);
+    box-shadow: 0 0 15px rgba(255, 220, 140, 0.15);
+  }
+}
   
 </style>
 </head>
@@ -917,33 +1039,156 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   <h2 class="section-title fade">Selected<br>Works</h2>
   <div class="grid works-grid">
     <div class="card fade">
-      <h3>Электронная музыка</h3>
-      <p>Breakcore / Jungle / UK Garage / Experimental</p>
-      <audio controls><source src="mishochekAtavism.mp3"></audio>
-      <audio controls><source src="mishochekReminiscence.mp3"></audio>
-      <audio controls><source src="mishochekAorta.mp3"></audio>
+  <h3>Электронная музыка</h3>
+  <p style="margin-bottom: 20px;">Breakcore / Jungle / UK Garage / Experimental</p>
+  
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track1', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Atavism</span>
+      <div class="progress-bar"><div class="progress" id="progress-track1"></div></div>
     </div>
-    <div class="card fade">
-      <h3>Кинематографичная музыка</h3>
-      <p>Trailer music / orchestral scoring / ambient atmosphere</p>
-      <audio controls><source src="VESHCHEV AVENGERS.mp3"></audio>
-      <audio controls><source src="VESHCHEV DEBUSSY.mp3"></audio>
-      <audio controls><source src="2.0.mp3"></audio>
+    <audio id="track1" class="audio-element"><source src="mishochekAtavism.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track2', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Reminiscence</span>
+      <div class="progress-bar"><div class="progress" id="progress-track2"></div></div>
     </div>
-    <div class="card fade">
-      <h3>Живые записи</h3>
-      <p>Classical ensembles / orchestral sessions / chamber music</p>
-      <audio controls><source src="STARKOV MIX 150426.mp3"></audio>
-      <audio controls><source src="Fis-moll.mp3"></audio>
-      <audio controls><source src="VESHCHEV SAINT-SAENS.mp3"></audio>
+    <audio id="track2" class="audio-element"><source src="mishochekReminiscence.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track3', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Aorta</span>
+      <div class="progress-bar"><div class="progress" id="progress-track3"></div></div>
     </div>
-    <div class="card fade">
-      <h3>Коммерческая музыка</h3>
-      <p>Pop / vocal / commercial arrangements</p>
-      <audio controls><source src="VESHCHEV CRY.mp3"></audio>
-      <audio controls><source src="VESHCHEV NO TIME TO DIE.mp3"></audio>
-      <audio controls><source src="VESHCHEV OCEAN EYES.mp3"></audio>
+    <audio id="track3" class="audio-element"><source src="mishochekAorta.mp3"></audio>
+  </div>
+</div>
+
+<div class="card fade">
+  <h3>Кинематографичная музыка</h3>
+  <p style="margin-bottom: 20px;">Trailer music / scoring / ambient</p>
+  
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track4', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Avengers Remix</span>
+      <div class="progress-bar"><div class="progress" id="progress-track4"></div></div>
     </div>
+    <audio id="track4" class="audio-element"><source src="VESHCHEV AVENGERS.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track5', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Debussy Atmosphere</span>
+      <div class="progress-bar"><div class="progress" id="progress-track5"></div></div>
+    </div>
+    <audio id="track5" class="audio-element"><source src="VESHCHEV DEBUSSY.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track6', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Project 2.0</span>
+      <div class="progress-bar"><div class="progress" id="progress-track6"></div></div>
+    </div>
+    <audio id="track6" class="audio-element"><source src="2.0.mp3"></audio>
+  </div>
+</div>
+
+<div class="card fade">
+  <h3>Живые записи</h3>
+  <p style="margin-bottom: 20px;">Classical ensembles / orchestral sessions</p>
+  
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track7', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Starkov Mix</span>
+      <div class="progress-bar"><div class="progress" id="progress-track7"></div></div>
+    </div>
+    <audio id="track7" class="audio-element"><source src="STARKOV MIX 150426.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track8', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Fis-moll Session</span>
+      <div class="progress-bar"><div class="progress" id="progress-track8"></div></div>
+    </div>
+    <audio id="track8" class="audio-element"><source src="Fis-moll.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track9', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Saint-Saëns</span>
+      <div class="progress-bar"><div class="progress" id="progress-track9"></div></div>
+    </div>
+    <audio id="track9" class="audio-element"><source src="VESHCHEV SAINT-SAENS.mp3"></audio>
+  </div>
+</div>
+
+<div class="card fade">
+  <h3>Коммерческая музыка</h3>
+  <p style="margin-bottom: 20px;">Pop / vocal / arrangements</p>
+  
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track10', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Cry</span>
+      <div class="progress-bar"><div class="progress" id="progress-track10"></div></div>
+    </div>
+    <audio id="track10" class="audio-element"><source src="VESHCHEV CRY.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track11', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">No Time To Die</span>
+      <div class="progress-bar"><div class="progress" id="progress-track11"></div></div>
+    </div>
+    <audio id="track11" class="audio-element"><source src="VESHCHEV NO TIME TO DIE.mp3"></audio>
+  </div>
+
+  <div class="custom-player">
+    <button class="play-btn" onclick="toggleTrack('track12', this)">
+      <span class="play-icon">▶</span>
+    </button>
+    <div class="player-info">
+      <span class="track-title">Ocean Eyes</span>
+      <div class="progress-bar"><div class="progress" id="progress-track12"></div></div>
+    </div>
+    <audio id="track12" class="audio-element"><source src="VESHCHEV OCEAN EYES.mp3"></audio>
+  </div>
+</div>
     <div class="card promo-card premium-card fade">
       <h3>Premium<br>Audio Production</h3>
       <p>Работа с глубиной, пространством и архитектурой звука.</p>
@@ -1308,8 +1553,106 @@ window.addEventListener('scroll', () => {
   }
   lastScrollY = window.scrollY;
 });
+
+let currentActiveAudio = null;
+let currentActiveButton = null;
+
+function toggleTrack(audioId, btn) {
+  const audio = document.getElementById(audioId);
+  const icon = btn.querySelector('.play-icon');
+
+  // Если кликнули на уже играющий трек — ставим на паузу
+  if (currentActiveAudio === audio) {
+    if (audio.paused) {
+      audio.play().catch(()=>{});
+      icon.innerText = '⏸';
+    } else {
+      audio.pause();
+      icon.innerText = '▶';
+    }
+    return;
+  }
+
+  // Если играет другой трек — выключаем его
+  if (currentActiveAudio) {
+    currentActiveAudio.pause();
+    if (currentActiveButton) {
+      currentActiveButton.querySelector('.play-icon').innerText = '▶';
+    }
+  }
+
+  // Включаем новый трек
+  audio.play().catch(()=>{});
+  icon.innerText = '⏸';
+  
+  currentActiveAudio = audio;
+  currentActiveButton = btn;
+
+  // Навешиваем обновление прогресс-бара, если еще не навешено
+  if (!audio.dataset.tracked) {
+    audio.addEventListener('timeupdate', () => {
+      const progress = document.getElementById(`progress-${audioId}`);
+      if (progress && audio.duration) {
+        const percentage = (audio.currentTime / audio.duration) * 100;
+        progress.style.width = percentage + '%';
+      }
+    });
+
+    // Когда трек закончился — возвращаем иконку «Play»
+    audio.addEventListener('ended', () => {
+      icon.innerText = '▶';
+      document.getElementById(`progress-${audioId}`).style.width = '0%';
+      if (currentActiveAudio === audio) {
+        currentActiveAudio = null;
+        currentActiveButton = null;
+      }
+    });
+    
+    audio.dataset.tracked = "true";
+  }
+}
+
+const dot = document.querySelector('.custom-cursor-dot');
+const outline = document.querySelector('.custom-cursor-outline');
+
+if (dot && outline) {
+  let mouseX = 0, mouseY = 0; // Координаты мыши
+  let outlineX = 0, outlineY = 0; // Координаты внешнего круга
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Точка следует за мышью мгновенно
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
+  });
+
+  // Функция плавного догона (анимационный цикл)
+  function animateCursor() {
+    // Формула: текущая позиция + (цель - текущая позиция) * скорость догона (0.15)
+    outlineX += (mouseX - outlineX) * 0.15;
+    outlineY += (mouseY - outlineY) * 0.15;
+
+    outline.style.left = outlineX + 'px';
+    outline.style.top = outlineY + 'px';
+
+    requestAnimationFrame(animateCursor);
+  }
+  requestAnimationFrame(animateCursor);
+
+  // Навешиваем события увеличения на все ссылки, кнопки и карточки
+  const hoverTargets = document.querySelectorAll('a, button, .project-card, .progress-bar, audio');
+  
+  hoverTargets.forEach(target => {
+    target.addEventListener('mouseenter', () => outline.classList.add('hovered'));
+    target.addEventListener('mouseleave', () => outline.classList.remove('hovered'));
+  });
+}
   
 </script>
 <div class="music-ambient-glow" id="ambientGlow"></div>
+  <div class="custom-cursor-dot"></div>
+<div class="custom-cursor-outline"></div>
 </body>
 </html>
