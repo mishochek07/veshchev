@@ -647,7 +647,6 @@ audio {
 }
 
 .result {
-  margin-top: 0;
   padding: 36px;
   border-radius: 28px;
   background: rgba(255,255,255,0.04);
@@ -706,6 +705,26 @@ audio {
   padding:12px 18px;
   border-radius:999px;
   cursor:pointer;
+
+  transition:
+    background .45s ease,
+    border-color .45s ease,
+    transform .45s ease,
+    box-shadow .45s ease;
+
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.currency-switcher button:hover{
+
+  background:rgba(255,255,255,0.09);
+
+  border-color:rgba(255,240,220,0.10);
+
+  box-shadow:
+    0 0 18px rgba(255,220,170,0.06);
+
+  transform:translateY(-1px);
 }
 
 
@@ -1871,6 +1890,7 @@ line-height:1.8;
   
   <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
 <audio id="resultSound" src="result.mp3" preload="auto"></audio>
+  <audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
 
 <script>
 
@@ -1902,8 +1922,14 @@ const symbols = {
 };
 
 function setCurrency(currency){
+
+  currencySound.currentTime = 0;
+  currencySound.play();
+
   currentCurrency = currency;
+
   updatePrice();
+
 }
 
 /* ===== STEP TRANSITION ===== */
@@ -2019,6 +2045,9 @@ hoverSound.volume = 0.15;
 
 const resultSound = new Audio('result.mp3');
 resultSound.volume = 0.3;
+  
+  const currencySound = new Audio('valuta.mp3');
+currencySound.volume = 0.18;
 
 function playHoverSound(){
 
