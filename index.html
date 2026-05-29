@@ -1125,13 +1125,10 @@ function playHoverSound() {
 function resizeEstimatorContainer(targetBlock) {
   const container = document.querySelector('.card.estimator');
   if (!container || !targetBlock) return;
-
   container.style.overflow = 'visible';
-
   const currentHeight = container.getBoundingClientRect().height;
   container.style.height = currentHeight + 'px';
-
-  const originalDisplay = targetBlock.style.display;
+  const originalDisplay = targetBlock.style.display; // Починили!
   targetBlock.style.display = 'block';
   
   const computedStyle = window.getComputedStyle(container);
@@ -1284,6 +1281,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('pause', handleStop, true);
   document.addEventListener('ended', handleStop, true);
+});
+// === КУСОК ДЛЯ КРАСИВОГО ТОРМОЖЕНИЯ ЛЕНТЫ (TAPE STOP) ===
+
+const activeTapeStops = new Map();
+let isInternalPause = false; // Флаг, чтобы отличать наше искусственное торможение от обычного клика
+
+function pauseWithTapeStop(audioElement) {
+  if (!audioElement || audioElement.paused || activeTapeStops.has(audioElement)) return;
+
+  let currentRate = audioElement.playbackRate;
+  const fadeDuration = 400; // Время торможения — 0.4 секунды
+  const intervalTime = 30;  // Как часто снижаем скорость (каждые 30 мс)
+  const steps = fadeDuration / intervalTime;
+  const rateStep = currentRate / steps;
+
+  const interval = setInterval(() => {
+    currentRate -= rateStep;
+    
+    if (currentRate <= 0.1) {
+      // Когда скорость упала почти до нуля — глушим трек окончательно
+      clearInterval(interval);
+      activeTapeStops.delete(audioElement);
+      
+      isInternalPause = true; // Поднимаем флаг, что сейчас будет техническая пауза
+      audioElement.pause();
+      audioElement.playbackRate = 1.0; // Возвращаем скорость в дефолт для следующего запуска
+    } else {
+      audioElement.playbackRate = currentRate;
+    }
+  }, intervalTime);
+
+  activeTapeStops.set(audioElement, interval);
+}
+
+// Слушаем события плееров по всему сайту
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // Если пользователь нажал Play после того, как трек тормозил — отменяем торможение
+  document.addEventListener('play', (event) => {
+    const target = event.target;
+    if (activeTapeStops.has(target)) {
+      clearInterval(activeTapeStops.get(target));
+      activeTapeStops.delete(target);
+    }
+    target.playbackRate = 1.0;
+  }, true);
+
+  // ПЕРЕХВАТЫВАЕМ НАЖАТИЕ НА ПАУЗУ
+  document.addEventListener('pause', (event) => {
+    const target = event.target;
+
+    // Игнорируем системные звуки квиза (наведение, клики валюты, результат), тормозим только музыку
+    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
+      return;
+    }
+
+    // Если пауза вызвана нашим же скриптом (когда скорость уже упала до 0.1) — ничего не делаем
+    if (isInternalPause) {
+      isInternalPause = false;
+      return;
+    }
+
+    // Если это юзер нажал на паузу в плеере — отменяем мгновенную остановку браузера...
+    event.preventDefault();
+    // ...заставляем трек продолжить играть, пока мы его плавно тормозим через Tape Stop
+    target.play().catch(()=>{});
+    pauseWithTapeStop(target);
+  }, true);
 });
 </script>
 <div class="music-ambient-glow" id="ambientGlow"></div>
