@@ -1097,6 +1097,7 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 <audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
 
 <script>
+// 1. АНИМАЦИИ ПОЯВЛЕНИЯ ПРИ СКРОЛЛЕ
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if(entry.isIntersecting){ entry.target.classList.add('visible'); }
@@ -1104,11 +1105,10 @@ const observer = new IntersectionObserver(entries => {
 });
 document.querySelectorAll('.fade').forEach(el => observer.observe(el));
 
+// 2. СИСТЕМНЫЕ ПЕРЕМЕННЫЕ КВИЗА-КАЛЬКУЛЯТОРА
 let currentCurrency = 'RUB';
 let currentPrice = 40000;
-let displayedPrice = 40000; // Хранит текущую цифру на экране для плавного перебора
-let animationFrameId = null;
-
+let displayedPrice = 40000;
 const rates = { RUB: 1, USD: 0.011, EUR: 0.010, AMD: 4.9 };
 const symbols = { RUB: '₽', USD: '$', EUR: '€', AMD: '֏' };
 
@@ -1120,15 +1120,102 @@ function playHoverSound() {
   }
 }
 
-// ЗАМЕНИ СТАРУЮ ФУНКЦИЮ РАСЧЕТА ВЫСОТЫ НА ЭТУ:
+// 3. ЛОГИКА ЭФФЕКТА TAPE STOP ПРИ ПАУЗЕ ПЛЕЕРА
+const activeTapeStops = new Map();
+let isInternalPause = false; // Флаг, чтобы отличать техническую паузу от клика юзера
 
+function pauseWithTapeStop(audioElement) {
+  if (!audioElement || audioElement.paused || activeTapeStops.has(audioElement)) return;
+
+  let currentRate = audioElement.playbackRate;
+  const fadeDuration = 400; // 0.4 секунды на торможение
+  const intervalTime = 30;
+  const steps = fadeDuration / intervalTime;
+  const rateStep = currentRate / steps;
+
+  const interval = setInterval(() => {
+    currentRate -= rateStep;
+    
+    if (currentRate <= 0.1) {
+      clearInterval(interval);
+      activeTapeStops.delete(audioElement);
+      
+      isInternalPause = true; // Поднимаем флаг: сейчас скрипт нажмет системную паузу
+      audioElement.pause();
+      audioElement.playbackRate = 1.0; // Возвращаем питч и скорость в дефолт
+    } else {
+      audioElement.playbackRate = currentRate;
+    }
+  }, intervalTime);
+
+  activeTapeStops.set(audioElement, interval);
+}
+
+// 4. ЕДИНЫЙ КОНТРОЛЛЕР ДЛЯ ТРЕКОВ И ЭМБИЕНТ-ФОНА (ОБЪЕДИНЕН И ИСПРАВЛЕН)
+document.addEventListener('DOMContentLoaded', () => {
+  const glowLayer = document.getElementById('ambientGlow');
+  
+  // Ловим старт трека
+  document.addEventListener('play', (event) => {
+    const target = event.target;
+    // Игнорируем системные звуки квиза
+    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
+      return;
+    }
+
+    // Если этот трек в этот момент тормозил — сбрасываем таймер торможения
+    if (activeTapeStops.has(target)) {
+      clearInterval(activeTapeStops.get(target));
+      activeTapeStops.delete(target);
+    }
+    target.playbackRate = 1.0;
+
+    // Включаем эмбиент-радугу на фоне сайта
+    if (glowLayer) glowLayer.classList.add('active');
+  }, true);
+
+  // Перехватываем нажатие на паузу
+  document.addEventListener('pause', (event) => {
+    const target = event.target;
+    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
+      return;
+    }
+
+    // Если пауза техническая (вызвана концом Tape Stop) — просто гасим фон и выходим
+    if (isInternalPause) {
+      isInternalPause = false; 
+      if (glowLayer) glowLayer.classList.remove('active');
+      return;
+    }
+
+    // Если это юзер кликнул на паузу — отменяем дефолтное поведение браузера
+    event.preventDefault();
+    
+    // Возвращаем трек в режим воспроизведения на время торможения ленты
+    target.play().catch(()=>{}); 
+    
+    // Запускаем эффект Tape Stop
+    pauseWithTapeStop(target);
+  }, true);
+
+  // Если трек просто доиграл до самого конца
+  document.addEventListener('ended', (event) => {
+    const target = event.target;
+    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
+      return;
+    }
+    if (glowLayer) glowLayer.classList.remove('active');
+  }, true);
+});
+
+// 5. ИЗМЕНЕНИЕ ВЫСОТЫ КОНТЕЙНЕРА КАЛЬКУЛЯТОРА
 function resizeEstimatorContainer(targetBlock) {
   const container = document.querySelector('.card.estimator');
   if (!container || !targetBlock) return;
   container.style.overflow = 'visible';
   const currentHeight = container.getBoundingClientRect().height;
   container.style.height = currentHeight + 'px';
-  const originalDisplay = targetBlock.style.display; // Починили!
+  const originalDisplay = targetBlock.style.display;
   targetBlock.style.display = 'block';
   
   const computedStyle = window.getComputedStyle(container);
@@ -1156,33 +1243,23 @@ function setCurrency(currency, buttonElement){
   if(currencySound) { currencySound.currentTime = 0; currencySound.play().catch(()=>{}); }
   
   currentCurrency = currency;
-
   document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active-currency'));
   if (buttonElement) buttonElement.classList.add('active-currency');
 
   updatePrice(true);
 }
 
-// ТЕПЕРЬ ЭТА ФУНКЦИЯОТВЕЧАЕТ ЗА ПЛАВНЫЙ СДВИГ И ЗАТУХАНИЕ ТЕКСТА
 function animateValue(targetPrice) {
   const priceElement = document.getElementById('price');
   if (!priceElement) return;
 
-  // 1. Добавляем класс затухания и увода текста вниз
   priceElement.classList.add('price-changing');
 
-  // 2. Ждем 200 миллисекунд, пока текст полностью станет невидимым
   setTimeout(() => {
-    // Меняем текст на новую валюту, пока никто не видит
     priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
-    
-    // Перемещаем невидимый текст наверх, чтобы он выплывал сверху вниз
     priceElement.style.transform = 'translateY(-10px)';
-    
-    // Форсируем перерисовку браузера
     priceElement.offsetHeight; 
 
-    // 3. Убираем класс затухания, возвращаем текст в центр и плавно проявляем
     priceElement.classList.remove('price-changing');
     priceElement.style.transform = 'translateY(0)';
   }, 200);
@@ -1190,22 +1267,17 @@ function animateValue(targetPrice) {
 
 function updatePrice(animated = false) {
   const targetPrice = Math.round(currentPrice * rates[currentCurrency]);
-  
   if (animated) {
-    // Запускаем плавный сдвиг текста
     animateValue(targetPrice);
   } else {
-    // Самый первый показ цены (без анимаций)
     const priceElement = document.getElementById('price');
     if (priceElement) {
       priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
     }
   }
-  // Запоминаем текущую цену
   displayedPrice = targetPrice;
 }
 
-// Плавный переход на следующий шаг
 function nextStep(step, basePrice = null){
   playHoverSound();
   if(basePrice !== null){ currentPrice = basePrice; }
@@ -1214,8 +1286,7 @@ function nextStep(step, basePrice = null){
   const next = document.getElementById('step' + step);
 
   if(current && next) {
-    resizeEstimatorContainer(next); // Запускаем плавную подгонку высоты карточки
-
+    resizeEstimatorContainer(next);
     current.style.opacity = '0';
     current.style.transform = 'translateY(-15px) scale(0.98)';
     
@@ -1230,10 +1301,9 @@ function nextStep(step, basePrice = null){
   }
 }
 
-// Плавный переход на экран результатов
 function finishQuiz(multiplier) {
   currentPrice = Math.round(currentPrice * multiplier);
-  updatePrice(false); // Загружаем цену без анимации для мгновенного первого рендера
+  updatePrice(false);
   
   const resultSound = document.getElementById('resultSound');
   if(resultSound) { resultSound.currentTime = 0; resultSound.play().catch(()=>{}); }
@@ -1242,7 +1312,7 @@ function finishQuiz(multiplier) {
   const resultBlock = document.getElementById('result');
 
   if(current && resultBlock) {
-    resizeEstimatorContainer(resultBlock); // Корректируем высоту карточки под результат
+    resizeEstimatorContainer(resultBlock);
 
     current.style.opacity = '0';
     current.style.transform = 'translateY(-15px) scale(0.98)';
@@ -1257,99 +1327,6 @@ function finishQuiz(multiplier) {
     }, 400);
   }
 }
-  // АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ НА САЙТЕ
-document.addEventListener('DOMContentLoaded', () => {
-  const glowLayer = document.getElementById('ambientGlow');
-  
-  // Перехватываем событие старта любого звука на странице
-  document.addEventListener('play', (event) => {
-    // Игнорируем системные звуки квиза (hover, клики валюты, результат)
-    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
-      return;
-    }
-    // Если включили реальный трек в плеере — зажигаем атмосферу
-    if (glowLayer) glowLayer.classList.add('active');
-  }, true);
-
-  // Перехватываем событие паузы или окончания трека
-  const handleStop = (event) => {
-    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
-      return;
-    }
-    if (glowLayer) glowLayer.classList.remove('active');
-  };
-
-  document.addEventListener('pause', handleStop, true);
-  document.addEventListener('ended', handleStop, true);
-});
-// === КУСОК ДЛЯ КРАСИВОГО ТОРМОЖЕНИЯ ЛЕНТЫ (TAPE STOP) ===
-
-const activeTapeStops = new Map();
-let isInternalPause = false; // Флаг, чтобы отличать наше искусственное торможение от обычного клика
-
-function pauseWithTapeStop(audioElement) {
-  if (!audioElement || audioElement.paused || activeTapeStops.has(audioElement)) return;
-
-  let currentRate = audioElement.playbackRate;
-  const fadeDuration = 400; // Время торможения — 0.4 секунды
-  const intervalTime = 30;  // Как часто снижаем скорость (каждые 30 мс)
-  const steps = fadeDuration / intervalTime;
-  const rateStep = currentRate / steps;
-
-  const interval = setInterval(() => {
-    currentRate -= rateStep;
-    
-    if (currentRate <= 0.1) {
-      // Когда скорость упала почти до нуля — глушим трек окончательно
-      clearInterval(interval);
-      activeTapeStops.delete(audioElement);
-      
-      isInternalPause = true; // Поднимаем флаг, что сейчас будет техническая пауза
-      audioElement.pause();
-      audioElement.playbackRate = 1.0; // Возвращаем скорость в дефолт для следующего запуска
-    } else {
-      audioElement.playbackRate = currentRate;
-    }
-  }, intervalTime);
-
-  activeTapeStops.set(audioElement, interval);
-}
-
-// Слушаем события плееров по всему сайту
-document.addEventListener('DOMContentLoaded', () => {
-  
-  // Если пользователь нажал Play после того, как трек тормозил — отменяем торможение
-  document.addEventListener('play', (event) => {
-    const target = event.target;
-    if (activeTapeStops.has(target)) {
-      clearInterval(activeTapeStops.get(target));
-      activeTapeStops.delete(target);
-    }
-    target.playbackRate = 1.0;
-  }, true);
-
-  // ПЕРЕХВАТЫВАЕМ НАЖАТИЕ НА ПАУЗУ
-  document.addEventListener('pause', (event) => {
-    const target = event.target;
-
-    // Игнорируем системные звуки квиза (наведение, клики валюты, результат), тормозим только музыку
-    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
-      return;
-    }
-
-    // Если пауза вызвана нашим же скриптом (когда скорость уже упала до 0.1) — ничего не делаем
-    if (isInternalPause) {
-      isInternalPause = false;
-      return;
-    }
-
-    // Если это юзер нажал на паузу в плеере — отменяем мгновенную остановку браузера...
-    event.preventDefault();
-    // ...заставляем трек продолжить играть, пока мы его плавно тормозим через Tape Stop
-    target.play().catch(()=>{});
-    pauseWithTapeStop(target);
-  }, true);
-});
 </script>
 <div class="music-ambient-glow" id="ambientGlow"></div>
 </body>
