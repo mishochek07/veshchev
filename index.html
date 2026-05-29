@@ -1074,7 +1074,8 @@ body.music-active::after{
   position:absolute;
   inset:0;
   pointer-events:none;
-  z-index:0;
+  overflow:hidden;
+  z-index: 20;
 }
 
 .float-icon{
@@ -1160,12 +1161,16 @@ body.music-active::after{
 
 /* ===== CONTENT ABOVE ICONS ===== */
 
-.estimator,
+.estimator-card,
 .quiz-step,
 .result,
 .currency-switcher{
   position:relative;
-  z-index:2;
+  z-index:3;
+}
+  .estimator-wrapper{
+  position: relative;
+  overflow: visible;
 }
   
 </style>
