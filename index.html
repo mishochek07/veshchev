@@ -868,6 +868,53 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+  /* СТИЛИ ДЛЯ СПИСКА ТРЕКОВ */
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.player-row-btn {
+  background: rgba(255, 248, 235, 0.03);
+  border: 1px solid rgba(255, 240, 220, 0.06);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.25s ease;
+  width: 100%;
+}
+
+.player-row-btn:hover {
+  background: rgba(255, 225, 178, 0.08);
+  border-color: rgba(255, 225, 178, 0.2);
+  transform: translateX(4px); /* Кнопка при наведении слегка сдвигается вправо */
+}
+
+/* Когда трек играет — кнопка подсвечивается неоновым/нежным цветом твоего glow */
+.player-row-btn.track-playing {
+  background: rgba(255, 225, 178, 0.15);
+  border-color: var(--glow);
+  color: var(--glow);
+  font-weight: 500;
+  box-shadow: 0 0 10px rgba(255, 225, 178, 0.1);
+}
+
+.player-row-btn span {
+  display: inline-block;
+  width: 12px;
+  font-size: 12px;
+}
   
 </style>
 </head>
@@ -905,34 +952,67 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 <section id="works">
   <h2 class="section-title fade">Selected<br>Works</h2>
   <div class="grid works-grid">
+    
     <div class="card fade">
       <h3>Электронная музыка</h3>
-      <p>Breakcore / Jungle / UK Garage / Experimental</p>
-      <audio controls><source src="mishochekAtavism.mp3"></audio>
-      <audio controls><source src="mishochekReminiscence.mp3"></audio>
-      <audio controls><source src="mishochekAorta.mp3"></audio>
+      <p style="margin-bottom: 15px;">Breakcore / Jungle / UK Garage / Experimental</p>
+      
+      <audio id="electro1" src="mishochekAtavism.mp3" preload="auto"></audio>
+      <audio id="electro2" src="mishochekReminiscence.mp3" preload="auto"></audio>
+      <audio id="electro3" src="mishochekAorta.mp3" preload="auto"></audio>
+
+      <div class="track-list">
+        <button class="player-row-btn" onclick="toggleTrack('electro1', this)"><span>▶</span> Atavism</button>
+        <button class="player-row-btn" onclick="toggleTrack('electro2', this)"><span>▶</span> Reminiscence</button>
+        <button class="player-row-btn" onclick="toggleTrack('electro3', this)"><span>▶</span> Aorta</button>
+      </div>
     </div>
+
     <div class="card fade">
       <h3>Кинематографичная музыка</h3>
-      <p>Trailer music / orchestral scoring / ambient atmosphere</p>
-      <audio controls><source src="VESHCHEV AVENGERS.mp3"></audio>
-      <audio controls><source src="VESHCHEV DEBUSSY.mp3"></audio>
-      <audio controls><source src="2.0.mp3"></audio>
+      <p style="margin-bottom: 15px;">Trailer music / orchestral scoring / ambient atmosphere</p>
+      
+      <audio id="cinema1" src="VESHCHEV AVENGERS.mp3" preload="auto"></audio>
+      <audio id="cinema2" src="VESHCHEV DEBUSSY.mp3" preload="auto"></audio>
+      <audio id="cinema3" src="2.0.mp3" preload="auto"></audio>
+
+      <div class="track-list">
+        <button class="player-row-btn" onclick="toggleTrack('cinema1', this)"><span>▶</span> Avengers Scoring</button>
+        <button class="player-row-btn" onclick="toggleTrack('cinema2', this)"><span>▶</span> Debussy Atmosphere</button>
+        <button class="player-row-btn" onclick="toggleTrack('cinema3', this)"><span>▶</span> Project 2.0</button>
+      </div>
     </div>
+
     <div class="card fade">
       <h3>Живые записи</h3>
-      <p>Classical ensembles / orchestral sessions / chamber music</p>
-      <audio controls><source src="STARKOV MIX 150426.mp3"></audio>
-      <audio controls><source src="Fis-moll.mp3"></audio>
-      <audio controls><source src="VESHCHEV SAINT-SAENS.mp3"></audio>
+      <p style="margin-bottom: 15px;">Classical ensembles / orchestral sessions / chamber music</p>
+      
+      <audio id="live1" src="STARKOV MIX 150426.mp3" preload="auto"></audio>
+      <audio id="live2" src="Fis-moll.mp3" preload="auto"></audio>
+      <audio id="live3" src="VESHCHEV SAINT-SAENS.mp3" preload="auto"></audio>
+
+      <div class="track-list">
+        <button class="player-row-btn" onclick="toggleTrack('live1', this)"><span>▶</span> Starkov Mix</button>
+        <button class="player-row-btn" onclick="toggleTrack('live2', this)"><span>▶</span> Fis-moll Session</button>
+        <button class="player-row-btn" onclick="toggleTrack('live3', this)"><span>▶</span> Saint-Saëns</button>
+      </div>
     </div>
+
     <div class="card fade">
       <h3>Коммерческая музыка</h3>
-      <p>Pop / vocal / commercial arrangements</p>
-      <audio controls><source src="VESHCHEV CRY.mp3"></audio>
-      <audio controls><source src="VESHCHEV NO TIME TO DIE.mp3"></audio>
-      <audio controls><source src="VESHCHEV OCEAN EYES.mp3"></audio>
+      <p style="margin-bottom: 15px;">Pop / vocal / commercial arrangements</p>
+      
+      <audio id="comm1" src="VESHCHEV CRY.mp3" preload="auto"></audio>
+      <audio id="comm2" src="VESHCHEV NO TIME TO DIE.mp3" preload="auto"></audio>
+      <audio id="comm3" src="VESHCHEV OCEAN EYES.mp3" preload="auto"></audio>
+
+      <div class="track-list">
+        <button class="player-row-btn" onclick="toggleTrack('comm1', this)"><span>▶</span> Cry</button>
+        <button class="player-row-btn" onclick="toggleTrack('comm2', this)"><span>▶</span> No Time To Die</button>
+        <button class="player-row-btn" onclick="toggleTrack('comm3', this)"><span>▶</span> Ocean Eyes</button>
+      </div>
     </div>
+
     <div class="card promo-card premium-card fade">
       <h3>Premium<br>Audio Production</h3>
       <p>Работа с глубиной, пространством и архитектурой звука.</p>
@@ -942,6 +1022,8 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
         <li>• Sound Design: Уникальные атмосферы</li>
       </ul>
     </div>
+  </div>
+</section>
     <div class="studio-mini fade">
       <div class="studio-overlay"></div>
       <div class="studio-mini-content">
@@ -1120,104 +1202,88 @@ function playHoverSound() {
   }
 }
 
-// 3. БЕЗОПАСНЫЙ ЭФФЕКТ TAPE STOP ПРИ ПАУЗЕ
+// 3. ЖЕЛЕЗОБЕТОННЫЙ ПЛЕЕР С ЭФФЕКТОМ TAPE STOP
 const activeTapeStops = new Map();
 
-function applyTapeStopEffect(audioElement) {
-  if (!audioElement || activeTapeStops.has(audioElement)) return;
-
-  // Запоминаем исходные параметры, чтобы вернуть их при новом старте
-  const originalVolume = audioElement.volume || 1.0;
-  let currentRate = 1.0;
-  let currentVolume = originalVolume;
-
-  const fadeDuration = 400; // 0.4 секунды на эффект торможения
-  const intervalTime = 30;
-  const steps = fadeDuration / intervalTime;
-  const rateStep = currentRate / steps;
-  const volumeStep = currentVolume / steps;
-
-  // Включаем воспроизведение на долю секунды, чтобы воспроизвести эффект сползания питча
-  audioElement.play().catch(()=>{});
-
-  const interval = setInterval(() => {
-    currentRate -= rateStep;
-    currentVolume -= volumeStep;
-    
-    if (currentRate <= 0.1 || currentVolume <= 0.01) {
-      clearInterval(interval);
-      activeTapeStops.delete(audioElement);
-      
-      audioElement.pause();
-      audioElement.playbackRate = 1.0;
-      audioElement.volume = originalVolume; // Сбрасываем в дефолт для следующего раза
-    } else {
-      audioElement.playbackRate = currentRate;
-      audioElement.volume = currentVolume;
-    }
-  }, intervalTime);
-
-  activeTapeStops.set(audioElement, interval);
-}
-
-// 4. ЕДИНЫЙ СИНХРОННЫЙ КОНТРОЛЛЕР ТРЕКОВ И ЭМБИЕНТ-ФОНА
-document.addEventListener('DOMContentLoaded', () => {
+function toggleTrack(audioId, btnElement) {
+  const audio = document.getElementById(audioId);
   const glowLayer = document.getElementById('ambientGlow');
-  
-  // Ловим старт трека
-  document.addEventListener('play', (event) => {
-    const target = event.target;
-    // Игнорируем системные звуки квиза
-    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
-      return;
-    }
+  if (!audio) return;
 
-    // Если этот трек в данный момент затухал — очищаем таймер
-    if (activeTapeStops.has(target)) {
-      clearInterval(activeTapeStops.get(target));
-      activeTapeStops.delete(target);
-    }
+  const originalText = btnElement.innerText.replace('▶', '').replace('❚❚', '').trim();
+
+  // ЕСЛИ ТРЕК УЖЕ ИГРАЕТ — КЛИКНУЛИ НА ПАУЗУ (ЗАПУСКАЕМ TAPE STOP)
+  if (!audio.paused && !activeTapeStops.has(audio)) {
+    btnElement.innerHTML = `<span>▶</span> ${originalText}`;
+    btnElement.classList.remove('track-playing');
     
-    // Останавливаем все ОСТАЛЬНЫЕ играющие плееры на сайте (чтобы каши не было)
-    document.querySelectorAll('audio').forEach(audio => {
-      if (audio !== target && !audio.paused && audio.id !== 'hoverSound' && audio.id !== 'resultSound' && audio.id !== 'currencySound') {
+    // Проверяем, играет ли какой-то другой трек (чтобы зря не тушить общую радугу)
+    setTimeout(() => {
+      let somethingPlaying = false;
+      document.querySelectorAll('audio').forEach(t => {
+        if (!t.paused && t.id !== 'hoverSound' && t.id !== 'resultSound' && t.id !== 'currencySound') somethingPlaying = true;
+      });
+      if (!somethingPlaying && glowLayer) glowLayer.classList.remove('active');
+    }, 50);
+
+    // Запускаем плавное падение питча ленты
+    let currentRate = 1.0;
+    const fadeDuration = 450; // Длительность зажёвывания
+    const intervalTime = 25;
+    const steps = fadeDuration / intervalTime;
+    const rateStep = currentRate / steps;
+
+    const interval = setInterval(() => {
+      currentRate -= rateStep;
+      if (currentRate <= 0.05) {
+        clearInterval(interval);
+        activeTapeStops.delete(audio);
         audio.pause();
-        audio.playbackRate = 1.0;
+        audio.playbackRate = 1.0; // Сброс в дефолт
+      } else {
+        audio.playbackRate = currentRate;
+      }
+    }, intervalTime);
+
+    activeTapeStops.set(audio, interval);
+
+  } else {
+    // ЕСЛИ ТРЕК НЕ ИГРАЛ — ВКЛЮЧАЕМ ЕГО
+    
+    // Глушим абсолютно все остальные треки на сайте мгновенно
+    document.querySelectorAll('audio').forEach(track => {
+      if (track !== audio && track.id !== 'hoverSound' && track.id !== 'resultSound' && track.id !== 'currencySound') {
+        track.pause();
+        track.playbackRate = 1.0;
+      }
+    });
+    
+    // Возвращаем все остальные кнопки в состояние "Play"
+    document.querySelectorAll('.player-row-btn').forEach(btn => {
+      if (btn !== btnElement) {
+        const txt = btn.innerText.replace('▶', '').replace('❚❚', '').trim();
+        btn.innerHTML = `<span>▶</span> ${txt}`;
+        btn.classList.remove('track-playing');
       }
     });
 
-    target.playbackRate = 1.0;
+    // Если этот конкретный трек сейчас тормозил — сбрасываем таймер торможения
+    if (activeTapeStops.has(audio)) {
+      clearInterval(activeTapeStops.get(audio));
+      activeTapeStops.delete(audio);
+    }
+
+    audio.playbackRate = 1.0;
+    audio.play().catch(()=>{});
+    
+    btnElement.innerHTML = `<span>❚❚</span> ${originalText}`;
+    btnElement.classList.add('track-playing');
+    
     if (glowLayer) glowLayer.classList.add('active');
-  }, true);
+  }
+}
 
-  // Ловим паузу со стороны пользователя
-  document.addEventListener('pause', (event) => {
-    const target = event.target;
-    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
-      return;
-    }
-
-    // Если этот трек уже обрабатывается нашим эффектом — не зацикливаем
-    if (activeTapeStops.has(target)) return;
-
-    // Запускаем безопасный звуковой спуск
-    applyTapeStopEffect(target);
-
-    // Гасим свет фоновой радуги
-    if (glowLayer) glowLayer.classList.remove('active');
-  }, true);
-
-  // Если трек просто доиграл до конца
-  document.addEventListener('ended', (event) => {
-    const target = event.target;
-    if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
-      return;
-    }
-    if (glowLayer) glowLayer.classList.remove('active');
-  }, true);
-});
-
-// 5. ИЗМЕНЕНИЕ ВЫСОТЫ КОНТЕЙНЕРА КАЛЬКУЛЯТОРА
+// 4. ИЗМЕНЕНИЕ ВЫСОТЫ КОНТЕЙНЕРА КАЛЬКУЛЯТОРА
 function resizeEstimatorContainer(targetBlock) {
   const container = document.querySelector('.card.estimator');
   if (!container || !targetBlock) return;
