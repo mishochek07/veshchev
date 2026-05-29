@@ -10,23 +10,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 
 <style>
-
   :root {
-
   --bg: #0f0d0a;
-
   --card: rgba(255,248,235,0.05);
-
   --border: rgba(255,240,220,0.09);
-
   --text: #f8f4ee;
-
   --muted: #c6b8a7;
-
   --glow: #ffe1b2;
-
   --accent: #fff6dc;
-
 }
 
 * {
@@ -37,26 +28,17 @@
 }
 
 body {
-  
-background:
+  background:
   radial-gradient(circle at top left, rgba(255,220,170,0.10), transparent 32%),
   radial-gradient(circle at bottom right, rgba(255,245,220,0.07), transparent 35%),
   linear-gradient(to bottom, #0f0d0a, #15120e);
 
   color: var(--text);
-
   font-family: 'Inter', sans-serif;
-
   overflow-x: hidden;
-
-  transition:
-  background 2.5s ease,
-  color 2s ease,
-  filter 2s ease;
+  transition: background 2.5s ease, color 2s ease, filter 2s ease;
   position: relative;
-}
-  isolation:isolate;
-
+  isolation: isolate;
 }
 
 body::before {
@@ -72,14 +54,14 @@ body::before {
 }
   
 nav {
-  position:relative;
+  position: relative;
   top: 0;
   width: 100%;
   padding: 24px 6vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index:10;
+  z-index: 10;
   backdrop-filter: blur(16px);
   background: rgba(5,7,11,0.55);
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -166,11 +148,9 @@ nav a:hover {
 
 .btn-primary:hover {
   transform: translateY(-4px);
-
   box-shadow:
     0 0 50px rgba(255,220,140,0.35),
     0 0 120px rgba(255,240,190,0.2);
-
   filter: saturate(1.2);
 }
   
@@ -188,47 +168,30 @@ nav a:hover {
   position: relative;
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 0 80px rgba(126,255,212,0.08);
-  transition:
-  box-shadow 2.4s ease,
-  transform 1s ease;
+  transition: box-shadow 2.4s ease, transform 1s ease;
 }
 
 .hero-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition:
-  filter 2.4s ease,
-  transform 2s ease;
+  transition: filter 2.4s ease, transform 2s ease;
 }
-.glow {
 
+.glow {
   position: absolute;
   inset: -20%;
-
-  background:
-  radial-gradient(circle,
-  rgba(255,225,178,0.12),
-  rgba(255,244,220,0.06),
-  transparent 65%);
-
+  background: radial-gradient(circle, rgba(255,225,178,0.12), rgba(255,244,220,0.06), transparent 65%);
   filter: blur(100px);
-
   z-index: -1;
-
   opacity: 0.4;
-
-  transition:
-    opacity 1s ease,
-    transform 2s ease,
-    background 1s ease;
-
+  transition: opacity 1s ease, transform 2s ease, background 1s ease;
 }
   
 section {
   padding: 120px 6vw;
-  position:relative;
-z-index:2;
+  position: relative;
+  z-index: 2;
 }
 
 .section-title {
@@ -252,120 +215,33 @@ z-index:2;
   min-height: 620px;
 }
 
-.studio-mini {
-  min-height: 620px;
-  height: 100%;
-  border-radius: 34px;
-  overflow: hidden;
-  position: relative;
-
-  background:
-    linear-gradient(to top, rgba(5,7,11,0.96), rgba(5,7,11,0.55)),
-    url('ableton.jpg') center/cover no-repeat;
-
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-.studio-mini-content {
-  position: relative;
-  z-index: 2;
-  padding: 42px;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.studio-mini-content h3 {
-  font-size: 64px;
-  line-height: 0.9;
-  margin: 18px 0 24px;
-  max-width: 520px;
-}
-
-.studio-mini-content p {
-  color: var(--text);
-  opacity: 0.9;
-  line-height: 1.7;
-  max-width: 520px;
-}
-
-.timeline {
-  margin-top: 34px;
-}
-
-.timeline-item {
-  margin-top: 18px;
-  padding-left: 18px;
-  border-left: 1px solid rgba(126,255,212,0.2);
-}
-
-.timeline-item h4 {
-  margin-top: 8px;
-  margin-bottom: 6px;
-}
-
 @media(max-width: 1400px){
-
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+  .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media(max-width: 980px){
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .studio-mini-content h3 {
-    font-size: 48px;
-  }
-
+  .grid { grid-template-columns: 1fr; }
+  .studio-mini-content h3 { font-size: 48px; }
 }
 
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-
   border-radius: 32px;
   padding: 32px;
-
   position: relative;
   overflow: hidden;
-
-transition:
-  transform 0.9s ease,
-  box-shadow 1.6s ease,
-  border-color 1.6s ease,
-  background 1.6s ease,
-  filter 1.6s ease;
-
-  will-change:
-  transform,
-  border-color,
-  background,
-  box-shadow;
+  transition: transform 0.9s ease, box-shadow 1.6s ease, border-color 1.6s ease, background 1.6s ease, filter 1.6s ease;
+  will-change: transform, border-color, background, box-shadow;
 }
   
 .card:hover {
   transform: translateY(-8px);
-
   border-color: rgba(255,220,170,0.35);
-
-  box-shadow:
-    0 0 80px rgba(255,220,170,0.12),
-    0 0 140px rgba(255,190,120,0.06);
-
-  transition:
-    transform .8s ease,
-    border-color 1s ease,
-    box-shadow 1s ease;
+  box-shadow: 0 0 80px rgba(255,220,170,0.12), 0 0 140px rgba(255,190,120,0.06);
+  transition: transform .8s ease, border-color 1s ease, box-shadow 1s ease;
 }
   
 .card::before{
@@ -373,27 +249,14 @@ transition:
   position:absolute;
   inset:0;
   border-radius:inherit;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,220,170,0.22),
-      rgba(255,245,220,0.04)
-    );
-
+  background: linear-gradient(135deg, rgba(255,220,170,0.22), rgba(255,245,220,0.04));
   opacity:0;
-
-  transition:
-    opacity 1s ease,
-    filter 1s ease,
-    transform 1s ease;
-
+  transition: opacity 1s ease, filter 1s ease, transform 1s ease;
   filter:blur(30px);
-
   pointer-events:none;
 }
   
-  .card:hover::before{
+.card:hover::before{
   opacity:1;
   filter:blur(0px);
 }
@@ -414,9 +277,7 @@ audio {
 }
 
 .promo-card {
-  background:
-    linear-gradient(to bottom right, rgba(126,255,212,0.08), rgba(141,204,255,0.04)),
-    rgba(255,255,255,0.04);
+  background: linear-gradient(to bottom right, rgba(126,255,212,0.08), rgba(141,204,255,0.04)), rgba(255,255,255,0.04);
 }
 
 .promo-card ul {
@@ -440,9 +301,7 @@ audio {
   border-radius: 42px;
   overflow: hidden;
   position: relative;
-  background:
-    linear-gradient(to top, rgba(5,7,11,0.94), rgba(5,7,11,0.5)),
-    url('ableton.jpg') center/cover no-repeat;
+  background: linear-gradient(to top, rgba(5,7,11,0.94), rgba(5,7,11,0.5)), url('ableton.jpg') center/cover no-repeat;
   display: flex;
   align-items: flex-end;
   padding: 60px;
@@ -514,21 +373,14 @@ audio {
 .project-card{
   position:relative;
   overflow:hidden;
-
   min-height:260px;
-
   border-radius:30px;
   border:1px solid rgba(255,255,255,0.08);
-
   cursor:pointer;
-
   transition:0.45s ease;
-
   display:flex;
   align-items:flex-end;
-
   padding:28px;
-
   background-size:cover !important;
   background-position:center !important;
 }
@@ -537,33 +389,17 @@ audio {
   content:'';
   position:absolute;
   inset:0;
-
-  background:
-  linear-gradient(
-    to top,
-    rgba(5,7,11,0.92),
-    rgba(5,7,11,0.2)
-  );
-
+  background: linear-gradient(to top, rgba(5,7,11,0.92), rgba(5,7,11,0.2));
   transition:0.45s ease;
 }
 
 .project-card:hover{
-  transform:
-  translateY(-10px)
-  scale(1.02);
-
-  box-shadow:
-  0 0 60px rgba(120,140,255,0.2);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 0 60px rgba(120,140,255,0.2);
 }
 
 .project-card:hover::before{
-  background:
-  linear-gradient(
-    to top,
-    rgba(5,7,11,0.72),
-    rgba(5,7,11,0.05)
-  );
+  background: linear-gradient(to top, rgba(5,7,11,0.72), rgba(5,7,11,0.05));
 }
 
 .project-card-content{
@@ -576,7 +412,6 @@ audio {
   font-size:40px;
   line-height:1;
   margin-bottom:12px;
-
   color:white;
 }
 
@@ -587,19 +422,11 @@ audio {
 }
 
 @media(max-width:1200px){
-
-  .cards-mode{
-    grid-template-columns:1fr 1fr;
-  }
-
+  .cards-mode{ grid-template-columns:1fr 1fr; }
 }
 
 @media(max-width:700px){
-
-  .cards-mode{
-    grid-template-columns:1fr;
-  }
-
+  .cards-mode{ grid-template-columns:1fr; }
 }
   
 .options {
@@ -616,79 +443,15 @@ audio {
   border-radius: 24px;
   padding: 24px;
   cursor: pointer;
-  transition:
-
-  transform 0.7s cubic-bezier(.19,1,.22,1),
-
-  border-color 2s ease,
-
-  background 2.5s ease,
-
-  box-shadow 2.5s ease;
+  transition: transform 0.7s cubic-bezier(.19,1,.22,1), border-color 2s ease, background 2.5s ease, box-shadow 2.5s ease;
   font-size: 15px;
 }
 
 .options button:hover {
-
   transform: translateY(-4px);
-
   border-color: rgba(255,225,180,0.22);
-
-  background:
-    linear-gradient(
-      to bottom right,
-      rgba(255,240,220,0.09),
-      rgba(255,225,180,0.04)
-    );
-
-  box-shadow:
-    0 0 30px rgba(255,220,180,0.06);
-
-}
-
-.result {
-  padding: 36px;
-  border-radius: 28px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  display: none;
-}
-
-.studio-mini {
-  position: relative;
-  min-height: 420px;
-  height: 100%;
-  border-radius: 34px;
-  overflow: hidden;
-  background:
-    linear-gradient(to top, rgba(5,7,11,0.96), rgba(5,7,11,0.55)),
-    url('ableton.jpg') center/cover no-repeat;
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-.studio-overlay {
-  position:absolute;
-  inset:0;
-  background: radial-gradient(circle at top right, rgba(126,255,212,0.16), transparent 40%);
-}
-
-.studio-mini-content {
-  position: relative;
-  z-index: 2;
-  padding: 42px;
-  max-width: 100%;
-}
-
-.studio-mini-content span {
-  letter-spacing: 0.25em;
-  font-size: 11px;
-  color: var(--glow);
-}
-
-.studio-mini-content h3 {
-  font-size: clamp(42px, 4vw, 72px);
-  line-height: 0.92;
-  margin: 18px 0 24px;
+  background: linear-gradient(to bottom right, rgba(255,240,220,0.09), rgba(255,225,180,0.04));
+  box-shadow: 0 0 30px rgba(255,220,180,0.06);
 }
 
 .currency-switcher {
@@ -705,94 +468,16 @@ audio {
   padding:12px 18px;
   border-radius:999px;
   cursor:pointer;
-
-  transition:
-    background .45s ease,
-    border-color .45s ease,
-    transform .45s ease,
-    box-shadow .45s ease;
-
+  transition: background .45s ease, border-color .45s ease, transform .45s ease, box-shadow .45s ease;
   border:1px solid rgba(255,255,255,0.04);
 }
 
 .currency-switcher button:hover{
-
   background:rgba(255,255,255,0.09);
-
   border-color:rgba(255,240,220,0.10);
-
-  box-shadow:
-    0 0 18px rgba(255,220,170,0.06);
-
+  box-shadow: 0 0 18px rgba(255,220,170,0.06);
   transform:translateY(-1px);
 }
-
-
-.quiz-step.active .project-card:nth-child(1){
-  animation-delay:.05s;
-}
-
-.quiz-step.active .project-card:nth-child(2){
-  animation-delay:.12s;
-}
-
-.quiz-step.active .project-card:nth-child(3){
-  animation-delay:.19s;
-}
-
-.quiz-step.active .project-card:nth-child(4){
-  animation-delay:.26s;
-}
-
-.result h3 {
-  font-size: 54px;
-  margin: 14px 0;
-}
-
-.result small {
-  letter-spacing: 0.2em;
-  color: var(--glow);
-}
-
-.contacts {
-  margin-top: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.contacts a {
-  text-decoration: none;
-  color: white;
-  padding: 14px 18px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-footer {
-  padding: 80px 6vw;
-  text-align: center;
-  color: var(--muted);
-}
-
-.fade {
-  opacity: 1;
-  transform: translateY(0px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.fade.visible {
-  opacity: 1;
-  transform: translateY(0px);
-}
-
-.fade.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===== WORKS LAYOUT FIX ===== */
 
 .works-grid{
   display:grid;
@@ -818,33 +503,37 @@ footer {
   position:relative;
   overflow:hidden;
   border-radius:34px;
+  background: linear-gradient(to top, rgba(5,7,11,0.96), rgba(5,7,11,0.45)), url('ableton.jpg') center/cover no-repeat;
+  border: 1px solid rgba(255,255,255,0.08);
+}
 
-  background:
-    linear-gradient(to top, rgba(5,7,11,0.96), rgba(5,7,11,0.45)),
-    url('ableton.jpg') center/cover no-repeat;
-
-  border:1px solid rgba(255,255,255,0.08);
+.studio-overlay {
+  position:absolute;
+  inset:0;
+  background: radial-gradient(circle at top right, rgba(126,255,212,0.16), transparent 40%);
 }
 
 .studio-mini-content{
   position:relative;
   z-index:2;
-
   padding:48px;
   height:100%;
-
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+}
+
+.studio-mini-content span {
+  letter-spacing: 0.25em;
+  font-size: 11px;
+  color: var(--glow);
 }
 
 .studio-mini-content h3{
   font-size:clamp(64px,5vw,96px);
   line-height:0.88;
   letter-spacing:-0.06em;
-
   max-width:900px;
-
   margin:18px 0 28px;
 }
 
@@ -854,33 +543,16 @@ footer {
   color:rgba(255,255,255,0.9);
 }
 
-.timeline{
-  margin-top:40px;
-}
-
-.timeline-item{
-  margin-top:20px;
-  padding-left:18px;
-  border-left:1px solid rgba(126,255,212,0.25);
-}
-
 .timeline-item h4{
   margin:8px 0;
 }
 
 @media(max-width:1400px){
-
-  .works-grid{
-    grid-template-columns:1fr;
-  }
-
-  .works-grid > .promo-card,
-  .works-grid > .studio-mini{
-    min-height:auto;
-  }
-
+  .works-grid{ grid-template-columns:1fr; }
+  .works-grid > .promo-card, .works-grid > .studio-mini{ min-height:auto; }
 }
-  .futuristic-estimator{
+
+.futuristic-estimator{
   position:relative;
   overflow:hidden;
 }
@@ -889,178 +561,87 @@ footer {
   position:absolute;
   width:600px;
   height:600px;
-  background:radial-gradient(circle,
-  rgba(138,215,255,0.18),
-  transparent 70%);
+  background:radial-gradient(circle, rgba(138,215,255,0.18), transparent 70%);
   top:-200px;
   right:-100px;
   filter:blur(40px);
   pointer-events:none;
 }
 
-.question-label{
-  color:var(--glow);
-  letter-spacing:0.25em;
-  font-size:12px;
-  margin-bottom:18px;
-}
-
 .options button{
-
   min-height:140px;
-
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:flex-start;
-
   gap:10px;
-
   position:relative;
-
   overflow:hidden;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,0.07),
-      rgba(255,255,255,0.03)
-    );
-
+  background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
   backdrop-filter:blur(14px);
 }
 
 .options button::before{
-
   content:'';
-
   position:absolute;
-
   inset:0;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(138,215,255,0.10),
-      transparent 60%
-    );
-
+  background: linear-gradient(135deg, rgba(138,215,255,0.10), transparent 60%);
   opacity:0;
-
   transition:0.4s ease;
 }
 
-.options button:hover::before{
-  opacity:1;
-}
-
-.options button span{
-  font-size:28px;
-}
-
-.options button strong{
-  font-size:20px;
-}
-
-.options button small{
-  opacity:0.6;
-  font-size:13px;
-  letter-spacing:0.08em;
-}
-
-.result{
-  position:relative;
-  overflow:hidden;
-}
+.options button:hover::before{ opacity:1; }
+.options button span{ font-size:28px; }
+.options button strong{ font-size:20px; }
+.options button small{ opacity:0.6; font-size:13px; letter-spacing:0.08em; }
 
 .result-orb{
-
   position:absolute;
-
   width:340px;
   height:340px;
-
   right:-80px;
   top:-80px;
-
-  background:
-    radial-gradient(circle,
-    rgba(199,166,255,0.22),
-    transparent 70%);
-
+  background: radial-gradient(circle, rgba(199,166,255,0.22), transparent 70%);
   filter:blur(30px);
 }
 
 .result-stats{
-
   display:flex;
   gap:20px;
-
   margin-top:30px;
   flex-wrap:wrap;
 }
 
 .result-stats div{
-
   flex:1;
-
   min-width:140px;
-
   padding:22px;
-
   border-radius:22px;
-
   background:rgba(255,255,255,0.04);
-
   border:1px solid rgba(255,255,255,0.06);
 }
 
 .result-stats span{
-
   display:block;
-
   font-size:11px;
-
   letter-spacing:0.18em;
-
   opacity:0.6;
-
   margin-bottom:10px;
 }
 
-.result-stats strong{
-  font-size:28px;
-}
-  /* ===== MUSIC ACTIVE MODE ===== */
-  
+.result-stats strong{ font-size:28px; }
+
 @media(max-width: 980px) {
-
-  .hero {
-    flex-direction: column;
-  }
-
+  .hero { flex-direction: column; }
   .hero-photo {
     width: 100%;
     max-width: 500px;
     height: 600px;
-    transition:
-    box-shadow 4s cubic-bezier(.19,1,.22,1),
-    transform 1s ease,
-    filter 3s ease;
+    transition: box-shadow 4s cubic-bezier(.19,1,.22,1), transform 1s ease, filter 3s ease;
   }
-
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-
-  nav ul {
-    display: none;
-  }
-
-  .studio-block {
-    padding: 24px;
-  }
-
+  .about-grid { grid-template-columns: 1fr; }
+  nav ul { display: none; }
+  .studio-block { padding: 24px; }
 }
   
 body::after{
@@ -1069,311 +650,105 @@ body::after{
   inset:0;
   pointer-events:none;
   z-index:0;
-
   background:
     radial-gradient(circle at 20% 30%, rgba(255,210,140,0.18), transparent 35%),
     radial-gradient(circle at 80% 20%, rgba(255,190,120,0.14), transparent 40%),
     radial-gradient(circle at 50% 80%, rgba(255,245,220,0.10), transparent 45%);
-
   opacity:0;
-
-  transition:
-    opacity 2.8s ease,
-    filter 2.8s ease;
-
+  transition: opacity 2.8s ease, filter 2.8s ease;
   mix-blend-mode:soft-light;
 }
 
-body.music-active::after{
-  opacity:.85;
-  filter:blur(0px);
-}
-
-  /* ===== FLOATING ICONS ===== */
-
-.estimator {
-  margin-top: 60px;
-  position: relative;
-  overflow: visible;
-  min-height: auto;
-  max-height: auto;
-}
-
-.quiz-step,
-.result{
-  position:absolute;
-  inset:0;
-}
+body.music-active::after{ opacity:.85; filter:blur(0px); }
 
 .float-icon{
   position:absolute;
   object-fit:contain;
-
   opacity:0.82;
   pointer-events:none;
   z-index:20;
-
-  filter:
-    drop-shadow(0 0 12px rgba(255,255,255,0.12));
-
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.12));
   animation: floatIcon 7s ease-in-out infinite;
-
-  transition:
-    transform 0.5s ease,
-    filter 0.5s ease;
+  transition: transform 0.5s ease, filter 0.5s ease;
 }
 
-  .float-icon img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
+.float-icon img{ width:100%; height:100%; object-fit:contain; }
+.floating-icon:hover{ transform:scale(1.08); }
 
-.floating-icon:hover{
-  transform:scale(1.08);
-}
-
-.icon1{
-  top: 120px;
-  left: -10px;
-
-  width: 28px;
-  height: 28px;
-
-  opacity: 0.65;
-
-  filter:
-    blur(0.3px)
-    drop-shadow(0 0 12px rgba(30,215,96,0.45));
-
-  animation-delay: 0s;
-}
-
-.icon2{
-  top: 70px;
-  right: 40px;
-
-  width: 92px;
-  height: 92px;
-
-  opacity: 0.95;
-
-  filter:
-    drop-shadow(0 0 34px rgba(255,59,92,0.55));
-
-  animation-delay: 1s;
-}
-
-.icon3{
-  top: 360px;
-  left: -20px;
-
-  width: 46px;
-  height: 46px;
-
-  opacity: 0.72;
-
-  filter:
-    blur(0.5px)
-    drop-shadow(0 0 16px rgba(255,136,0,0.4));
-
-  animation-delay: 2s;
-}
-
-.icon4{
-  top: 250px;
-  right: -30px;
-
-  width: 120px;
-  height: 120px;
-
-  opacity: 0.88;
-
-  filter:
-    drop-shadow(0 0 42px rgba(138,92,246,0.6));
-
-  animation-delay: 3s;
-}
-
-.icon5{
-  bottom: 30px;
-  left: 180px;
-
-  width: 34px;
-  height: 34px;
-
-  opacity: 0.5;
-
-  filter:
-    blur(1px)
-    drop-shadow(0 0 12px rgba(255,255,255,0.18));
-
-  animation-delay: 1.5s;
-}
-
-.icon6{
-  bottom: -10px;
-  right: 120px;
-
-  width: 150px;
-  height: 150px;
-
-  opacity: 0.82;
-
-  filter:
-    drop-shadow(0 0 60px rgba(255,255,255,0.35));
-
-  animation-delay: 2.5s;
-}
+.icon1{ top: 120px; left: -10px; width: 28px; height: 28px; opacity: 0.65; filter: blur(0.3px) drop-shadow(0 0 12px rgba(30,215,96,0.45)); animation-delay: 0s; }
+.icon2{ top: 70px; right: 40px; width: 92px; height: 92px; opacity: 0.95; filter: drop-shadow(0 0 34px rgba(255,59,92,0.55)); animation-delay: 1s; }
+.icon3{ top: 360px; left: -20px; width: 46px; height: 46px; opacity: 0.72; filter: blur(0.5px) drop-shadow(0 0 16px rgba(255,136,0,0.4)); animation-delay: 2s; }
+.icon4{ top: 250px; right: -30px; width: 120px; height: 120px; opacity: 0.88; filter: drop-shadow(0 0 42px rgba(138,92,246,0.6)); animation-delay: 3s; }
+.icon5{ bottom: 30px; left: 180px; width: 34px; height: 34px; opacity: 0.5; filter: blur(1px) drop-shadow(0 0 12px rgba(255,255,255,0.18)); animation-delay: 1.5s; }
+.icon6{ bottom: -10px; right: 120px; width: 150px; height: 150px; opacity: 0.82; filter: drop-shadow(0 0 60px rgba(255,255,255,0.35)); animation-delay: 2.5s; }
 
 @keyframes floatIcon{
-
-  0%{
-    transform:
-      translate(0px,0px)
-      rotate(0deg);
-  }
-
-  25%{
-    transform:
-      translate(18px,-16px)
-      rotate(4deg);
-  }
-
-  50%{
-    transform:
-      translate(-14px,18px)
-      rotate(-4deg);
-  }
-
-  75%{
-    transform:
-      translate(16px,10px)
-      rotate(3deg);
-  }
-
-  100%{
-    transform:
-      translate(0px,0px)
-      rotate(0deg);
-  }
-
+  0%{ transform: translate(0px,0px) rotate(0deg); }
+  25%{ transform: translate(18px,-16px) rotate(4deg); }
+  50%{ transform: translate(-14px,18px) rotate(-4deg); }
+  75%{ transform: translate(16px,10px) rotate(3deg); }
+  100%{ transform: translate(0px,0px) rotate(0deg); }
 }
 
-/* ===== CONTENT ABOVE ICONS ===== */
+.estimator-card, .currency-switcher{ position:relative; z-index:3; }
+.estimator-wrapper{ position: relative; overflow: visible; }
+.estimator-icons{ position:absolute; inset:0; pointer-events:none; z-index:0; }
 
-.estimator-card,
-.quiz-step,
-.result,
-.currency-switcher{
-  position:relative;
-  z-index:3;
-}
-  .estimator-wrapper{
+/* Новый CSS для шагов квиза взамен вредоносных абсолютов */
+.quiz-step {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px) scale(.99);
+  transition: opacity .5s ease, transform .5s ease;
   position: relative;
-  overflow: visible;
+  z-index: 3;
 }
-  .estimator-icons{
-
-  position:absolute;
-
-  inset:0;
-
-  pointer-events:none;
-
-  z-index:0;
-
+.quiz-step.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
-  /* ===== QUIZ ANIMATIONS ===== */
-
-.quiz-step{
-  opacity:0;
-  transform:
-    translateY(40px)
-    scale(.98);
-
-  pointer-events:none;
-
-  transition:
-    opacity .9s cubic-bezier(.19,1,.22,1),
-    transform .9s cubic-bezier(.19,1,.22,1);
+.result {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px) scale(.99);
+  transition: opacity .6s ease, transform .6s ease;
+  position: relative;
+  z-index: 3;
+  padding: 36px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
 }
-
-.quiz-step.active{
-  opacity:1;
-  transform:
-    translateY(0)
-    scale(1);
-
-  pointer-events:auto;
+.result.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
-
-/* stagger cards */
 
 .quiz-step .project-card{
   opacity:0;
-  transform:
-    translateY(30px)
-    scale(.96);
-
-  transition:
-    opacity .8s ease,
-    transform .8s cubic-bezier(.19,1,.22,1);
+  transform: translateY(30px) scale(.96);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.19,1,.22,1);
 }
-
 .quiz-step.active .project-card{
   opacity:1;
-  transform:
-    translateY(0)
-    scale(1);
+  transform: translateY(0) scale(1);
 }
+.quiz-step.active .project-card:nth-child(1){ transition-delay:.08s; }
+.quiz-step.active .project-card:nth-child(2){ transition-delay:.16s; }
+.quiz-step.active .project-card:nth-child(3){ transition-delay:.24s; }
+.quiz-step.active .project-card:nth-child(4){ transition-delay:.32s; }
+.result h3 { font-size: 54px; margin: 14px 0; }
+.result small { letter-spacing: 0.2em; color: var(--glow); }
 
-/* delays */
-
-.quiz-step.active .project-card:nth-child(1){
-  transition-delay:.08s;
-}
-
-.quiz-step.active .project-card:nth-child(2){
-  transition-delay:.16s;
-}
-
-.quiz-step.active .project-card:nth-child(3){
-  transition-delay:.24s;
-}
-
-.quiz-step.active .project-card:nth-child(4){
-  transition-delay:.32s;
-}
-  .result{
-  opacity:0;
-  transform:
-    translateY(40px)
-    scale(.98);
-
-  pointer-events:none;
-
-  transition:
-    opacity 1s cubic-bezier(.19,1,.22,1),
-    transform 1s cubic-bezier(.19,1,.22,1);
-}
-
-.result.active{
-  opacity:1;
-  transform:
-    translateY(0)
-    scale(1);
-
-  pointer-events:auto;
-}
-  
 </style>
 </head>
 <body>
 
 <nav>
   <div class="logo">МИХАИЛ ВЕЩЕВ</div>
-
   <ul>
     <li><a href="#works">Работы</a></li>
     <li><a href="#estimator">Стоимость</a></li>
@@ -1382,223 +757,99 @@ body.music-active::after{
 </nav>
 
 <section class="hero">
-
   <div class="hero-text fade">
-
     <div class="hero-label">
       SOUND DESIGN / MUSIC PRODUCTION / POST-PRODUCTION
     </div>
-
-    <h1>
-      МИХАИЛ<br>
-      ВЕЩЕВ
-    </h1>
-
+    <h1>МИХАИЛ<br>ВЕЩЕВ</h1>
     <p>
-      Аранжировка, саунд-дизайн, EDM,
-      пост-продакшн и кинематографичная музыка.
-      Работа с пространством, атмосферой и эмоциональной динамикой.
+      Аранжировка, саунд-дизайн, EDM, пост-продакшн и кинематографичная музыка. Работа с пространством, атмосферой и эмоциональной динамикой.
     </p>
-
     <div class="hero-buttons">
-      <a class="btn btn-primary" href="#contact">
-        Обсудить проект
-      </a>
-
-      <a class="btn btn-secondary" href="#works">
-        Слушать работы
-      </a>
+      <a class="btn btn-primary" href="#contact">Обсудить проект</a>
+      <a class="btn btn-secondary" href="#works">Слушать работы</a>
     </div>
-
   </div>
-
   <div class="hero-photo fade">
     <div class="glow"></div>
     <img src="portrait.jpg" alt="Михаил Вещев">
   </div>
-
 </section>
 
 <section id="works">
-
-  <h2 class="section-title fade">
-    Selected<br>
-    Works
-  </h2>
-
+  <h2 class="section-title fade">Selected<br>Works</h2>
   <div class="grid works-grid">
-
-  <div class="card fade">
-    <h3>Электронная музыка</h3>
-    <p>Breakcore / Jungle / UK Garage / Experimental</p>
-
-    <audio controls>
-      <source src="mishochekAtavism.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="mishochekReminiscence.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="mishochekAorta.mp3">
-    </audio>
-  </div>
-
-  <div class="card fade">
-    <h3>Кинематографичная музыка</h3>
-    <p>Trailer music / orchestral scoring / ambient atmosphere</p>
-
-    <audio controls>
-      <source src="VESHCHEV AVENGERS.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="VESHCHEV DEBUSSY.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="2.0.mp3">
-    </audio>
-  </div>
-
-  <div class="card fade">
-    <h3>Живые записи</h3>
-    <p>Classical ensembles / orchestral sessions / chamber music</p>
-
-    <audio controls>
-      <source src="STARKOV MIX 150426.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="Fis-moll.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="VESHCHEV SAINT-SAENS.mp3">
-    </audio>
-  </div>
-
-  <div class="card fade">
-    <h3>Коммерческая музыка</h3>
-    <p>Pop / vocal / commercial arrangements</p>
-
-    <audio controls>
-      <source src="VESHCHEV CRY.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="VESHCHEV NO TIME TO DIE.mp3">
-    </audio>
-
-    <audio controls>
-      <source src="VESHCHEV OCEAN EYES.mp3">
-    </audio>
-  </div>
-
-  <!-- ЛЕВЫЙ БЛОК -->
-
-  <div class="card promo-card premium-card fade">
-
-    <h3>
-      Premium<br>
-      Audio Production
-    </h3>
-
-    <p>
-      Работа с глубиной, пространством и эмоциональной архитектурой звука.
-      От камерных ансамблей до гибридного оркестра с электроникой.
-    </p>
-
-    <ul>
-      <li>• Фильмы, рекламы, трейлеры и вертикальный контент (Reels, Shorts и TikTok): Полный цикл аудио-
-постпродакшна: музыка, FX, монтаж аудио, сведение</li>
-      <li>• ADR / Дубляж: Профессиональная работа с
-актерами озвучания, переозвучка, чистка диалогов
-и реставрация аудио.</li>
-      <li>• Sound Design: Создание уникальных атмосфер и
-эффектов для кино и видео.</li>
-    </ul>
-
-  </div>
-
-  <!-- ПРАВЫЙ БЛОК -->
-
-  <div class="studio-mini fade">
-
-    <div class="studio-overlay"></div>
-
-    <div class="studio-mini-content">
-
-      <span>EDUCATION / EXPERIENCE</span>
-
-      <h3>
-        Gnesin College<br>
-        & Professional Work
-      </h3>
-
-      <p>
-        Работа с академическими ансамблями,
-        кинематографичным продакшном и современным саунд-дизайном.
-      </p>
-
-      <div class="stack">
-        <div class="tag">Avid Pro Tools</div>
-        <div class="tag">Ableton Live</div>
-        <div class="tag">Steinberg Dorico</div>
-        <div class="tag">iZotope RX</div>
-      </div>
-
-      <div class="timeline">
-
-        <div class="timeline-item">
-          <span>2024</span>
-          <h4>Радио «Орфей»</h4>
-          <p>Сессии академических коллективов.</p>
-        </div>
-
-        <div class="timeline-item">
-          <span>2025</span>
-          <h4>Кисловодская филармония</h4>
-          <p>Подзвучка, трансляция и запись классических ансамблей и оркестров.</p>
-        </div>
-
-        <div class="timeline-item">
-          <span>NOW</span>
-          <h4>Freelance Production</h4>
-          <p>и работа в студии</p>
-        </div>
-
-      </div>
-
+    <div class="card fade">
+      <h3>Электронная музыка</h3>
+      <p>Breakcore / Jungle / UK Garage / Experimental</p>
+      <audio controls><source src="mishochekAtavism.mp3"></audio>
+      <audio controls><source src="mishochekReminiscence.mp3"></audio>
+      <audio controls><source src="mishochekAorta.mp3"></audio>
     </div>
-
+    <div class="card fade">
+      <h3>Кинематографичная музыка</h3>
+      <p>Trailer music / orchestral scoring / ambient atmosphere</p>
+      <audio controls><source src="VESHCHEV AVENGERS.mp3"></audio>
+      <audio controls><source src="VESHCHEV DEBUSSY.mp3"></audio>
+      <audio controls><source src="2.0.mp3"></audio>
+    </div>
+    <div class="card fade">
+      <h3>Живые записи</h3>
+      <p>Classical ensembles / orchestral sessions / chamber music</p>
+      <audio controls><source src="STARKOV MIX 150426.mp3"></audio>
+      <audio controls><source src="Fis-moll.mp3"></audio>
+      <audio controls><source src="VESHCHEV SAINT-SAENS.mp3"></audio>
+    </div>
+    <div class="card fade">
+      <h3>Коммерческая музыка</h3>
+      <p>Pop / vocal / commercial arrangements</p>
+      <audio controls><source src="VESHCHEV CRY.mp3"></audio>
+      <audio controls><source src="VESHCHEV NO TIME TO DIE.mp3"></audio>
+      <audio controls><source src="VESHCHEV OCEAN EYES.mp3"></audio>
+    </div>
+    <div class="card promo-card premium-card fade">
+      <h3>Premium<br>Audio Production</h3>
+      <p>Работа с глубиной, пространством и архитектурой звука.</p>
+      <ul>
+        <li>• Фильмы, реклама, трейлеры и вертикальный контент</li>
+        <li>• ADR / Дубляж и реставрация аудио</li>
+        <li>• Sound Design: Уникальные атмосферы</li>
+      </ul>
+    </div>
+    <div class="studio-mini fade">
+      <div class="studio-overlay"></div>
+      <div class="studio-mini-content">
+        <span>EDUCATION / EXPERIENCE</span>
+        <h3>Gnesin College<br>& Professional Work</h3>
+        <p>Работа с академическими ансамблями и саунд-дизайном.</p>
+        <div class="stack">
+          <div class="tag">Avid Pro Tools</div>
+          <div class="tag">Ableton Live</div>
+          <div class="tag">Steinberg Dorico</div>
+          <div class="tag">iZotope RX</div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item"><span>2024</span><h4>Радио «Орфей»</h4><p>Сессии академических коллективов.</p></div>
+          <div class="timeline-item"><span>2025</span><h4>Кисловодская филармония</h4><p>Запись классических оркестров.</p></div>
+          <div class="timeline-item"><span>NOW</span><h4>Freelance Production</h4><p>и работа в студии</p></div>
+        </div>
+      </div>
+    </div>
   </div>
-
-</div>
-
 </section>
 
 <section id="estimator">
-
-<div class="estimator-icons">
-  <img src="spotify.png" class="float-icon icon1">
-  <img src="applemusic.png" class="float-icon icon2">
-  <img src="soundcloud.png" class="float-icon icon3">
-  <img src="abletonlive.png" class="float-icon icon4">
-  <img src="logicpro.png" class="float-icon icon5">
-  <img src="protools.png" class="float-icon icon6">
-</div>
-
-  <h2 class="section-title fade">
-    Создай свой<br>
-    идеальный проект
-  </h2>
-
+  <div class="estimator-icons">
+    <img src="spotify.png" class="float-icon icon1">
+    <img src="applemusic.png" class="float-icon icon2">
+    <img src="soundcloud.png" class="float-icon icon3">
+    <img src="abletonlive.png" class="float-icon icon4">
+    <img src="logicpro.png" class="float-icon icon5">
+    <img src="protools.png" class="float-icon icon6">
+  </div>
+  <h2 class="section-title fade">Создай свой<br>идеальный проект</h2>
   <div class="card estimator fade futuristic-estimator">
-
     <div class="estimator-glow"></div>
-
     <div class="currency-switcher">
       <button onclick="setCurrency('RUB')">₽ RUB</button>
       <button onclick="setCurrency('USD')">$ USD</button>
@@ -1606,144 +857,100 @@ body.music-active::after{
       <button onclick="setCurrency('AMD')">֏ AMD</button>
     </div>
 
-    <style>
-      .quiz-step {
-        display: none;
-        opacity: 0;
-        transform: translateY(20px) scale(.99);
-        transition: opacity .5s ease, transform .5s ease;
-      }
-      .quiz-step.active {
-        display: block;
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-      .result {
-        display: none;
-        opacity: 0;
-        transform: translateY(20px) scale(.99);
-        transition: opacity .6s ease, transform .6s ease;
-      }
-      .result.active {
-        display: block;
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    </style>
-
     <div class="quiz-step active" id="step1">
-      <h3>What do we need to create?</h3>
+      <h3>Что нужно создать?</h3>
       <div class="options cards-mode">
         <button class="project-card" onclick="nextStep(2, 40000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('arrangement.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Arrangement</h4>
-            <p>emotion / dynamics / harmony</p>
-          </div>
+          <div class="project-card-content"><h4>Аранжировка</h4><p>emotion / dynamics / harmony</p></div>
         </button>
         <button class="project-card" onclick="nextStep(2, 30000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('cinematic.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Video Music</h4>
-            <p>movie / soundtrack</p>
-          </div>
+          <div class="project-card-content"><h4>Музыка для видео</h4><p>movie / soundtrack</p></div>
         </button>
         <button class="project-card" onclick="nextStep(2, 25000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('sounddesign.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Sound Design</h4>
-            <p>games / abstract / experimental</p>
-          </div>
+          <div class="project-card-content"><h4>Саунд-дизайн</h4><p>games / abstract / experimental</p></div>
         </button>
         <button class="project-card" onclick="nextStep(2, 14000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('mixing.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Mix / Master</h4>
-            <p>clarity / loudness / balance</p>
-          </div>
+          <div class="project-card-content"><h4>Mix / Master</h4><p>clarity / loudness / balance</p></div>
         </button>
       </div>
     </div>
         
     <div class="quiz-step" id="step2">
-      <h3>What is the project's vibe?</h3>
+      <h3>Какой vibe должен быть у проекта?</h3>
       <div class="options cards-mode">
         <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('emotional.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Emotional</h4>
-            <p>emotional / beautiful / deep</p>
-          </div>
+          <div class="project-card-content"><h4>Эмоциональный</h4><p>emotional / beautiful / deep</p></div>
         </button>
         <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('dark.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Dark</h4>
-            <p>experimental / distorted / abstract</p>
-          </div>
+          <div class="project-card-content"><h4>Мрачный</h4><p>experimental / distorted / abstract</p></div>
         </button>
         <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('commercial.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Commercial</h4>
-            <p>clean / expensive / modern</p>
-          </div>
+          <div class="project-card-content"><h4>Коммерческий</h4><p>clean / expensive / modern</p></div>
         </button>
         <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('aggressive.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Aggressive</h4>
-            <p>loud / sharp / energetic</p>
-          </div>
+          <div class="project-card-content"><h4>Агрессивный</h4><p>loud / sharp / energetic</p></div>
         </button>
       </div>
     </div>
 
     <div class="quiz-step" id="step3">
-      <h3>Turnaround / Deadline?</h3>
+      <h3>Насколько всё срочно?</h3>
       <div class="options cards-mode">
         <button class="project-card" onclick="finishQuiz(1)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('normal.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>No Rush</h4>
-            <p>careful / cinematic / detailed</p>
-          </div>
+          <div class="project-card-content"><h4>Не сильно срочно</h4><p>careful / cinematic / detailed</p></div>
         </button>
         <button class="project-card" onclick="finishQuiz(1.25)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('fast.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Standard Pace</h4>
-            <p>tight deadline / intense workflow</p>
-          </div>
+          <div class="project-card-content"><h4>В обычном темпе</h4><p>tight deadline / intense workflow</p></div>
         </button>
         <button class="project-card" onclick="finishQuiz(1.55)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('urgent.jpg') center/cover;">
-          <div class="project-card-content">
-            <h4>Urgent</h4>
-            <p>sleep is optional / export at 4am</p>
-          </div>
+          <div class="project-card-content"><h4>Сроки горят</h4><p>sleep is optional / export at 4am</p></div>
         </button>
       </div>
-
       <div style="margin-top:28px; padding:24px; border-radius:24px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.72); line-height:1.8;">
-        ⚡ Fast turnaround available.<br>
-        🌙 Night sessions supported.<br>
-        🎧 Cinematic polish included by default.
+        ⚡ Fast turnaround available.<br>🌙 Night sessions supported.<br>🎧 Cinematic polish included by default.
       </div>
     </div>
 
     <div class="result" id="result">
       <div class="result-orb"></div>
       <small>ESTIMATED PRODUCTION COST</small>
-      <h3 id="price">от 40 000 ₽</h3>
+      <h3 id="price">от 40000 ₽</h3>
       <p id="resultText">Проект выглядит как что-то очень атмосферное.</p>
-
       <div class="result-stats">
         <div><span>АТМОСФЕРА</span><strong>97%</strong></div>
         <div><span>КОНТРАСТ</span><strong>92%</strong></div>
         <div><span>ЭКСПЕРИМЕНТАЛЬНОСТЬ</span><strong>88%</strong></div>
       </div>
-
       <div class="contacts">
         <a href="https://t.me/mishocheks" target="_blank">Telegram</a>
         <a href="mailto:mishocheks@internet.ru">mishocheks@internet.ru</a>
       </div>
     </div>
-
   </div>
-
 </section>
 
+<section id="contact">
+  <h2 class="section-title fade">Давайте сделаем<br>что-то новое.</h2>
+  <div class="contacts fade">
+    <a href="https://t.me/mishocheks" target="_blank">Telegram</a>
+    <a href="mailto:mishocheks@internet.ru">Email</a>
+  </div>
+</section>
+
+<footer>© 2026 Михаил Вещев</footer>
+  
+<audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
+<audio id="resultSound" src="result.mp3" preload="auto"></audio>
+<audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
+
 <script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){ entry.target.classList.add('visible'); }
+  });
+});
+document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+
 let currentCurrency = 'RUB';
 let currentPrice = 40000;
 
@@ -1772,9 +979,7 @@ function updatePrice() {
 
 function nextStep(step, basePrice = null){
   playHoverSound();
-  if(basePrice !== null){
-    currentPrice = basePrice;
-  }
+  if(basePrice !== null){ currentPrice = basePrice; }
 
   const current = document.querySelector('.quiz-step.active');
   const next = document.getElementById('step' + step);
@@ -1786,7 +991,6 @@ function nextStep(step, basePrice = null){
     setTimeout(() => {
       current.classList.remove('active');
       next.classList.add('active');
-      
       setTimeout(() => {
         next.style.opacity = '1';
         next.style.transform = 'translateY(0) scale(1)';
@@ -1812,7 +1016,6 @@ function finishQuiz(multiplier) {
     setTimeout(() => {
       current.classList.remove('active');
       resultBlock.classList.add('active');
-      
       setTimeout(() => {
         resultBlock.style.opacity = '1';
         resultBlock.style.transform = 'translateY(0) scale(1)';
@@ -1821,6 +1024,6 @@ function finishQuiz(multiplier) {
   }
 }
 </script>
-  
+
 </body>
 </html>
