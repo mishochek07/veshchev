@@ -1064,102 +1064,103 @@ body.music-active::after{
 }
   
   /* ===== FLOATING ICONS ===== */
-
-#estimator{
-  position:relative;
-  overflow:hidden;
+  
+.estimator {
+  margin-top: 60px;
+  position: relative;
+  overflow: visible;
 }
 
-.floating-icons{
+.floating-icon{
   position:absolute;
-  inset:0;
-  pointer-events:none;
-  overflow:hidden;
-  z-index: 20;
-}
-
-.float-icon{
-  position:absolute;
-  width:70px;
-  height:70px;
+  width:72px;
+  height:72px;
   object-fit:contain;
 
-  animation: floatIcon 5s ease-in-out infinite;
-
-  transition:
-    transform 0.25s ease,
-    filter 0.4s ease;
-
-  will-change: transform;
+  opacity:0.9;
+  pointer-events:none;
+  z-index:20;
 
   filter:
-    blur(0.2px)
-    drop-shadow(0 0 40px rgba(255,220,170,0.16));
+    drop-shadow(0 0 18px rgba(255,255,255,0.18));
+
+  animation: floatIcon 7s ease-in-out infinite;
+
+  transition:
+    transform 0.5s ease,
+    filter 0.5s ease;
 }
 
-/* ===== POSITIONS ===== */
+.floating-icon:hover{
+  transform:scale(1.08);
+}
 
 .icon1{
-  top:-90px;
-  left:20px;
-  animation-duration:4s;
+  top:-30px;
+  left:40px;
+  animation-delay:0s;
 }
 
 .icon2{
-  top:20px;
-  right:-80px;
-  animation-duration:5s;
+  top:40px;
+  right:-20px;
+  animation-delay:1s;
 }
 
 .icon3{
-  bottom:-70px;
-  left:-60px;
-  animation-duration:6s;
+  bottom:-20px;
+  left:-30px;
+  animation-delay:2s;
 }
 
 .icon4{
-  bottom:-40px;
-  right:240px;
-  animation-duration:4.5s;
+  bottom:40px;
+  right:120px;
+  animation-delay:3s;
 }
 
 .icon5{
-  top:260px;
-  left:-90px;
-  animation-duration:5.5s;
+  top:220px;
+  left:-35px;
+  animation-delay:1.5s;
 }
 
 .icon6{
-  top:360px;
-  right:-70px;
-  animation-duration:6.5s;
+  top:320px;
+  right:30px;
+  animation-delay:2.5s;
 }
 
-@keyframes floatMove{
-
+@keyframes floatIcon{
 
   0%{
-    transform:translate(0px,0px) rotate(0deg) scale(1);
+    transform:
+      translate(0px,0px)
+      rotate(0deg);
   }
 
-  20%{
-    transform:translate(45px,-35px) rotate(8deg) scale(1.05);
+  25%{
+    transform:
+      translate(18px,-16px)
+      rotate(4deg);
   }
 
-  40%{
-    transform:translate(-40px,30px) rotate(-8deg) scale(0.96);
+  50%{
+    transform:
+      translate(-14px,18px)
+      rotate(-4deg);
   }
 
-  60%{
-    transform:translate(55px,20px) rotate(6deg) scale(1.08);
-  }
-
-  80%{
-    transform:translate(-35px,-25px) rotate(-5deg) scale(0.98);
+  75%{
+    transform:
+      translate(16px,10px)
+      rotate(3deg);
   }
 
   100%{
-    transform:translate(0px,0px) rotate(0deg) scale(1);
+    transform:
+      translate(0px,0px)
+      rotate(0deg);
   }
 
 }
