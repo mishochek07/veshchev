@@ -1071,24 +1071,30 @@ body.music-active::after{
   overflow: visible;
 }
 
-.floating-icon{
+.float-icon{
+
   position:absolute;
-  width:32px;
-  height:32px;
+
+  width:72px;
+  height:72px;
+
   object-fit:contain;
 
-  opacity:0.82;
+  opacity:0.95;
+
   pointer-events:none;
-  z-index:20;
+
+  z-index:1;
 
   filter:
-    drop-shadow(0 0 12px rgba(255,255,255,0.12));
+    drop-shadow(0 0 22px rgba(255,255,255,0.18));
 
-  animation: floatIcon 7s ease-in-out infinite;
+  animation: floatIcon 5s ease-in-out infinite;
 
   transition:
-    transform 0.5s ease,
+    transform 0.18s linear,
     filter 0.5s ease;
+
 }
 
 .floating-icon:hover{
@@ -1096,39 +1102,33 @@ body.music-active::after{
 }
 
 .icon1{
-  top:-30px;
-  left:40px;
-  animation-delay:0s;
+  top:120px;
+  left:-20px;
 }
 
 .icon2{
   top:40px;
-  right:-20px;
-  animation-delay:1s;
+  right:20px;
 }
 
 .icon3{
-  bottom:-20px;
+  bottom:120px;
   left:-30px;
-  animation-delay:2s;
 }
 
 .icon4{
-  bottom:40px;
-  right:120px;
-  animation-delay:3s;
+  bottom:80px;
+  right:-10px;
 }
 
 .icon5{
-  top:220px;
-  left:-35px;
-  animation-delay:1.5s;
+  top:320px;
+  left:-40px;
 }
 
 .icon6{
-  top:320px;
-  right:30px;
-  animation-delay:2.5s;
+  top:260px;
+  right:-30px;
 }
 
 @keyframes floatIcon{
@@ -1393,21 +1393,12 @@ body.music-active::after{
 
 <section id="estimator">
 
-  <div class="floating-icon">
-
   <img src="spotify.png" class="float-icon icon1">
-
-  <img src="applemusic.png" class="float-icon icon2">
-
-  <img src="soundcloud.png" class="float-icon icon3">
-
-  <img src="abletonlive.png" class="float-icon icon4">
-
-  <img src="logicpro.png" class="float-icon icon5">
-
-  <img src="protools.png" class="float-icon icon6">
-
-</div>
+<img src="applemusic.png" class="float-icon icon2">
+<img src="soundcloud.png" class="float-icon icon3">
+<img src="abletonlive.png" class="float-icon icon4">
+<img src="logicpro.png" class="float-icon icon5">
+<img src="protools.png" class="float-icon icon6">
 
   <h2 class="section-title fade">
     Создай свой<br>
@@ -1875,14 +1866,16 @@ document.addEventListener('mousemove', e => {
 
   document.querySelectorAll('.float-icon').forEach((icon, index) => {
 
-    const speed = 12 + index * 3;
+    const speed = 38 + index * 8;
 
     icon.style.transform = `
-      translate(
-        ${x * speed}px,
-        ${y * speed}px
-      )
-    `;
+translate3d(
+  ${x * speed}px,
+  ${y * speed}px,
+  0
+)
+rotate(${x * 8}deg)
+`;
 
   });
 
