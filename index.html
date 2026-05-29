@@ -743,16 +743,19 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 .result h3 { font-size: 54px; margin: 14px 0; }
 .result small { letter-spacing: 0.2em; color: var(--glow); }
 
-  .card.estimator {
-  transition: height 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s ease, box-shadow 1.6s ease;
+ /* ЖЕЛЕЙНЫЕ СТИЛИ ДЛЯ КОНТЕЙНЕРА И ШАГОВ */
+.card.estimator {
+  /* Эффект пружины: за счет 0.6s и специального безье блок будет сочно "отскакивать" */
+  transition: height 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.9s ease, box-shadow 1.6s ease;
   will-change: height;
 }
 
 .quiz-step {
   display: none;
   opacity: 0;
-  transform: translateY(15px) scale(.99);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  /* Стартуем чуть ниже и сильнее сжатыми для большего контраста в динамике */
+  transform: translateY(20px) scale(0.96);
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
 }
 
@@ -765,8 +768,8 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 .result {
   display: none;
   opacity: 0;
-  transform: translateY(15px) scale(.99);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(20px) scale(0.96);
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   z-index: 3;
 }
@@ -1080,38 +1083,30 @@ function resizeEstimatorContainer(targetBlock) {
   const container = document.querySelector('.card.estimator');
   if (!container || !targetBlock) return;
 
-  // Отключаем overflow: hidden на время, чтобы он не блокировал клики
   container.style.overflow = 'visible';
 
-  // Получаем текущую точную высоту контейнера из браузера
   const currentHeight = container.getBoundingClientRect().height;
   container.style.height = currentHeight + 'px';
 
-  // Временно включаем отображение шага для замера
   const originalDisplay = targetBlock.style.display;
   targetBlock.style.display = 'block';
   
-  // Автоматически считаем внутренние отступы (padding) карточки из CSS
   const computedStyle = window.getComputedStyle(container);
   const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
   const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
   
-  // Итоговая точная высота контента вместе с его реальными отступами
   const targetHeight = targetBlock.scrollHeight + paddingTop + paddingBottom;
   targetBlock.style.display = originalDisplay;
 
-  // Запускаем плавный переход
   requestAnimationFrame(() => {
-    container.style.transition = 'height 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+    container.style.transition = 'height 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
     container.style.height = targetHeight + 'px';
   });
 
-  // Как только анимация завершилась, полностью сбрасываем инлайновую высоту в auto,
-  // чтобы карточка «ожила», стала резиновой и открыла доступ ко всем кликам
   setTimeout(() => {
     container.style.height = 'auto';
     container.style.overflow = 'visible';
-  }, 450);
+  }, 650);
 }
 
 function setCurrency(currency, buttonElement){
@@ -1125,22 +1120,29 @@ function setCurrency(currency, buttonElement){
   document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active-currency'));
   if (buttonElement) buttonElement.classList.add('active-currency');
 
-  updatePrice(true); // true включает анимацию цифр
+  updatePrice(true);
 }
 
-// Анимация эффекта "бегущих цифр" (Odometer)
 function animateValue(start, end, duration) {
   const priceElement = document.getElementById('price');
   if (!priceElement) return;
 
   const startTime = performance.now();
   
+  function elasticEaseOut(t) {
+    if (t === 0) return 0;
+    if (t === 1) return 1;
+    const p = 0.3;
+    return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
+  }
+  
   function update(currentTime) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    const easeProgress = progress * (2 - progress); // Плавное замедление к концу
+    const springProgress = elasticEaseOut(progress);
     
-    const currentValue = Math.round(start + (end - start) * easeProgress);
+    const currentValue = Math.round(start + (end - start) * springProgress);
+    
     priceElement.innerText = `от ${currentValue.toLocaleString()} ${symbols[currentCurrency]}`;
     displayedPrice = currentValue;
 
