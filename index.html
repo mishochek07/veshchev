@@ -453,9 +453,14 @@ footer {
 }
 
 .fade {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: 1s ease;
+  opacity: 1;
+  transform: translateY(0px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade.visible {
+  opacity: 1;
+  transform: translateY(0px);
 }
 
 .fade.visible {
@@ -910,3 +915,5 @@ function updatePrice() {
 
 </body>
 </html>
+
+После этого сайт будет полностью обновлен.
