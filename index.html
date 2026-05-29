@@ -20,473 +20,823 @@
   --accent: #fff6dc;
 }
 
-* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  scroll-behavior: smooth;\n}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
 
 body {
   background:
   radial-gradient(circle at top left, rgba(255,220,170,0.10), transparent 32%),
-  radial-gradient(circle at bottom right, rgba(255,245,220,0.07), transparent 40%),
-  var(--bg);
+  radial-gradient(circle at bottom right, rgba(255,245,220,0.07), transparent 35%),
+  linear-gradient(to bottom, #0f0d0a, #15120e);
+
   color: var(--text);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
-  line-height: 1.6;
+  transition: background 2.5s ease, color 2s ease, filter 2s ease;
+  position: relative;
+  isolation: isolate;
 }
 
-header {
+body::before {
+  content: '';
   position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: -1;
+}
+  
+nav {
+  position: relative;
   top: 0;
-  left: 0;
   width: 100%;
+  padding: 24px 6vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px 8%;
-  z-index: 100;
-  background: linear-gradient(to bottom, rgba(15,13,10,0.8), transparent);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,240,220,0.03);
+  z-index: 10;
+  backdrop-filter: blur(16px);
+  background: rgba(5,7,11,0.55);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .logo {
-  font-weight: 900;
-  font-size: 20px;
-  letter-spacing: -0.5px;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.35em;
 }
 
-.nav-links {
+nav ul {
   display: flex;
-  gap: 40px;
+  gap: 32px;
   list-style: none;
 }
 
-.nav-links a {
+nav a {
   color: var(--muted);
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.3s ease, transform 0.3s ease;
-  display: inline-block;
-}
-
-.nav-links a:hover {
-  color: var(--text);
-  transform: translateY(-1px);
-}
-
-#hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 8%;
-  position: relative;
-}
-
-.hero-content {
-  max-width: 900px;
-}
-
-.hero-tag {
   font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  color: var(--muted);
-  margin-bottom: 20px;
-  font-weight: 600;
-  display: inline-block;
-  border-left: 2px solid var(--glow);
-  padding-left: 15px;
+  transition: 0.3s ease;
 }
 
-h1 {
-  font-size: clamp(45px, 7vw, 105px);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -3px;
-  margin-bottom: 40px;
+nav a:hover {
+  color: white;
 }
 
-.hero-description {
-  font-size: clamp(16px, 2.5vw, 22px);
-  color: var(--muted);
-  max-width: 650px;
-  font-weight: 300;
-  margin-bottom: 50px;
-}
-
-.cta-btn {
-  display: inline-flex;
+.hero {
+  min-height: 100vh;
+  display: flex;
   align-items: center;
-  gap: 15px;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 18px 35px;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 15px;
+  justify-content: space-between;
+  padding: 140px 6vw 80px;
+  gap: 80px;
+}
+
+.hero-text {
+  max-width: 760px;
+}
+
+.hero-label {
+  color: var(--glow);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-size: clamp(70px, 11vw, 180px);
+  line-height: 0.88;
+  letter-spacing: -0.08em;
+  margin-bottom: 28px;
+}
+
+.hero p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 620px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 18px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 18px 28px;
+  border-radius: 999px;
   text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: 0.35s ease;
+  font-weight: 600;
 }
 
-.cta-btn:hover {
-  background: var(--text);
-  color: var(--bg);
-  border-color: var(--text);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+.btn-primary {
+  background: linear-gradient(135deg, var(--glow), var(--accent));
+  color: black;
 }
 
-.cta-btn svg {
-  transition: transform 0.4s ease;
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 50px rgba(255,220,140,0.35),
+    0 0 120px rgba(255,240,190,0.2);
+  filter: saturate(1.2);
+}
+  
+.btn-secondary {
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  backdrop-filter: blur(10px);
 }
 
-.cta-btn:hover svg {
-  transform: translateX(5px);
+.hero-photo {
+  width: 420px;
+  height: 700px;
+  border-radius: 36px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 80px rgba(126,255,212,0.08);
+  transition: box-shadow 2.4s ease, transform 1s ease;
 }
 
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 2.4s ease, transform 2s ease;
+}
+
+.glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle, rgba(255,225,178,0.12), rgba(255,244,220,0.06), transparent 65%);
+  filter: blur(100px);
+  z-index: -1;
+  opacity: 0.4;
+  transition: opacity 1s ease, transform 2s ease, background 1s ease;
+}
+  
 section {
-  padding: 140px 8%;
+  padding: 120px 6vw;
+  position: relative;
+  z-index: 2;
 }
 
 .section-title {
-  font-size: clamp(35px, 5vw, 65px);
-  font-weight: 900;
-  letter-spacing: -2px;
-  line-height: 1;
-  margin-bottom: 70px;
+  font-size: clamp(50px, 8vw, 110px);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+  margin-bottom: 60px;
 }
 
 .grid {
   display: grid;
-  gap: 30px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
 }
 
 .works-grid {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-items: stretch;
+}
+
+.premium-card {
+  min-height: 620px;
+}
+
+@media(max-width: 1400px){
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 980px){
+  .grid { grid-template-columns: 1fr; }
+  .studio-mini-content h3 { font-size: 48px; }
 }
 
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  padding: 45px 40px;
-  border-radius: 24px;
-  backdrop-filter: blur(8px);
-  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 32px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.9s ease, box-shadow 1.6s ease, border-color 1.6s ease, background 1.6s ease, filter 1.6s ease;
+  will-change: transform, border-color, background, box-shadow;
 }
-
+  
 .card:hover {
-  border-color: rgba(255,240,220,0.18);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  transform: translateY(-8px);
+  border-color: rgba(255,220,170,0.35);
+  box-shadow: 0 0 80px rgba(255,220,170,0.12), 0 0 140px rgba(255,190,120,0.06);
+  transition: transform .8s ease, border-color 1s ease, box-shadow 1s ease;
 }
-
+  
+.card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background: linear-gradient(135deg, rgba(255,220,170,0.22), rgba(255,245,220,0.04));
+  opacity:0;
+  transition: opacity 1s ease, filter 1s ease, transform 1s ease;
+  filter:blur(30px);
+  pointer-events:none;
+}
+  
+.card:hover::before{
+  opacity:1;
+  filter:blur(0px);
+}
+  
 .card h3 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 15px;
-  letter-spacing: -0.5px;
+  font-size: 32px;
+  margin-bottom: 20px;
 }
 
 .card p {
   color: var(--muted);
-  font-size: 15px;
-  font-weight: 300;
+  line-height: 1.7;
+}
+
+audio {
+  width: 100%;
+  margin-top: 18px;
 }
 
 .promo-card {
-  background: radial-gradient(circle at top right, rgba(255,225,178,0.07), transparent 60%), var(--card);
+  background: linear-gradient(to bottom right, rgba(126,255,212,0.08), rgba(141,204,255,0.04)), rgba(255,255,255,0.04);
 }
 
-.premium-card ul {
+.promo-card ul {
   list-style: none;
-  margin-top: 25px;
+  margin-top: 24px;
 }
 
-.premium-card li {
-  margin-bottom: 12px;
+.promo-card li {
+  margin-bottom: 14px;
+  color: var(--muted);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.studio-block {
+  min-height: 700px;
+  border-radius: 42px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(to top, rgba(5,7,11,0.94), rgba(5,7,11,0.5)), url('ableton.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: flex-end;
+  padding: 60px;
+}
+
+.studio-content {
+  max-width: 620px;
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 28px;
+  padding: 36px;
+}
+
+.studio-content h3 {
+  font-size: 54px;
+  line-height: 0.95;
+  margin-bottom: 20px;
+}
+
+.studio-content p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.tag {
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
   font-size: 14px;
-  color: var(--muted);
-  font-weight: 300;
-}
-
-.experience-layout {
-  grid-template-columns: 1fr 2fr;
-}
-
-.exp-left h3 {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  margin-bottom: 10px;
-}
-
-.exp-left p {
-  color: var(--muted);
-  font-size: 15px;
-  font-weight: 300;
 }
 
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 30px;
+  margin-top: 30px;
 }
 
 .timeline-item {
-  position: relative;
-  padding-left: 30px;
-  border-left: 1px solid var(--border);
+  padding-left: 20px;
+  border-left: 2px solid rgba(126,255,212,0.2);
 }
 
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -4px;
-  top: 8px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--glow);
-}
-
-.time-period {
-  font-size: 13px;
-  font-weight: 600;
+.timeline-item span {
   color: var(--glow);
-  margin-bottom: 8px;
-}
-
-.job-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.job-desc {
-  color: var(--muted);
-  font-size: 15px;
-  font-weight: 300;
+  font-size: 12px;
+  letter-spacing: 0.2em;
 }
 
 .estimator {
-  max-width: 650px;
-  margin: 0 auto;
-  border: 1px solid rgba(255,225,178,0.15);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  margin-top: 60px;
   position: relative;
+  overflow: visible;
+}
+  
+.cards-mode{
+  grid-template-columns:repeat(4,1fr);
+}
+
+.project-card{
+  position:relative;
+  overflow:hidden;
+  min-height:260px;
+  border-radius:30px;
+  border:1px solid rgba(255,255,255,0.08);
+  cursor:pointer;
+  transition:0.45s ease;
+  display:flex;
+  align-items:flex-end;
+  padding:28px;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+.project-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(to top, rgba(5,7,11,0.92), rgba(5,7,11,0.2));
+  transition:0.45s ease;
+}
+
+.project-card:hover{
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 0 60px rgba(120,140,255,0.2);
+}
+
+.project-card:hover::before{
+  background: linear-gradient(to top, rgba(5,7,11,0.72), rgba(5,7,11,0.05));
+}
+
+.project-card-content{
+  position:relative;
+  z-index:2;
+  text-align:left;
+}
+
+.project-card h4{
+  font-size:40px;
+  line-height:1;
+  margin-bottom:12px;
+  color:white;
+}
+
+.project-card p{
+  color:rgba(255,255,255,0.72);
+  letter-spacing:0.08em;
+  text-transform:lowercase;
+}
+
+@media(max-width:1200px){
+  .cards-mode{ grid-template-columns:1fr 1fr; }
+}
+
+@media(max-width:700px){
+  .cards-mode{ grid-template-columns:1fr; }
+}
+  
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.options button {
+  background: rgba(255,255,255,0.05);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 24px;
+  cursor: pointer;
+  transition: transform 0.7s cubic-bezier(.19,1,.22,1), border-color 2s ease, background 2.5s ease, box-shadow 2.5s ease;
+  font-size: 15px;
+}
+
+.options button:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,225,180,0.22);
+  background: linear-gradient(to bottom right, rgba(255,240,220,0.09), rgba(255,225,180,0.04));
+  box-shadow: 0 0 30px rgba(255,220,180,0.06);
+}
+
+.currency-switcher {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:40px;
+}
+
+.currency-switcher button {
+  border:none;
+  background:rgba(255,255,255,0.06);
+  color:white;
+  padding:12px 18px;
+  border-radius:999px;
+  cursor:pointer;
+  transition: background .45s ease, border-color .45s ease, transform .45s ease, box-shadow .45s ease;
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.currency-switcher button:hover{
+  background:rgba(255,255,255,0.09);
+  border-color:rgba(255,240,220,0.10);
+  box-shadow: 0 0 18px rgba(255,220,170,0.06);
+  transform:translateY(-1px);
+}
+
+.works-grid{
+  display:grid;
+  grid-template-columns: 1fr 2.2fr;
+  gap:28px;
+  align-items:stretch;
+}
+
+.works-grid > .card:nth-child(-n+4){
+  grid-column: span 1;
+}
+
+.works-grid > .promo-card{
+  min-height:720px;
+}
+
+.works-grid > .studio-mini{
+  min-height:720px;
+  width:100%;
+}
+
+.studio-mini{
+  position:relative;
+  overflow:hidden;
+  border-radius:34px;
+  background: linear-gradient(to top, rgba(5,7,11,0.96), rgba(5,7,11,0.45)), url('ableton.jpg') center/cover no-repeat;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.studio-overlay {
+  position:absolute;
+  inset:0;
+  background: radial-gradient(circle at top right, rgba(126,255,212,0.16), transparent 40%);
+}
+
+.studio-mini-content{
+  position:relative;
+  z-index:2;
+  padding:48px;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.studio-mini-content span {
+  letter-spacing: 0.25em;
+  font-size: 11px;
+  color: var(--glow);
+}
+
+.studio-mini-content h3{
+  font-size:clamp(64px,5vw,96px);
+  line-height:0.88;
+  letter-spacing:-0.06em;
+  max-width:900px;
+  margin:18px 0 28px;
+}
+
+.studio-mini-content p{
+  max-width:760px;
+  line-height:1.8;
+  color:rgba(255,255,255,0.9);
+}
+
+.timeline-item h4{
+  margin:8px 0;
+}
+
+@media(max-width:1400px){
+  .works-grid{ grid-template-columns:1fr; }
+  .works-grid > .promo-card, .works-grid > .studio-mini{ min-height:auto; }
+}
+
+.futuristic-estimator{
+  position:relative;
+  overflow:hidden;
+}
+
+.estimator-glow{
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle, rgba(138,215,255,0.18), transparent 70%);
+  top:-200px;
+  right:-100px;
+  filter:blur(40px);
+  pointer-events:none;
+}
+
+.options button{
+  min-height:140px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+  gap:10px;
+  position:relative;
+  overflow:hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+  backdrop-filter:blur(14px);
+}
+
+.options button::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(135deg, rgba(138,215,255,0.10), transparent 60%);
+  opacity:0;
+  transition:0.4s ease;
+}
+
+.options button:hover::before{ opacity:1; }
+.options button span{ font-size:28px; }
+.options button strong{ font-size:20px; }
+.options button small{ opacity:0.6; font-size:13px; letter-spacing:0.08em; }
+
+.result-orb{
+  position:absolute;
+  width:340px;
+  height:340px;
+  right:-80px;
+  top:-80px;
+  background: radial-gradient(circle, rgba(199,166,255,0.22), transparent 70%);
+  filter:blur(30px);
+}
+
+.result-stats{
+  display:flex;
+  gap:20px;
+  margin-top:30px;
+  flex-wrap:wrap;
+}
+
+.result-stats div{
+  flex:1;
+  min-width:140px;
+  padding:22px;
+  border-radius:22px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+.result-stats span{
+  display:block;
+  font-size:11px;
+  letter-spacing:0.18em;
+  opacity:0.6;
+  margin-bottom:10px;
+}
+
+.result-stats strong{ font-size:28px; }
+
+@media(max-width: 980px) {
+  .hero { flex-direction: column; }
+  .hero-photo {
+    width: 100%;
+    max-width: 500px;
+    height: 600px;
+    transition: box-shadow 4s cubic-bezier(.19,1,.22,1), transform 1s ease, filter 3s ease;
+  }
+  .about-grid { grid-template-columns: 1fr; }
+  nav ul { display: none; }
+  .studio-block { padding: 24px; }
+}
+  
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,210,140,0.18), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(255,190,120,0.14), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(255,245,220,0.10), transparent 45%);
+  opacity:0;
+  transition: opacity 2.8s ease, filter 2.8s ease;
+  mix-blend-mode:soft-light;
+}
+
+body.music-active::after{ opacity:.85; filter:blur(0px); }
+
+.float-icon{
+  position:absolute;
+  object-fit:contain;
+  opacity:0.82;
+  pointer-events:none;
+  z-index:20;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.12));
+  animation: floatIcon 7s ease-in-out infinite;
+  transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.float-icon img{ width:100%; height:100%; object-fit:contain; }
+.floating-icon:hover{ transform:scale(1.08); }
+
+.icon1{ top: 120px; left: -10px; width: 28px; height: 28px; opacity: 0.65; filter: blur(0.3px) drop-shadow(0 0 12px rgba(30,215,96,0.45)); animation-delay: 0s; }
+.icon2{ top: 70px; right: 40px; width: 92px; height: 92px; opacity: 0.95; filter: drop-shadow(0 0 34px rgba(255,59,92,0.55)); animation-delay: 1s; }
+.icon3{ top: 360px; left: -20px; width: 46px; height: 46px; opacity: 0.72; filter: blur(0.5px) drop-shadow(0 0 16px rgba(255,136,0,0.4)); animation-delay: 2s; }
+.icon4{ top: 250px; right: -30px; width: 120px; height: 120px; opacity: 0.88; filter: drop-shadow(0 0 42px rgba(138,92,246,0.6)); animation-delay: 3s; }
+.icon5{ bottom: 30px; left: 180px; width: 34px; height: 34px; opacity: 0.5; filter: blur(1px) drop-shadow(0 0 12px rgba(255,255,255,0.18)); animation-delay: 1.5s; }
+.icon6{ bottom: -10px; right: 120px; width: 150px; height: 150px; opacity: 0.82; filter: drop-shadow(0 0 60px rgba(255,255,255,0.35)); animation-delay: 2.5s; }
+
+@keyframes floatIcon{
+  0%{ transform: translate(0px,0px) rotate(0deg); }
+  25%{ transform: translate(18px,-16px) rotate(4deg); }
+  50%{ transform: translate(-14px,18px) rotate(-4deg); }
+  75%{ transform: translate(16px,10px) rotate(3deg); }
+  100%{ transform: translate(0px,0px) rotate(0deg); }
+}
+
+.estimator-card, .currency-switcher{ position:relative; z-index:3; }
+.estimator-wrapper{ position: relative; overflow: visible; }
+.estimator-icons{ position:absolute; inset:0; pointer-events:none; z-index:0; }
+
+/* Новый CSS для шагов квиза взамен вредоносных абсолютов */
+.quiz-step {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px) scale(.99);
+  transition: opacity .5s ease, transform .5s ease;
+  position: relative;
+  z-index: 3;
+}
+.quiz-step.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.result {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px) scale(.99);
+  transition: opacity .6s ease, transform .6s ease;
+  position: relative;
+  z-index: 3;
+  padding: 36px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.result.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.quiz-step .project-card{
+  opacity:0;
+  transform: translateY(30px) scale(.96);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.19,1,.22,1);
+}
+.quiz-step.active .project-card{
+  opacity:1;
+  transform: translateY(0) scale(1);
+}
+.quiz-step.active .project-card:nth-child(1){ transition-delay:.08s; }
+.quiz-step.active .project-card:nth-child(2){ transition-delay:.16s; }
+.quiz-step.active .project-card:nth-child(3){ transition-delay:.24s; }
+.quiz-step.active .project-card:nth-child(4){ transition-delay:.32s; }
+.result h3 { font-size: 54px; margin: 14px 0; }
+.result small { letter-spacing: 0.2em; color: var(--glow); }
+
+ /* ЖЕЛЕЙНЫЕ СТИЛИ ДЛЯ КОНТЕЙНЕРА И ШАГОВ */
+.card.estimator {
+  /* Эффект пружины: за счет 0.6s и специального безье блок будет сочно "отскакивать" */
+  transition: height 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.9s ease, box-shadow 1.6s ease;
+  will-change: height;
 }
 
 .quiz-step {
   display: none;
+  opacity: 0;
+  /* Стартуем чуть ниже и сильнее сжатыми для большего контраста в динамике */
+  transform: translateY(20px) scale(0.96);
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: 100%;
 }
 
 .quiz-step.active {
   display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-.quiz-progress {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--glow);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 15px;
+.result {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 3;
 }
 
-.quiz-question {
-  font-size: clamp(20px, 3vw, 28px);
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  line-height: 1.2;
-  margin-bottom: 35px;
+.result.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-.options-list {
+.result-currency-wrapper {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
   gap: 12px;
 }
 
-.option-btn {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border);
-  padding: 18px 25px;
-  border-radius: 14px;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 400;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+.result-currency-wrapper span {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
 }
 
-.option-btn:hover {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(255,240,220,0.25);
-  transform: translateX(5px);
-}
-
-.price-display {
-  text-align: center;
-  padding: 20px 0;
-}
-
-.price-title {
-  font-size: 14px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 10px;
-}
-
-.price-value {
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 900;
-  letter-spacing: -1px;
-  color: var(--text);
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.price-changing {
-  opacity: 0.3;
-}
-
-.currency-toggle {
+.result-currency-switcher {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 30px;
+  gap: 8px;
 }
 
-.currency-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  padding: 8px 16px;
-  border-radius: 8px;
+.result-currency-switcher button {
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 14px;
+  border-radius: 999px;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.currency-btn:hover {
-  color: var(--text);
-  border-color: rgba(255,240,220,0.2);
-}
-
-.active-currency {
-  background: rgba(255,248,235,0.08);
-  color: var(--glow);
-  border-color: var(--glow);
-}
-
-.restart-btn {
-  margin-top: 35px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  padding: 12px 25px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
   transition: all 0.3s ease;
 }
 
-.restart-btn:hover {
-  color: var(--text);
-  border-color: var(--text);
+.result-currency-switcher button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 240, 220, 0.2);
 }
 
-footer {
-  padding: 80px 8% 50px 8%;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 300;
+.result-currency-switcher button.active-currency {
+  background: var(--glow);
+  color: black;
+  border-color: var(--glow);
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(255, 220, 140, 0.2);
 }
 
-.footer-right {
-  display: flex;
-  gap: 30px;
-}
-
-.footer-right a {
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-right a:hover {
-  color: var(--text);
-}
-
-.fade {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.9s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.9s cubic-bezier(0.165, 0.84, 0.44, 1);
+  #price {
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity, transform;
 }
 
-.fade.visible {
-  opacity: 1;
-  transform: translateY(0);
+#price.price-changing {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-/* СТИЛИ ДЛЯ СПИСКА ТРЕКОВ */
-.track-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 15px;
-}
-
-.player-row-btn {
-  background: rgba(255, 248, 235, 0.03);
-  border: 1px solid rgba(255, 240, 220, 0.06);
-  color: var(--text);
-  padding: 10px 14px;
-  border-radius: 6px;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.25s ease;
-  width: 100%;
-}
-
-.player-row-btn:hover {
-  background: rgba(255, 225, 178, 0.08);
-  border-color: rgba(255, 225, 178, 0.2);
-  transform: translateX(4px);
-}
-
-.player-row-btn.track-playing {
-  background: rgba(255, 225, 178, 0.15);
-  border-color: var(--glow);
-  color: var(--glow);
-  font-weight: 500;
-  box-shadow: 0 0 10px rgba(255, 225, 178, 0.1);
-}
-
-.player-row-btn span {
-  display: inline-block;
-  width: 12px;
-  font-size: 12px;
-}
-
-/* АТМОСФЕРНЫЙ ОВЕРЛЕЙ ДЛЯ МУЗЫКИ */
+  /* ИСПРАВЛЕННЫЙ ВАРИАНТ С ПЛАВНЫМ ЗАТУХАНИЕМ БЕЗ ПРЫЖКОВ */
 .music-ambient-glow {
   position: fixed;
   inset: 0;
@@ -496,15 +846,21 @@ footer {
   pointer-events: none;
   opacity: 0;
   mix-blend-mode: screen; 
+  
+  /* ВАЖНО: Анимация теперь привязана СЮДА на постоянку, чтобы она не сбрасывалась */
   animation: dynamicRainbow 20s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  
+  /* Но когда музыки нет — мы её СТАВИМ НА ПАУЗУ, чтобы не жрала ресурсы процессора */
   animation-play-state: paused;
+  
   transition: opacity 2.5s ease-in-out;
   will-change: opacity, background-position;
 }
 
+/* Когда музыка играет — просто плавно зажигаем слой и запускаем ход анимации */
 .music-ambient-glow.active {
   opacity: 0.65;
-  animation-play-state: running;
+  animation-play-state: running; /* Анимация пошла дальше с того же места */
 }
 
 @keyframes dynamicRainbow {
@@ -512,90 +868,71 @@ footer {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+  
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">Mikhail Veshchev</div>
-  <ul class="nav-links">
-    <li><a href="#works">Works</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#estimator">Cost Estimator</a></li>
+<nav>
+  <div class="logo">МИХАИЛ ВЕЩЕВ</div>
+  <ul>
+    <li><a href="#works">Работы</a></li>
+    <li><a href="#estimator">Стоимость</a></li>
+    <li><a href="#contact">Контакт</a></li>
   </ul>
-</header>
+</nav>
 
-<div id="hero">
-  <div class="hero-content">
-    <span class="hero-tag fade">Sound Engineer & Composer</span>
-    <h1 class="fade">Архитектура<br>звукового опыта.</h1>
-    <p class="hero-description fade">Создаю объёмные звуковые ландшафты, пишу музыку для кино и медиа, проектирую интерактивный звук. На стыке академической точности и современных технологий.</p>
-    <a href="#estimator" class="cta-btn fade">
-      Рассчитать проект
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3.33334 8H12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M8 3.33334L12.6667 8L8 12.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
+<section class="hero">
+  <div class="hero-text fade">
+    <div class="hero-label">
+      SOUND DESIGN / MUSIC PRODUCTION / POST-PRODUCTION
+    </div>
+    <h1>МИХАИЛ<br>ВЕЩЕВ</h1>
+    <p>
+      Аранжировка, саунд-дизайн, EDM, пост-продакшн и кинематографичная музыка. Работа с пространством, атмосферой и эмоциональной динамикой.
+    </p>
+    <div class="hero-buttons">
+      <a class="btn btn-primary" href="#contact">Обсудить проект</a>
+      <a class="btn btn-secondary" href="#works">Слушать работы</a>
+    </div>
   </div>
-</div>
+  <div class="hero-photo fade">
+    <div class="glow"></div>
+    <img src="portrait.jpg" alt="Михаил Вещев">
+  </div>
+</section>
 
 <section id="works">
   <h2 class="section-title fade">Selected<br>Works</h2>
   <div class="grid works-grid">
-    
     <div class="card fade">
       <h3>Электронная музыка</h3>
-      <p style="margin-bottom: 15px;">Breakcore / Jungle / UK Garage / Experimental</p>
-      <audio id="electro1" src="mishochekAtavism.mp3" preload="auto"></audio>
-      <audio id="electro2" src="mishochekReminiscence.mp3" preload="auto"></audio>
-      <audio id="electro3" src="mishochekAorta.mp3" preload="auto"></audio>
-      <div class="track-list">
-        <button class="player-row-btn" onclick="toggleTrack('electro1', this)"><span>▶</span> Atavism</button>
-        <button class="player-row-btn" onclick="toggleTrack('electro2', this)"><span>▶</span> Reminiscence</button>
-        <button class="player-row-btn" onclick="toggleTrack('electro3', this)"><span>▶</span> Aorta</button>
-      </div>
+      <p>Breakcore / Jungle / UK Garage / Experimental</p>
+      <audio controls><source src="mishochekAtavism.mp3"></audio>
+      <audio controls><source src="mishochekReminiscence.mp3"></audio>
+      <audio controls><source src="mishochekAorta.mp3"></audio>
     </div>
-
     <div class="card fade">
       <h3>Кинематографичная музыка</h3>
-      <p style="margin-bottom: 15px;">Trailer music / orchestral scoring / ambient atmosphere</p>
-      <audio id="cinema1" src="VESHCHEV AVENGERS.mp3" preload="auto"></audio>
-      <audio id="cinema2" src="VESHCHEV DEBUSSY.mp3" preload="auto"></audio>
-      <audio id="cinema3" src="2.0.mp3" preload="auto"></audio>
-      <div class="track-list">
-        <button class="player-row-btn" onclick="toggleTrack('cinema1', this)"><span>▶</span> Avengers Scoring</button>
-        <button class="player-row-btn" onclick="toggleTrack('cinema2', this)"><span>▶</span> Debussy Atmosphere</button>
-        <button class="player-row-btn" onclick="toggleTrack('cinema3', this)"><span>▶</span> Project 2.0</button>
-      </div>
+      <p>Trailer music / orchestral scoring / ambient atmosphere</p>
+      <audio controls><source src="VESHCHEV AVENGERS.mp3"></audio>
+      <audio controls><source src="VESHCHEV DEBUSSY.mp3"></audio>
+      <audio controls><source src="2.0.mp3"></audio>
     </div>
-
     <div class="card fade">
       <h3>Живые записи</h3>
-      <p style="margin-bottom: 15px;">Classical ensembles / orchestral sessions / chamber music</p>
-      <audio id="live1" src="STARKOV MIX 150426.mp3" preload="auto"></audio>
-      <audio id="live2" src="Fis-moll.mp3" preload="auto"></audio>
-      <audio id="live3" src="VESHCHEV SAINT-SAENS.mp3" preload="auto"></audio>
-      <div class="track-list">
-        <button class="player-row-btn" onclick="toggleTrack('live1', this)"><span>▶</span> Starkov Mix</button>
-        <button class="player-row-btn" onclick="toggleTrack('live2', this)"><span>▶</span> Fis-moll Session</button>
-        <button class="player-row-btn" onclick="toggleTrack('live3', this)"><span>▶</span> Saint-Saëns</button>
-      </div>
+      <p>Classical ensembles / orchestral sessions / chamber music</p>
+      <audio controls><source src="STARKOV MIX 150426.mp3"></audio>
+      <audio controls><source src="Fis-moll.mp3"></audio>
+      <audio controls><source src="VESHCHEV SAINT-SAENS.mp3"></audio>
     </div>
-
     <div class="card fade">
       <h3>Коммерческая музыка</h3>
-      <p style="margin-bottom: 15px;">Pop / vocal / commercial arrangements</p>
-      <audio id="comm1" src="VESHCHEV CRY.mp3" preload="auto"></audio>
-      <audio id="comm2" src="VESHCHEV NO TIME TO DIE.mp3" preload="auto"></audio>
-      <audio id="comm3" src="VESHCHEV OCEAN EYES.mp3" preload="auto"></audio>
-      <div class="track-list">
-        <button class="player-row-btn" onclick="toggleTrack('comm1', this)"><span>▶</span> Cry</button>
-        <button class="player-row-btn" onclick="toggleTrack('comm2', this)"><span>▶</span> No Time To Die</button>
-        <button class="player-row-btn" onclick="toggleTrack('comm3', this)"><span>▶</span> Ocean Eyes</button>
-      </div>
+      <p>Pop / vocal / commercial arrangements</p>
+      <audio controls><source src="VESHCHEV CRY.mp3"></audio>
+      <audio controls><source src="VESHCHEV NO TIME TO DIE.mp3"></audio>
+      <audio controls><source src="VESHCHEV OCEAN EYES.mp3"></audio>
     </div>
-
     <div class="card promo-card premium-card fade">
       <h3>Premium<br>Audio Production</h3>
       <p>Работа с глубиной, пространством и архитектурой звука.</p>
@@ -605,98 +942,161 @@ footer {
         <li>• Sound Design: Уникальные атмосферы</li>
       </ul>
     </div>
-  </div>
-</section>
-
-<section id="experience">
-  <div class="grid experience-layout">
-    <div class="exp-left fade">
-      <h2 class="section-title" style="margin-bottom: 20px;">Gnesin College<br>& Experience</h2>
-      <p>Академическая база, дополненная годами практики в коммерческом производстве звука.</p>
-    </div>
-    <div class="timeline">
-      <div class="timeline-item fade">
-        <div class="time-period">2023 — Present</div>
-        <div class="job-title">Sound Designer & Mixing Engineer</div>
-        <div class="job-desc">Фриланс производство звука для независимых короткометражных фильмов, коммерческой рекламы и музыкальных релизов. Сведение многоканального аудио, реставрация фонограмм.</div>
-      </div>
-      <div class="timeline-item fade">
-        <div class="time-period">2022 — 2024</div>
-        <div class="job-title">Assistant Recording Engineer</div>
-        <div class="job-desc">Участие в записи академических коллективов, камерных ансамблей и сольных исполнителей в концертных залах. Работа со сложными микрофонными системами (Decca Tree, AB, XY).</div>
+    <div class="studio-mini fade">
+      <div class="studio-overlay"></div>
+      <div class="studio-mini-content">
+        <span>EDUCATION / EXPERIENCE</span>
+        <h3>Gnesin College<br>& Professional Work</h3>
+        <p>Работа с академическими ансамблями и саунд-дизайном.</p>
+        <div class="stack">
+          <div class="tag">Avid Pro Tools</div>
+          <div class="tag">Ableton Live</div>
+          <div class="tag">Steinberg Dorico</div>
+          <div class="tag">iZotope RX</div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item"><span>2024</span><h4>Радио «Орфей»</h4><p>Сессии академических коллективов.</p></div>
+          <div class="timeline-item"><span>2025</span><h4>Кисловодская филармония</h4><p>Запись классических оркестров.</p></div>
+          <div class="timeline-item"><span>NOW</span><h4>Freelance Production</h4><p>и работа в студии</p></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <section id="estimator">
-  <h2 class="section-title fade" style="text-align: center;">Cost<br>Estimator</h2>
-  <div class="card estimator fade">
-    
+  <div class="estimator-icons">
+    <img src="spotify.png" class="float-icon icon1">
+    <img src="applemusic.png" class="float-icon icon2">
+    <img src="soundcloud.png" class="float-icon icon3">
+    <img src="abletonlive.png" class="float-icon icon4">
+    <img src="logicpro.png" class="float-icon icon5">
+    <img src="protools.png" class="float-icon icon6">
+  </div>
+  <h2 class="section-title fade">Создай свой<br>идеальный проект</h2>
+  <div class="card estimator fade futuristic-estimator">
+    <div class="estimator-glow"></div>
+    <!-- ОБНОВЛЕННЫЙ БЛОК РЕЗУЛЬТАТА С ВЫБОРОМ ВАЛЮТЫ ВНУТРИ -->
+<div class="result" id="result">
+  <div class="result-orb"></div>
+  <small>ESTIMATED PRODUCTION COST</small>
+  
+  <!-- ЦЕНА, КОТОРАЯ БУДЕТ КРАСИВО ПЕРЕБИРАТЬСЯ -->
+  <h3 id="price" style="font-variant-numeric: tabular-nums;">от 40 000 ₽</h3>
+  
+  <p id="resultText">Проект выглядит как что-то очень атмосферное.</p>
+  
+  <div class="result-stats">
+    <div><span>АТМОСФЕРА</span><strong>97%</strong></div>
+    <div><span>КОНТРАСТ</span><strong>92%</strong></div>
+    <div><span>ЭКСПЕРИМЕНТАЛЬНОСТЬ</span><strong>88%</strong></div>
+  </div>
+
+  <!-- ВЫБОР ВАЛЮТЫ ТОЛЬКО ТУТ -->
+  <div class="result-currency-wrapper">
+    <span>ИЗМЕНИТЬ ВАЛЮТУ РАСЧЕТА:</span>
+    <div class="result-currency-switcher">
+      <button class="currency-btn active-currency" onclick="setCurrency('RUB', this)">₽ RUB</button>
+      <button class="currency-btn" onclick="setCurrency('USD', this)">$ USD</button>
+      <button class="currency-btn" onclick="setCurrency('EUR', this)">€ EUR</button>
+      <button class="currency-btn" onclick="setCurrency('AMD', this)">֏ AMD</button>
+    </div>
+  </div>
+
+  <!-- ТВОИ КНОПКИ СВЯЗИ -->
+  <div class="contacts" style="display: flex; gap: 14px; margin-top: 32px;">
+    <a class="btn btn-primary" href="https://t.me/mishocheks" target="_blank">Telegram</a>
+    <a class="btn btn-secondary" href="mailto:mishocheks@internet.ru">Email</a>
+  </div>
+</div>
+
     <div class="quiz-step active" id="step1">
-      <div class="quiz-progress">Шаг 1 из 3</div>
-      <div class="quiz-question">Каков основной формат вашего проекта?</div>
-      <div class="options-list">
-        <button class="option-btn" onclick="nextStep(2, 40000)">Музыкальный трек (Сведение / Аранжировка)</button>
-        <button class="option-btn" onclick="nextStep(2, 60000)">Саунд-дизайн видео / Кино (до 10 мин)</button>
-        <button class="option-btn" onclick="nextStep(2, 25000)">Рекламный аудиоролик / Вертикальный контент</button>
+      <h3>Что нужно создать?</h3>
+      <div class="options cards-mode">
+        <button class="project-card" onclick="nextStep(2, 40000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('arrangement.jpg') center/cover;">
+          <div class="project-card-content"><h4>Аранжировка</h4><p>emotion / dynamics / harmony</p></div>
+        </button>
+        <button class="project-card" onclick="nextStep(2, 30000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('cinematic.jpg') center/cover;">
+          <div class="project-card-content"><h4>Музыка для видео</h4><p>movie / soundtrack</p></div>
+        </button>
+        <button class="project-card" onclick="nextStep(2, 25000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('sounddesign.jpg') center/cover;">
+          <div class="project-card-content"><h4>Саунд-дизайн</h4><p>games / abstract / experimental</p></div>
+        </button>
+        <button class="project-card" onclick="nextStep(2, 14000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('mixing.jpg') center/cover;">
+          <div class="project-card-content"><h4>Mix / Master</h4><p>clarity / loudness / balance</p></div>
+        </button>
       </div>
     </div>
-
+        
     <div class="quiz-step" id="step2">
-      <div class="quiz-progress">Шаг 2 из 3</div>
-      <div class="quiz-question">Какой объем работы и сложность архитектуры звука?</div>
-      <div class="options-list">
-        <button class="option-btn" onclick="nextStep(3)">Базовый (Чистый микс / Стандартные эффекты)</button>
-        <button class="option-btn" onclick="finishQuiz(1.4)">Продвинутый (Сложный саунд-дизайн, многослойность) (+40%)</button>
-        <button class="option-btn" onclick="finishQuiz(1.8)">Премиум (Полное ведение, эксклюзивные текстуры) (+80%)</button>
+      <h3>Какой vibe должен быть у проекта?</h3>
+      <div class="options cards-mode">
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('emotional.jpg') center/cover;">
+          <div class="project-card-content"><h4>Эмоциональный</h4><p>emotional / beautiful / deep</p></div>
+        </button>
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('dark.jpg') center/cover;">
+          <div class="project-card-content"><h4>Мрачный</h4><p>experimental / distorted / abstract</p></div>
+        </button>
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('commercial.jpg') center/cover;">
+          <div class="project-card-content"><h4>Коммерческий</h4><p>clean / expensive / modern</p></div>
+        </button>
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('aggressive.jpg') center/cover;">
+          <div class="project-card-content"><h4>Агрессивный</h4><p>loud / sharp / energetic</p></div>
+        </button>
       </div>
     </div>
 
     <div class="quiz-step" id="step3">
-      <div class="quiz-progress">Шаг 3 из 3</div>
-      <div class="quiz-question">Требуются ли дополнительные услуги?</div>
-      <div class="options-list">
-        <button class="option-btn" onclick="finishQuiz(1.0)">Нет, только базовый объем</button>
-        <button class="option-btn" onclick="finishQuiz(1.2)">Срочное выполнение (до 48 часов) (+20%)</button>
-        <button class="option-btn" onclick="finishQuiz(1.25)">Реставрация исходных аудиоматериалов (+25%)</button>
+      <h3>Насколько всё срочно?</h3>
+      <div class="options cards-mode">
+        <button class="project-card" onclick="finishQuiz(1)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('normal.jpg') center/cover;">
+          <div class="project-card-content"><h4>Не сильно срочно</h4><p>careful / cinematic / detailed</p></div>
+        </button>
+        <button class="project-card" onclick="finishQuiz(1.25)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('fast.jpg') center/cover;">
+          <div class="project-card-content"><h4>В обычном темпе</h4><p>tight deadline / intense workflow</p></div>
+        </button>
+        <button class="project-card" onclick="finishQuiz(1.55)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('urgent.jpg') center/cover;">
+          <div class="project-card-content"><h4>Сроки горят</h4><p>sleep is optional / export at 4am</p></div>
+        </button>
+      </div>
+      <div style="margin-top:28px; padding:24px; border-radius:24px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.72); line-height:1.8;">
+        ⚡ Fast turnaround available.<br>🌙 Night sessions supported.<br>🎧 Cinematic polish included by default.
       </div>
     </div>
 
-    <div class="quiz-step" id="result">
-      <div class="price-display">
-        <div class="price-title">Ориентировочная стоимость</div>
-        <div class="price-value" id="price">от 40 000 ₽</div>
-        <div class="currency-toggle">
-          <button class="currency-btn active-currency" onclick="setCurrency('RUB', this)">RUB</button>
-          <button class="currency-btn" onclick="setCurrency('USD', this)">USD</button>
-          <button class="currency-btn" onclick="setCurrency('EUR', this)">EUR</button>
-          <button class="currency-btn" onclick="setCurrency('AMD', this)">AMD</button>
-        </div>
-        <button class="restart-btn" onclick="nextStep(1, 40000)">Рассчитать заново</button>
+    <div class="result" id="result">
+      <div class="result-orb"></div>
+      <small>ESTIMATED PRODUCTION COST</small>
+      <h3 id="price">от 40000 ₽</h3>
+      <p id="resultText">Проект выглядит как что-то очень атмосферное.</p>
+      <div class="result-stats">
+        <div><span>АТМОСФЕРА</span><strong>97%</strong></div>
+        <div><span>КОНТРАСТ</span><strong>92%</strong></div>
+        <div><span>ЭКСПЕРИМЕНТАЛЬНОСТЬ</span><strong>88%</strong></div>
       </div>
+      <div class="contacts" style="display: flex; gap: 14px; margin-top: 24px;">
+  <a class="btn btn-primary" href="https://t.me/mishocheks" target="_blank">Telegram</a>
+  <a class="btn btn-secondary" href="mailto:mishocheks@internet.ru">Email</a>
+</div>
     </div>
-
   </div>
 </section>
 
-<footer>
-  <div class="footer-left">© 2026 Mikhail Veshchev. All rights reserved.</div>
-  <div class="footer-right">
-    <a href="#">Telegram</a>
-    <a href="#">SoundCloud</a>
-    <a href="#">Email</a>
+<section id="contact">
+  <h2 class="section-title fade">Давайте сделаем<br>что-то новое.</h2>
+  <div class="contacts fade">
+    <a href="https://t.me/mishocheks" target="_blank">Telegram</a>
+    <a href="mailto:mishocheks@internet.ru">Email</a>
   </div>
-</footer>
+</section>
 
-<div class="music-ambient-glow" id="ambientGlow"></div>
-
+<footer>© 2026 Михаил Вещев</footer>
+  
 <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
 <audio id="resultSound" src="result.mp3" preload="auto"></audio>
 <audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
 
 <script>
-// 1. АНИМАЦИИ ПОЯВЛЕНИЯ ПРИ СКРОЛЛЕ
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if(entry.isIntersecting){ entry.target.classList.add('visible'); }
@@ -704,10 +1104,11 @@ const observer = new IntersectionObserver(entries => {
 });
 document.querySelectorAll('.fade').forEach(el => observer.observe(el));
 
-// 2. СИСТЕМНЫЕ ПЕРЕМЕННЫЕ КВИЗА-КАЛЬКУЛЯТОРА
 let currentCurrency = 'RUB';
 let currentPrice = 40000;
-let displayedPrice = 40000;
+let displayedPrice = 40000; // Хранит текущую цифру на экране для плавного перебора
+let animationFrameId = null;
+
 const rates = { RUB: 1, USD: 0.011, EUR: 0.010, AMD: 4.9 };
 const symbols = { RUB: '₽', USD: '$', EUR: '€', AMD: '֏' };
 
@@ -719,94 +1120,17 @@ function playHoverSound() {
   }
 }
 
-// 3. ЖЕЛЕЗОБЕТОННЫЙ ПЛЕЕР С ЭФФЕКТОМ TAPE STOP
-const activeTapeStops = new Map();
+// ЗАМЕНИ СТАРУЮ ФУНКЦИЮ РАСЧЕТА ВЫСОТЫ НА ЭТУ:
 
-function toggleTrack(audioId, btnElement) {
-  const audio = document.getElementById(audioId);
-  const glowLayer = document.getElementById('ambientGlow');
-  if (!audio) return;
-
-  const originalText = btnElement.innerText.replace('▶', '').replace('❚❚', '').trim();
-
-  // ЕСЛИ ТРЕК УЖЕ ИГРАЕТ — КЛИКНУЛИ НА ПАУЗУ (ЗАПУСКАЕМ TAPE STOP)
-  if (!audio.paused && !activeTapeStops.has(audio)) {
-    btnElement.innerHTML = `<span>▶</span> ${originalText}`;
-    btnElement.classList.remove('track-playing');
-    
-    // Проверяем, играет ли какой-то другой трек на сайте
-    setTimeout(() => {
-      let somethingPlaying = false;
-      document.querySelectorAll('audio').forEach(t => {
-        if (!t.paused && t.id !== 'hoverSound' && t.id !== 'resultSound' && t.id !== 'currencySound') somethingPlaying = true;
-      });
-      if (!somethingPlaying && glowLayer) glowLayer.classList.remove('active');
-    }, 50);
-
-    // Запускаем плавное падение питча ленты
-    let currentRate = 1.0;
-    const fadeDuration = 450; 
-    const intervalTime = 25;
-    const steps = fadeDuration / intervalTime;
-    const rateStep = currentRate / steps;
-
-    const interval = setInterval(() => {
-      currentRate -= rateStep;
-      if (currentRate <= 0.05) {
-        clearInterval(interval);
-        activeTapeStops.delete(audio);
-        audio.pause();
-        audio.playbackRate = 1.0; 
-      } else {
-        audio.playbackRate = currentRate;
-      }
-    }, intervalTime);
-
-    activeTapeStops.set(audio, interval);
-
-  } else {
-    // ЕСЛИ ТРЕК НЕ ИГРАЛ — ВКЛЮЧАЕМ ЕГО
-    
-    // Глушим абсолютно все остальные треки на сайте мгновенно
-    document.querySelectorAll('audio').forEach(track => {
-      if (track !== audio && track.id !== 'hoverSound' && track.id !== 'resultSound' && track.id !== 'currencySound') {
-        track.pause();
-        track.playbackRate = 1.0;
-      }
-    });
-    
-    // Возвращаем все остальные кнопки в состояние "Play"
-    document.querySelectorAll('.player-row-btn').forEach(btn => {
-      if (btn !== btnElement) {
-        const txt = btn.innerText.replace('▶', '').replace('❚❚', '').trim();
-        btn.innerHTML = `<span>▶</span> ${txt}`;
-        btn.classList.remove('track-playing');
-      }
-    });
-
-    // Если этот конкретный трек сейчас тормозил — сбрасываем таймер торможения
-    if (activeTapeStops.has(audio)) {
-      clearInterval(activeTapeStops.get(audio));
-      activeTapeStops.delete(audio);
-    }
-
-    audio.playbackRate = 1.0;
-    audio.play().catch(()=>{});
-    
-    btnElement.innerHTML = `<span>❚❚</span> ${originalText}`;
-    btnElement.classList.add('track-playing');
-    
-    if (glowLayer) glowLayer.classList.add('active');
-  }
-}
-
-// 4. ИЗМЕНЕНИЕ ВЫСОТЫ КОНТЕЙНЕРА КАЛЬКУЛЯТОРА
 function resizeEstimatorContainer(targetBlock) {
   const container = document.querySelector('.card.estimator');
   if (!container || !targetBlock) return;
+
   container.style.overflow = 'visible';
+
   const currentHeight = container.getBoundingClientRect().height;
   container.style.height = currentHeight + 'px';
+
   const originalDisplay = targetBlock.style.display;
   targetBlock.style.display = 'block';
   
@@ -835,23 +1159,33 @@ function setCurrency(currency, buttonElement){
   if(currencySound) { currencySound.currentTime = 0; currencySound.play().catch(()=>{}); }
   
   currentCurrency = currency;
+
   document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active-currency'));
   if (buttonElement) buttonElement.classList.add('active-currency');
 
   updatePrice(true);
 }
 
+// ТЕПЕРЬ ЭТА ФУНКЦИЯОТВЕЧАЕТ ЗА ПЛАВНЫЙ СДВИГ И ЗАТУХАНИЕ ТЕКСТА
 function animateValue(targetPrice) {
   const priceElement = document.getElementById('price');
   if (!priceElement) return;
 
+  // 1. Добавляем класс затухания и увода текста вниз
   priceElement.classList.add('price-changing');
 
+  // 2. Ждем 200 миллисекунд, пока текст полностью станет невидимым
   setTimeout(() => {
+    // Меняем текст на новую валюту, пока никто не видит
     priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
+    
+    // Перемещаем невидимый текст наверх, чтобы он выплывал сверху вниз
     priceElement.style.transform = 'translateY(-10px)';
+    
+    // Форсируем перерисовку браузера
     priceElement.offsetHeight; 
 
+    // 3. Убираем класс затухания, возвращаем текст в центр и плавно проявляем
     priceElement.classList.remove('price-changing');
     priceElement.style.transform = 'translateY(0)';
   }, 200);
@@ -859,17 +1193,22 @@ function animateValue(targetPrice) {
 
 function updatePrice(animated = false) {
   const targetPrice = Math.round(currentPrice * rates[currentCurrency]);
+  
   if (animated) {
+    // Запускаем плавный сдвиг текста
     animateValue(targetPrice);
   } else {
+    // Самый первый показ цены (без анимаций)
     const priceElement = document.getElementById('price');
     if (priceElement) {
       priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
     }
   }
+  // Запоминаем текущую цену
   displayedPrice = targetPrice;
 }
 
+// Плавный переход на следующий шаг
 function nextStep(step, basePrice = null){
   playHoverSound();
   if(basePrice !== null){ currentPrice = basePrice; }
@@ -878,7 +1217,8 @@ function nextStep(step, basePrice = null){
   const next = document.getElementById('step' + step);
 
   if(current && next) {
-    resizeEstimatorContainer(next);
+    resizeEstimatorContainer(next); // Запускаем плавную подгонку высоты карточки
+
     current.style.opacity = '0';
     current.style.transform = 'translateY(-15px) scale(0.98)';
     
@@ -893,9 +1233,10 @@ function nextStep(step, basePrice = null){
   }
 }
 
+// Плавный переход на экран результатов
 function finishQuiz(multiplier) {
   currentPrice = Math.round(currentPrice * multiplier);
-  updatePrice(false);
+  updatePrice(false); // Загружаем цену без анимации для мгновенного первого рендера
   
   const resultSound = document.getElementById('resultSound');
   if(resultSound) { resultSound.currentTime = 0; resultSound.play().catch(()=>{}); }
@@ -904,7 +1245,7 @@ function finishQuiz(multiplier) {
   const resultBlock = document.getElementById('result');
 
   if(current && resultBlock) {
-    resizeEstimatorContainer(resultBlock);
+    resizeEstimatorContainer(resultBlock); // Корректируем высоту карточки под результат
 
     current.style.opacity = '0';
     current.style.transform = 'translateY(-15px) scale(0.98)';
@@ -919,7 +1260,33 @@ function finishQuiz(multiplier) {
     }, 400);
   }
 }
-</script>
+  // АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ НА САЙТЕ
+document.addEventListener('DOMContentLoaded', () => {
+  const glowLayer = document.getElementById('ambientGlow');
+  
+  // Перехватываем событие старта любого звука на странице
+  document.addEventListener('play', (event) => {
+    // Игнорируем системные звуки квиза (hover, клики валюты, результат)
+    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
+      return;
+    }
+    // Если включили реальный трек в плеере — зажигаем атмосферу
+    if (glowLayer) glowLayer.classList.add('active');
+  }, true);
 
+  // Перехватываем событие паузы или окончания трека
+  const handleStop = (event) => {
+    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
+      return;
+    }
+    if (glowLayer) glowLayer.classList.remove('active');
+  };
+
+  document.addEventListener('pause', handleStop, true);
+  document.addEventListener('ended', handleStop, true);
+});
+  
+</script>
+<div class="music-ambient-glow" id="ambientGlow"></div>
 </body>
 </html>
