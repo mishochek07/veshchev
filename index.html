@@ -1072,29 +1072,21 @@ body.music-active::after{
 }
 
 .float-icon{
-
   position:absolute;
-
-  max-width:58px;
-  max-height:58px;
-
   object-fit:contain;
 
-  opacity:0.92;
-
+  opacity:0.82;
   pointer-events:none;
-
-  z-index:2;
+  z-index:20;
 
   filter:
-    drop-shadow(0 0 18px rgba(255,255,255,0.14));
+    drop-shadow(0 0 12px rgba(255,255,255,0.12));
 
-  animation: floatIcon 6s ease-in-out infinite;
+  animation: floatIcon 7s ease-in-out infinite;
 
   transition:
-    transform 0.12s linear,
-    filter 0.4s ease;
-
+    transform 0.5s ease,
+    filter 0.5s ease;
 }
 
   .float-icon img{
