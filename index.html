@@ -1075,26 +1075,35 @@ body.music-active::after{
 
   position:absolute;
 
-  width:72px;
-  height:72px;
+  width:58px !important;
+  height:58px !important;
+
+  max-width:58px;
+  max-height:58px;
 
   object-fit:contain;
 
-  opacity:0.95;
+  opacity:0.92;
 
   pointer-events:none;
 
-  z-index:1;
+  z-index:2;
 
   filter:
-    drop-shadow(0 0 22px rgba(255,255,255,0.18));
+    drop-shadow(0 0 18px rgba(255,255,255,0.14));
 
-  animation: floatIcon 5s ease-in-out infinite;
+  animation: floatIcon 6s ease-in-out infinite;
 
   transition:
-    transform 0.18s linear,
-    filter 0.5s ease;
+    transform 0.12s linear,
+    filter 0.4s ease;
 
+}
+
+  .float-icon img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
 
 .floating-icon:hover{
@@ -1177,6 +1186,17 @@ body.music-active::after{
   .estimator-wrapper{
   position: relative;
   overflow: visible;
+}
+  .estimator-icons{
+
+  position:absolute;
+
+  inset:0;
+
+  pointer-events:none;
+
+  z-index:0;
+
 }
   
 </style>
@@ -1393,12 +1413,16 @@ body.music-active::after{
 
 <section id="estimator">
 
-  <img src="spotify.png" class="float-icon icon1">
+<div class="estimator-icons">
+
+<img src="spotify.png" class="float-icon icon1">
 <img src="applemusic.png" class="float-icon icon2">
 <img src="soundcloud.png" class="float-icon icon3">
 <img src="abletonlive.png" class="float-icon icon4">
 <img src="logicpro.png" class="float-icon icon5">
 <img src="protools.png" class="float-icon icon6">
+
+</div>
 
   <h2 class="section-title fade">
     Создай свой<br>
