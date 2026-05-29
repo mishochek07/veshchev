@@ -352,6 +352,70 @@ audio {
   display: none;
 }
 
+.works-bottom-grid {
+  margin-top: 28px;
+}
+
+.studio-mini {
+  position: relative;
+  min-height: 560px;
+  border-radius: 34px;
+  overflow: hidden;
+  background:
+    linear-gradient(to top, rgba(5,7,11,0.96), rgba(5,7,11,0.55)),
+    url('ableton.jpg') center/cover no-repeat;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.studio-overlay {
+  position:absolute;
+  inset:0;
+  background: radial-gradient(circle at top right, rgba(126,255,212,0.16), transparent 40%);
+}
+
+.studio-mini-content {
+  position: relative;
+  z-index: 2;
+  padding: 50px;
+  max-width: 700px;
+}
+
+.studio-mini-content span {
+  letter-spacing: 0.25em;
+  font-size: 11px;
+  color: var(--glow);
+}
+
+.studio-mini-content h3 {
+  font-size: 62px;
+  line-height: 0.92;
+  margin: 18px 0 24px;
+}
+
+.currency-switcher {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:40px;
+}
+
+.currency-switcher button {
+  border:none;
+  background:rgba(255,255,255,0.06);
+  color:white;
+  padding:12px 18px;
+  border-radius:999px;
+  cursor:pointer;
+}
+
+.quiz-step {
+  display:none;
+}
+
+.quiz-step.active {
+  display:block;
+}
+
 .result.active {
   display: block;
 }
@@ -577,9 +641,40 @@ footer {
 
   </div>
 
+  <div class="works-bottom-grid fade">
+
+    <div class="studio-mini">
+
+      <div class="studio-overlay"></div>
+
+      <div class="studio-mini-content">
+        <span>EDUCATION / EXPERIENCE</span>
+
+        <h3>
+          Gnesin College<br>
+          & Professional Work
+        </h3>
+
+        <p>
+          Работа с академическими ансамблями,
+          кинематографичным продакшном и современным саунд-дизайном.
+        </p>
+
+        <div class="stack">
+          <div class="tag">Avid Pro Tools</div>
+          <div class="tag">Ableton Live</div>
+          <div class="tag">Steinberg Dorico</div>
+          <div class="tag">iZotope RX</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
 </section>
 
-<section id="about">
+<section id="about" style="display:none;">
 
   <div class="studio-block fade">
 
@@ -632,30 +727,58 @@ footer {
 <section id="estimator">
 
   <h2 class="section-title fade">
-    Какая работа<br>
-    вам нужна?
+    Audio Project<br>
+    Constructor
   </h2>
 
   <div class="card estimator fade">
 
-    <h3>Выберите направление</h3>
+    <div class="currency-switcher">
+      <button onclick="setCurrency('RUB')">₽ RUB</button>
+      <button onclick="setCurrency('USD')">$ USD</button>
+      <button onclick="setCurrency('EUR')">€ EUR</button>
+      <button onclick="setCurrency('AMD')">֏ AMD</button>
+    </div>
 
-    <div class="options">
-      <button onclick="showPrice(40000)">Аранжировки</button>
-      <button onclick="showPrice(30000)">Пост-продакшн / видео</button>
-      <button onclick="showPrice(25000)">Саунд-дизайн / игры</button>
-      <button onclick="showPrice(14000)">Монтаж и сведение</button>
-      <button onclick="showPrice(19000)">Оркестровая музыка</button>
-      <button onclick="showPrice(10000)">Джинглы / брендинг</button>
+    <div class="quiz-step active" id="step1">
+      <h3>Какой проект вам нужен?</h3>
+
+      <div class="options">
+        <button onclick="nextStep(2, 40000)">Музыкальная аранжировка</button>
+        <button onclick="nextStep(2, 30000)">Музыка для видео / кино</button>
+        <button onclick="nextStep(2, 25000)">Саунд-дизайн / игра</button>
+        <button onclick="nextStep(2, 14000)">Сведение / монтаж</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" id="step2">
+      <h3>Какой вайб должен быть у проекта?</h3>
+
+      <div class="options">
+        <button onclick="nextStep(3)">Cinematic & Emotional</button>
+        <button onclick="nextStep(3)">Dark & Experimental</button>
+        <button onclick="nextStep(3)">Clean & Commercial</button>
+        <button onclick="nextStep(3)">Aggressive & Loud</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" id="step3">
+      <h3>Насколько срочно?</h3>
+
+      <div class="options">
+        <button onclick="finishQuiz(1)">Есть время</button>
+        <button onclick="finishQuiz(1.2)">Нужно быстро</button>
+        <button onclick="finishQuiz(1.5)">Нужно ОЧЕНЬ быстро</button>
+      </div>
     </div>
 
     <div class="result" id="result">
-      <small>ПРИМЕРНАЯ СТОИМОСТЬ</small>
-      <h3 id="price">от 30000 ₽</h3>
+      <small>ESTIMATED BUDGET</small>
 
-      <p>
-        Финальная стоимость зависит от сроков,
-        сложности и объема проекта.
+      <h3 id="price">от 40000 ₽</h3>
+
+      <p id="resultText">
+        Проект звучит как что-то атмосферное.
       </p>
 
       <div class="contacts">
@@ -715,13 +838,71 @@ const observer = new IntersectionObserver(entries => {
 
 fades.forEach(el => observer.observe(el));
 
-function showPrice(price) {
+let currentCurrency = 'RUB';
+let currentPrice = 40000;
+
+const rates = {
+  RUB: 1,
+  USD: 0.011,
+  EUR: 0.010,
+  AMD: 4.9
+};
+
+const symbols = {
+  RUB: '₽',
+  USD: '$',
+  EUR: '€',
+  AMD: '֏'
+};
+
+function setCurrency(currency) {
+  currentCurrency = currency;
+  updatePrice();
+}
+
+function nextStep(step, basePrice = null) {
+
+  if(basePrice) {
+    currentPrice = basePrice;
+  }
+
+  document.querySelectorAll('.quiz-step').forEach(el => {
+    el.classList.remove('active');
+  });
+
+  document.getElementById(`step${step}`).classList.add('active');
+}
+
+function finishQuiz(multiplier) {
+
+  currentPrice = Math.round(currentPrice * multiplier);
+
+  document.querySelectorAll('.quiz-step').forEach(el => {
+    el.style.display = 'none';
+  });
 
   const result = document.getElementById('result');
-  const priceElement = document.getElementById('price');
-
   result.classList.add('active');
-  priceElement.innerText = `от ${price.toLocaleString('ru-RU')} ₽`;
+
+  const texts = [
+    'Это может получиться очень кинематографично.',
+    'Проект звучит как что-то атмосферное и дорогое.',
+    'Любим такие задачи. Будет мощно.',
+    'Тут можно сделать действительно уникальный звук.'
+  ];
+
+  document.getElementById('resultText').innerText = texts[Math.floor(Math.random() * texts.length)];
+
+  updatePrice();
+}
+
+function updatePrice() {
+
+  const converted = Math.round(currentPrice * rates[currentCurrency]);
+
+  document.getElementById('price').innerText =
+    `от ${converted.toLocaleString('ru-RU')} ${symbols[currentCurrency]}`;
+} ₽`;
 
 }
 
