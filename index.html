@@ -11,25 +11,21 @@
 
 <style>
 
-:root {
+  :root {
 
-  --bg: #07090f;
+  --bg: #0f0d0a;
 
-  --card: rgba(255,255,255,0.05);
+  --card: rgba(255,248,235,0.05);
 
-  --border: rgba(180,220,255,0.12);
+  --border: rgba(255,240,220,0.09);
 
-  --text: #f2f6ff;
+  --text: #f8f4ee;
 
-  --muted: #93a4bd;
+  --muted: #c6b8a7;
 
-  --glow: #8ad7ff;
+  --glow: #ffe1b2;
 
-  --accent: #c7a6ff;
-
-  --pink: #ffb7dc;
-
-  --cyan: #7df9ff;
+  --accent: #fff6dc;
 
 }
 
@@ -41,11 +37,11 @@
 }
 
 body {
-
-  background:
-    radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(255,255,255,0.04), transparent 30%),
-    var(--bg);
+  
+background:
+  radial-gradient(circle at top left, rgba(255,220,170,0.10), transparent 32%),
+  radial-gradient(circle at bottom right, rgba(255,245,220,0.07), transparent 35%),
+  linear-gradient(to bottom, #0f0d0a, #15120e);
 
   color: var(--text);
 
@@ -62,14 +58,13 @@ body {
 
   pointer-events: none;
   z-index: 999;
-
-  backdrop-filter:
-    grayscale(1)
-    saturate(0.45)
-    brightness(0.9);
-
-  opacity: 1;
-
+    
+backdrop-filter:
+  grayscale(0.7)
+  saturate(0.5)
+  brightness(0.92)
+  sepia(0.15);
+    
   transition:
     opacity 1.4s ease,
     backdrop-filter 1.4s ease;
@@ -82,10 +77,9 @@ body.music-active::after {
 
   opacity: 0;
 
-  backdrop-filter:
-    grayscale(0)
-    saturate(1.4)
-    brightness(1.05);
+  transition:
+    opacity 2.8s ease,
+    backdrop-filter 2.8s ease;
 
 }
 
