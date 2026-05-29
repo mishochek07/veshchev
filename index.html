@@ -826,6 +826,16 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   box-shadow: 0 0 15px rgba(255, 220, 140, 0.2);
 }
 
+  #price {
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+#price.price-changing {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
 </style>
 </head>
 <body>
@@ -1123,50 +1133,46 @@ function setCurrency(currency, buttonElement){
   updatePrice(true);
 }
 
-function animateValue(start, end, duration) {
+// ТЕПЕРЬ ЭТА ФУНКЦИЯОТВЕЧАЕТ ЗА ПЛАВНЫЙ СДВИГ И ЗАТУХАНИЕ ТЕКСТА
+function animateValue(targetPrice) {
   const priceElement = document.getElementById('price');
   if (!priceElement) return;
 
-  const startTime = performance.now();
-  
-  function elasticEaseOut(t) {
-    if (t === 0) return 0;
-    if (t === 1) return 1;
-    const p = 0.3;
-    return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
-  }
-  
-  function update(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const springProgress = elasticEaseOut(progress);
-    
-    const currentValue = Math.round(start + (end - start) * springProgress);
-    
-    priceElement.innerText = `от ${currentValue.toLocaleString()} ${symbols[currentCurrency]}`;
-    displayedPrice = currentValue;
+  // 1. Добавляем класс затухания и увода текста вниз
+  priceElement.classList.add('price-changing');
 
-    if (progress < 1) {
-      animationFrameId = requestAnimationFrame(update);
-    }
-  }
-  
-  if (animationFrameId) cancelAnimationFrame(animationFrameId);
-  animationFrameId = requestAnimationFrame(update);
+  // 2. Ждем 200 миллисекунд, пока текст полностью станет невидимым
+  setTimeout(() => {
+    // Меняем текст на новую валюту, пока никто не видит
+    priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
+    
+    // Перемещаем невидимый текст наверх, чтобы он выплывал сверху вниз
+    priceElement.style.transform = 'translateY(-10px)';
+    
+    // Форсируем перерисовку браузера
+    priceElement.offsetHeight; 
+
+    // 3. Убираем класс затухания, возвращаем текст в центр и плавно проявляем
+    priceElement.classList.remove('price-changing');
+    priceElement.style.transform = 'translateY(0)';
+  }, 200);
 }
 
 function updatePrice(animated = false) {
   const targetPrice = Math.round(currentPrice * rates[currentCurrency]);
   
   if (animated) {
-    animateValue(displayedPrice, targetPrice, 600); // 600мс крутятся цифры
+    // Запускаем плавный сдвиг текста
+    animateValue(targetPrice);
   } else {
+    // Самый первый показ цены (без анимаций)
     const priceElement = document.getElementById('price');
     if (priceElement) {
       priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
-      displayedPrice = targetPrice;
     }
   }
+  // Запоминаем текущую цену
+  displayedPrice = targetPrice;
 }
 
 // Плавный переход на следующий шаг
