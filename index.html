@@ -1058,8 +1058,6 @@ const observer = new IntersectionObserver(entries => {
 });
 document.querySelectorAll('.fade').forEach(el => observer.observe(el));
 
-/* ЗАМЕНИТЬ СТАРЫЙ КОД ВНУТРИ ТЕГА <script> НА ЭТОТ КУСОК */
-
 let currentCurrency = 'RUB';
 let currentPrice = 40000;
 let displayedPrice = 40000; // Хранит текущую цифру на экране для плавного перебора
@@ -1068,30 +1066,54 @@ let animationFrameId = null;
 const rates = { RUB: 1, USD: 0.011, EUR: 0.010, AMD: 4.9 };
 const symbols = { RUB: '₽', USD: '$', EUR: '€', AMD: '֏' };
 
-// Умный замер высоты подстраивающегося блока контента
+function playHoverSound() {
+  const hoverSound = document.getElementById('hoverSound');
+  if(hoverSound) { 
+    hoverSound.currentTime = 0; 
+    hoverSound.play().catch(()=>{}); 
+  }
+}
+
+// ЗАМЕНИ СТАРУЮ ФУНКЦИЮ РАСЧЕТА ВЫСОТЫ НА ЭТУ:
+
 function resizeEstimatorContainer(targetBlock) {
   const container = document.querySelector('.card.estimator');
   if (!container || !targetBlock) return;
 
-  const currentHeight = container.offsetHeight;
+  // Отключаем overflow: hidden на время, чтобы он не блокировал клики
+  container.style.overflow = 'visible';
+
+  // Получаем текущую точную высоту контейнера из браузера
+  const currentHeight = container.getBoundingClientRect().height;
   container.style.height = currentHeight + 'px';
 
+  // Временно включаем отображение шага для замера
   const originalDisplay = targetBlock.style.display;
   targetBlock.style.display = 'block';
   
-  const targetHeight = targetBlock.scrollHeight + 64; // Учитываем паддинги карточки
+  // Автоматически считаем внутренние отступы (padding) карточки из CSS
+  const computedStyle = window.getComputedStyle(container);
+  const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
+  const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
+  
+  // Итоговая точная высота контента вместе с его реальными отступами
+  const targetHeight = targetBlock.scrollHeight + paddingTop + paddingBottom;
   targetBlock.style.display = originalDisplay;
 
+  // Запускаем плавный переход
   requestAnimationFrame(() => {
+    container.style.transition = 'height 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
     container.style.height = targetHeight + 'px';
   });
 
+  // Как только анимация завершилась, полностью сбрасываем инлайновую высоту в auto,
+  // чтобы карточка «ожила», стала резиновой и открыла доступ ко всем кликам
   setTimeout(() => {
     container.style.height = 'auto';
-  }, 500);
+    container.style.overflow = 'visible';
+  }, 450);
 }
 
-// Переключение валют (теперь вызывается только на финальном экране)
 function setCurrency(currency, buttonElement){
   if (currentCurrency === currency) return;
   
