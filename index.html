@@ -1582,14 +1582,12 @@ body.music-active::after{
 <section id="estimator">
 
 <div class="estimator-icons">
-
-<img src="spotify.png" class="float-icon icon1">
-<img src="applemusic.png" class="float-icon icon2">
-<img src="soundcloud.png" class="float-icon icon3">
-<img src="abletonlive.png" class="float-icon icon4">
-<img src="logicpro.png" class="float-icon icon5">
-<img src="protools.png" class="float-icon icon6">
-
+  <img src="spotify.png" class="float-icon icon1">
+  <img src="applemusic.png" class="float-icon icon2">
+  <img src="soundcloud.png" class="float-icon icon3">
+  <img src="abletonlive.png" class="float-icon icon4">
+  <img src="logicpro.png" class="float-icon icon5">
+  <img src="protools.png" class="float-icon icon6">
 </div>
 
   <h2 class="section-title fade">
@@ -1608,514 +1606,220 @@ body.music-active::after{
       <button onclick="setCurrency('AMD')">֏ AMD</button>
     </div>
 
-   <div class="quiz-step active" id="step1">
+    <style>
+      .quiz-step {
+        display: none;
+        opacity: 0;
+        transform: translateY(20px) scale(.99);
+        transition: opacity .5s ease, transform .5s ease;
+      }
+      .quiz-step.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      .result {
+        display: none;
+        opacity: 0;
+        transform: translateY(20px) scale(.99);
+        transition: opacity .6s ease, transform .6s ease;
+      }
+      .result.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    </style>
 
-<h3>Что нужно создать?</h3>
-
-<div class="options cards-mode">
-
-<button class="project-card"
-onclick="nextStep(2, 40000)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('arrangement.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Аранжировка</h4>
-<p>emotion / dynamics / harmony</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="nextStep(2, 30000)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('cinematic.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Музыка для видео</h4>
-<p>movie / soundtrack</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="nextStep(2, 25000)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('sounddesign.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Саунд-дизайн</h4>
-<p>games / abstract / experimental</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="nextStep(2, 14000)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('mixing.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Mix / Master</h4>
-<p>clarity / loudness / balance</p>
-</div>
-
-</button>
-
-</div>
-
-</div>
-    
+    <div class="quiz-step active" id="step1">
+      <h3>What do we need to create?</h3>
+      <div class="options cards-mode">
+        <button class="project-card" onclick="nextStep(2, 40000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('arrangement.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Arrangement</h4>
+            <p>emotion / dynamics / harmony</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="nextStep(2, 30000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('cinematic.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Video Music</h4>
+            <p>movie / soundtrack</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="nextStep(2, 25000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('sounddesign.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Sound Design</h4>
+            <p>games / abstract / experimental</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="nextStep(2, 14000)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('mixing.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Mix / Master</h4>
+            <p>clarity / loudness / balance</p>
+          </div>
+        </button>
+      </div>
+    </div>
+        
     <div class="quiz-step" id="step2">
+      <h3>What is the project's vibe?</h3>
+      <div class="options cards-mode">
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('emotional.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Emotional</h4>
+            <p>emotional / beautiful / deep</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('dark.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Dark</h4>
+            <p>experimental / distorted / abstract</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('commercial.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Commercial</h4>
+            <p>clean / expensive / modern</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="nextStep(3)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('aggressive.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Aggressive</h4>
+            <p>loud / sharp / energetic</p>
+          </div>
+        </button>
+      </div>
+    </div>
 
-<h3>Какой vibe должен быть у проекта?</h3>
+    <div class="quiz-step" id="step3">
+      <h3>Turnaround / Deadline?</h3>
+      <div class="options cards-mode">
+        <button class="project-card" onclick="finishQuiz(1)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('normal.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>No Rush</h4>
+            <p>careful / cinematic / detailed</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="finishQuiz(1.25)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('fast.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Standard Pace</h4>
+            <p>tight deadline / intense workflow</p>
+          </div>
+        </button>
+        <button class="project-card" onclick="finishQuiz(1.55)" style="background: linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)), url('urgent.jpg') center/cover;">
+          <div class="project-card-content">
+            <h4>Urgent</h4>
+            <p>sleep is optional / export at 4am</p>
+          </div>
+        </button>
+      </div>
 
-<div class="options cards-mode">
-
-<button class="project-card"
-onclick="nextStep(3)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('emotional.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Эмоциональный</h4>
-<p>emotional / beautiful / deep</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="nextStep(3)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('dark.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Мрачный</h4>
-<p>experimental / distorted / abstract</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="nextStep(3)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('commercial.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Коммерческий</h4>
-<p>clean / expensive / modern</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="nextStep(3)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('aggressive.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Агрессивный</h4>
-<p>loud / sharp / energetic</p>
-</div>
-
-</button>
-
-</div>
-
-</div>
-
-   <div class="quiz-step" id="step3">
-
-<h3>Насколько всё срочно?</h3>
-
-<div class="options cards-mode">
-
-<button class="project-card"
-onclick="finishQuiz(1)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('normal.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Не сильно срочно</h4>
-<p>careful / cinematic / detailed</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="finishQuiz(1.25)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('fast.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>В обычном темпе</h4>
-<p>tight deadline / intense workflow</p>
-</div>
-
-</button>
-
-<button class="project-card"
-onclick="finishQuiz(1.55)"
-style="
-background:
-linear-gradient(to top, rgba(5,7,11,0.88), rgba(5,7,11,0.2)),
-url('urgent.jpg') center/cover;
-">
-
-<div class="project-card-content">
-<h4>Сроки горят</h4>
-<p>sleep is optional / export at 4am</p>
-</div>
-
-</button>
-
-</div>
-
-<div style="
-margin-top:28px;
-padding:24px;
-border-radius:24px;
-background:rgba(255,255,255,0.04);
-border:1px solid rgba(255,255,255,0.08);
-color:rgba(255,255,255,0.72);
-line-height:1.8;
-">
-
-⚡ Fast turnaround available.<br>
-🌙 Night sessions supported.<br>
-🎧 Cinematic polish included by default.
-
-</div>
-
-</div>
+      <div style="margin-top:28px; padding:24px; border-radius:24px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.72); line-height:1.8;">
+        ⚡ Fast turnaround available.<br>
+        🌙 Night sessions supported.<br>
+        🎧 Cinematic polish included by default.
+      </div>
+    </div>
 
     <div class="result" id="result">
-
       <div class="result-orb"></div>
-
       <small>ESTIMATED PRODUCTION COST</small>
-
-      <h3 id="price">
-        от 40000 ₽
-      </h3>
-
-      <p id="resultText">
-        Проект выглядит как что-то очень атмосферное.
-      </p>
+      <h3 id="price">от 40 000 ₽</h3>
+      <p id="resultText">Проект выглядит как что-то очень атмосферное.</p>
 
       <div class="result-stats">
-
-        <div>
-          <span>АТМОСФЕРА</span>
-          <strong>97%</strong>
-        </div>
-
-        <div>
-          <span>КОНТРАСТ</span>
-          <strong>92%</strong>
-        </div>
-
-        <div>
-          <span>ЭКСПЕРИМЕНТАЛЬНОСТЬ</span>
-          <strong>88%</strong>
-        </div>
-
+        <div><span>АТМОСФЕРА</span><strong>97%</strong></div>
+        <div><span>КОНТРАСТ</span><strong>92%</strong></div>
+        <div><span>ЭКСПЕРИМЕНТАЛЬНОСТЬ</span><strong>88%</strong></div>
       </div>
 
       <div class="contacts">
-
-        <a href="https://t.me/mishocheks" target="_blank">
-          Telegram
-        </a>
-
-        <a href="mailto:mishocheks@internet.ru">
-          mishocheks@internet.ru
-        </a>
-
+        <a href="https://t.me/mishocheks" target="_blank">Telegram</a>
+        <a href="mailto:mishocheks@internet.ru">mishocheks@internet.ru</a>
       </div>
-
     </div>
 
   </div>
 
 </section>
 
-<section id="contact">
-
-  <h2 class="section-title fade">
-    Давайте сделаем<br>
-    что-то новое.
-  </h2>
-
-  <div class="contacts fade">
-
-    <a href="https://t.me/mishocheks" target="_blank">
-      Telegram
-    </a>
-
-    <a href="mailto:mishocheks@internet.ru">
-      Email
-    </a>
-
-  </div>
-
-</section>
-
-<footer>
-  © 2026 Михаил Вещев
-</footer>
-  
-  <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
-<audio id="resultSound" src="result.mp3" preload="auto"></audio>
-  <audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
-
 <script>
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
-  });
-});
-
-document.querySelectorAll('.fade').forEach(el => observer.observe(el));
-
 let currentCurrency = 'RUB';
 let currentPrice = 40000;
 
-const rates = {
-  RUB: 1,
-  USD: 0.011,
-  EUR: 0.010,
-  AMD: 4.9
-};
+const rates = { RUB: 1, USD: 0.011, EUR: 0.010, AMD: 4.9 };
+const symbols = { RUB: '₽', USD: '$', EUR: '€', AMD: '֏' };
 
-const symbols = {
-  RUB: '₽',
-  USD: '$',
-  EUR: '€',
-  AMD: '֏'
-};
-
-function setCurrency(currency){
-
-  currencySound.currentTime = 0;
-  currencySound.play();
-
-  currentCurrency = currency;
-
-  updatePrice();
-
+function playHoverSound() {
+  const hoverSound = document.getElementById('hoverSound');
+  if(hoverSound) { hoverSound.currentTime = 0; hoverSound.play().catch(()=>{}); }
 }
 
-/* ===== STEP TRANSITION ===== */
+function setCurrency(currency){
+  const currencySound = document.getElementById('currencySound');
+  if(currencySound) { currencySound.currentTime = 0; currencySound.play().catch(()=>{}); }
+  currentCurrency = currency;
+  updatePrice();
+}
+
+function updatePrice() {
+  const priceElement = document.getElementById('price');
+  if (priceElement) {
+    const converted = Math.round(currentPrice * rates[currentCurrency]);
+    priceElement.innerText = `от ${converted.toLocaleString()} ${symbols[currentCurrency]}`;
+  }
+}
 
 function nextStep(step, basePrice = null){
-
   playHoverSound();
-
   if(basePrice !== null){
     currentPrice = basePrice;
   }
 
-  const current =
-    document.querySelector('.quiz-step.active');
+  const current = document.querySelector('.quiz-step.active');
+  const next = document.getElementById('step' + step);
 
-  if(current){
-
-    current.classList.remove('active');
-
+  if(current && next) {
+    current.style.opacity = '0';
+    current.style.transform = 'translateY(-20px) scale(0.98)';
+    
     setTimeout(() => {
-
-      current.style.display = 'none';
-
-      const next =
-        document.getElementById(`step${step}`);
-
-      if(next){
-
-        next.style.display = 'block';
-
-        requestAnimationFrame(() => {
-          next.classList.add('active');
-        });
-
-      }
-
-    }, 450);
-
+      current.classList.remove('active');
+      next.classList.add('active');
+      
+      setTimeout(() => {
+        next.style.opacity = '1';
+        next.style.transform = 'translateY(0) scale(1)';
+      }, 30);
+    }, 500);
   }
-
 }
 
-/* ===== RESULT ===== */
-
-function finishQuiz(multiplier){
-
-  playResultSound();
-
-  currentPrice =
-    Math.round(currentPrice * multiplier);
-
-  const current =
-    document.querySelector('.quiz-step.active');
-
-  if(current){
-
-    current.classList.remove('active');
-
-    setTimeout(() => {
-
-      current.style.display = 'none';
-
-      const result =
-        document.getElementById('result');
-
-      result.style.display = 'block';
-
-      requestAnimationFrame(() => {
-        result.classList.add('active');
-      });
-
-      const texts = [
-        'Это может получиться очень кинематографично.',
-        'Проект звучит как что-то атмосферное и дорогое.',
-        'Любим такие задачи. Будет мощно.',
-        'Тут можно сделать действительно уникальный звук.'
-      ];
-
-      document.getElementById('resultText').innerText =
-        texts[Math.floor(Math.random() * texts.length)];
-
-      updatePrice();
-
-    }, 450);
-
-  }
-
-}
-
-function updatePrice(){
-
-  const converted =
-    Math.round(currentPrice * rates[currentCurrency]);
-
-  document.getElementById('price').innerText =
-    `от ${converted.toLocaleString('ru-RU')} ${symbols[currentCurrency]}`;
-
-}
-
-/* ===== INITIAL ===== */
-
-document.getElementById('step1').style.display = 'block';
-
-requestAnimationFrame(() => {
-  document.getElementById('step1')
-    .classList.add('active');
-});
-
-/* ===== SOUNDS ===== */
-
-const hoverSound = new Audio('hover.mp3');
-hoverSound.volume = 0.15;
-
-const resultSound = new Audio('result.mp3');
-resultSound.volume = 0.3;
+function finishQuiz(multiplier) {
+  currentPrice = Math.round(currentPrice * multiplier);
+  updatePrice();
   
-  const currencySound = new Audio('valuta.mp3');
-currencySound.volume = 0.18;
+  const resultSound = document.getElementById('resultSound');
+  if(resultSound) { resultSound.currentTime = 0; resultSound.play().catch(()=>{}); }
 
-function playHoverSound(){
+  const current = document.querySelector('.quiz-step.active');
+  const resultBlock = document.getElementById('result');
 
-  hoverSound.currentTime = 0;
-  hoverSound.play();
-
+  if(current && resultBlock) {
+    current.style.opacity = '0';
+    current.style.transform = 'translateY(-20px) scale(0.98)';
+    
+    setTimeout(() => {
+      current.classList.remove('active');
+      resultBlock.classList.add('active');
+      
+      setTimeout(() => {
+        resultBlock.style.opacity = '1';
+        resultBlock.style.transform = 'translateY(0) scale(1)';
+      }, 30);
+    }, 500);
+  }
 }
-
-function playResultSound(){
-
-  resultSound.currentTime = 0;
-  resultSound.play();
-
-}
-
-/* ===== MUSIC MODE ===== */
-
-document.querySelectorAll('audio').forEach(audio => {
-
-  audio.addEventListener('play', () => {
-    document.body.classList.add('music-active');
-  });
-
-  audio.addEventListener('pause', () => {
-
-    const playing =
-      [...document.querySelectorAll('audio')]
-      .some(a => !a.paused);
-
-    if(!playing){
-      document.body.classList.remove('music-active');
-    }
-
-  });
-
-});
-
-/* ===== ICON PARALLAX ===== */
-
-document.addEventListener('mousemove', e => {
-
-  const x = (e.clientX / window.innerWidth - 0.5);
-  const y = (e.clientY / window.innerHeight - 0.5);
-
-  document.querySelectorAll('.float-icon').forEach((icon, index) => {
-
-    const speed = 38 + index * 8;
-
-    icon.style.transform = `
-translate3d(
-  ${x * speed}px,
-  ${y * speed}px,
-  0
-)
-rotate(${x * 8}deg)
-`;
-
-  });
-
-});
-
 </script>
   
 </body>
