@@ -836,36 +836,29 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   transform: translateY(10px);
 }
 
-/* ОБНОВЛЕННЫЙ И БОЛЕЕ НАДЕЖНЫЙ ВАРИАНТ ФОНА */
-
-/* Делаем сам body готовым к плавной смене фонов */
-body {
-  position: relative;
-  /* Добавляем плавный переход для самого фонового цвета на всякий случай */
-  transition: background 2s ease-in-out; 
-}
-
-body::after {
-  content: "";
+/* УМНЫЙ АТМОСФЕРНЫЙ ОВЕРЛЕЙ ДЛЯ МУЗЫКИ */
+.music-ambient-glow {
   position: fixed;
   inset: 0;
-  /* Глубокий премиальный градиент */
-  background: linear-gradient(125deg, #1a1525, #0d1b2a, #1b1116, #0f2027) !important;
-  background-size: 400% 400% !important;
-  /* z-index -2 прячет его под контент, но !important не даст перекрыть его базовым фоном body */
-  z-index: -2 !important;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 2s ease-in-out !important;
+  /* Дорогой спектр оттенков: фиолетовый, глубокий синий, индиго, тёмный изумруд */
+  background: linear-gradient(135deg, #2b1c47, #0f2342, #3a1c31, #122b28, #1a162b);
+  background-size: 400% 400%;
+  z-index: 99999; /* Кладись поверх всего */
+  pointer-events: none; /* Пропускай клики сквозь себя */
+  opacity: 0; /* Изначально выключен */
+  /* Режим смешивания, который сохранит твою вёрстку, но окрасит тёмные участки и glow-эффекты */
+  mix-blend-mode: screen; 
+  transition: opacity 2.5s ease-in-out;
+  will-change: opacity, background-position;
 }
 
-/* Включаем перелив при активной музыке */
-body.music-active::after {
-  opacity: 1 !important;
-  animation: rainbowGradient 15s ease infinite !important;
+/* Когда музыка играет, плавно зажигаем и запускаем перелив */
+.music-ambient-glow.active {
+  opacity: 0.65; /* Яркость перелива (можно сделать 0.8, если захочешь сочнее) */
+  animation: dynamicRainbow 20s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-@keyframes rainbowGradient {
+@keyframes dynamicRainbow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
@@ -1262,7 +1255,32 @@ function finishQuiz(multiplier) {
     }, 400);
   }
 }
-</script>
+  // АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ НА САЙТЕ
+document.addEventListener('DOMContentLoaded', () => {
+  const glowLayer = document.getElementById('ambientGlow');
+  
+  // Перехватываем событие старта любого звука на странице
+  document.addEventListener('play', (event) => {
+    // Игнорируем системные звуки квиза (hover, клики валюты, результат)
+    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
+      return;
+    }
+    // Если включили реальный трек в плеере — зажигаем атмосферу
+    if (glowLayer) glowLayer.classList.add('active');
+  }, true);
 
+  // Перехватываем событие паузы или окончания трека
+  const handleStop = (event) => {
+    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
+      return;
+    }
+    if (glowLayer) glowLayer.classList.remove('active');
+  };
+
+  document.addEventListener('pause', handleStop, true);
+  document.addEventListener('ended', handleStop, true);
+});
+</script>
+<div class="music-ambient-glow" id="ambientGlow"></div>
 </body>
 </html>
