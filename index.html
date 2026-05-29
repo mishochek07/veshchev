@@ -71,6 +71,10 @@ transition:
 
 }
 
+  transition:
+  background 2.5s ease,
+  color 2s ease,
+  filter 2s ease;
 }
 
 body.music-active::after {
@@ -192,9 +196,14 @@ nav a:hover {
 
 .btn-primary:hover {
   transform: translateY(-4px);
-  box-shadow: 0 0 40px rgba(126,255,212,0.25);
-}
 
+  box-shadow:
+    0 0 50px rgba(255,220,140,0.35),
+    0 0 120px rgba(255,240,190,0.2);
+
+  filter: saturate(1.2);
+}
+  
 .btn-secondary {
   border: 1px solid rgba(255,255,255,0.1);
   color: white;
@@ -218,8 +227,17 @@ nav a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition:
+  filter 2.4s ease,
+  transform 2s ease;
 }
 
+  body.music-active .hero-photo img {
+  filter:
+    saturate(1.35)
+    contrast(1.08)
+    brightness(1.03);
+}
 .glow {
 
   position: absolute;
@@ -370,45 +388,41 @@ section {
 .card {
   background: var(--card);
   border: 1px solid var(--border);
+
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
   border-radius: 32px;
   padding: 32px;
+
   position: relative;
   overflow: hidden;
-  transition: 0.4s ease;
-  box-shadow:
-  inset 0 1px 0 rgba(255,255,255,0.08),
-  0 10px 40px rgba(0,0,0,0.35);
+
   transition:
-
-  transform 0.8s cubic-bezier(.19,1,.22,1),
-
-  border-color 2.8s cubic-bezier(.19,1,.22,1),
-
-  box-shadow 3s cubic-bezier(.19,1,.22,1),
-
-  background 3s cubic-bezier(.19,1,.22,1),
-
-  filter 2s ease;
+    background 1.2s ease,
+    border-color 1.2s ease,
+    box-shadow 1.2s ease,
+    transform 0.8s ease,
+    filter 1.2s ease;
 }
   
 .card:hover {
+  transform: translateY(-8px);
 
-  transform: translateY(-6px);
-
-  border-color: rgba(255,225,180,0.22);
+  border-color: rgba(255,245,210,0.45);
 
   background:
     linear-gradient(
-      to bottom right,
-      rgba(255,245,230,0.07),
-      rgba(255,225,180,0.03)
+      135deg,
+      rgba(255,255,255,0.14),
+      rgba(255,231,170,0.12)
     );
 
   box-shadow:
-    0 0 40px rgba(255,220,180,0.06),
-    0 0 120px rgba(255,240,220,0.04);
+    0 0 80px rgba(255,220,140,0.18),
+    0 0 140px rgba(255,245,210,0.08);
 
+  filter: saturate(1.15);
 }
 
 .card h3 {
@@ -1017,6 +1031,36 @@ footer {
 
 .result-stats strong{
   font-size:28px;
+}
+  /* ===== MUSIC ACTIVE MODE ===== */
+
+body.music-active {
+
+  --bg: #1b140c;
+
+  --card: rgba(255,245,225,0.12);
+
+  --border: rgba(255,235,190,0.22);
+
+  --text: #fffdf8;
+
+  --muted: #d8c8ae;
+
+  --glow: #ffe29a;
+
+  --accent: #ffd087;
+
+  transition:
+    background 2.5s ease,
+    color 2s ease,
+    filter 2s ease;
+}
+
+body.music-active .hero-photo img {
+  filter:
+    saturate(1.35)
+    contrast(1.08)
+    brightness(1.03);
 }
   
 @media(max-width: 980px) {
