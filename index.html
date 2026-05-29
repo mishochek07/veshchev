@@ -353,12 +353,13 @@ audio {
 }
 
 .works-bottom-grid {
-  margin-top: 28px;
+  display: contents;
 }
 
 .studio-mini {
   position: relative;
-  min-height: 560px;
+  min-height: 420px;
+  height: 100%;
   border-radius: 34px;
   overflow: hidden;
   background:
@@ -376,8 +377,8 @@ audio {
 .studio-mini-content {
   position: relative;
   z-index: 2;
-  padding: 50px;
-  max-width: 700px;
+  padding: 42px;
+  max-width: 100%;
 }
 
 .studio-mini-content span {
@@ -387,7 +388,7 @@ audio {
 }
 
 .studio-mini-content h3 {
-  font-size: 62px;
+  font-size: clamp(42px, 4vw, 72px);
   line-height: 0.92;
   margin: 18px 0 24px;
 }
@@ -831,17 +832,15 @@ footer {
 
 <script>
 
-const fades = document.querySelectorAll('.fade');
-
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if(entry.isIntersecting) {
+    if(entry.isIntersecting){
       entry.target.classList.add('visible');
     }
-  })
-}, { threshold: 0.2 });
+  });
+});
 
-fades.forEach(el => observer.observe(el));
+document.querySelectorAll('.fade').forEach(el => observer.observe(el));
 
 let currentCurrency = 'RUB';
 let currentPrice = 40000;
@@ -860,25 +859,31 @@ const symbols = {
   AMD: '֏'
 };
 
-function setCurrency(currency) {
+function setCurrency(currency){
   currentCurrency = currency;
   updatePrice();
 }
 
-function nextStep(step, basePrice = null) {
+function nextStep(step, basePrice = null){
 
-  if(basePrice) {
+  if(basePrice !== null){
     currentPrice = basePrice;
   }
 
   document.querySelectorAll('.quiz-step').forEach(el => {
     el.classList.remove('active');
+    el.style.display = 'none';
   });
 
-  document.getElementById(`step${step}`).classList.add('active');
+  const next = document.getElementById(`step${step}`);
+
+  if(next){
+    next.classList.add('active');
+    next.style.display = 'block';
+  }
 }
 
-function finishQuiz(multiplier) {
+function finishQuiz(multiplier){
 
   currentPrice = Math.round(currentPrice * multiplier);
 
@@ -887,6 +892,8 @@ function finishQuiz(multiplier) {
   });
 
   const result = document.getElementById('result');
+
+  result.style.display = 'block';
   result.classList.add('active');
 
   const texts = [
@@ -896,24 +903,24 @@ function finishQuiz(multiplier) {
     'Тут можно сделать действительно уникальный звук.'
   ];
 
-  document.getElementById('resultText').innerText = texts[Math.floor(Math.random() * texts.length)];
+  document.getElementById('resultText').innerText =
+    texts[Math.floor(Math.random() * texts.length)];
 
   updatePrice();
 }
 
-function updatePrice() {
+function updatePrice(){
 
-  const converted = Math.round(currentPrice * rates[currentCurrency]);
+  const converted =
+    Math.round(currentPrice * rates[currentCurrency]);
 
   document.getElementById('price').innerText =
     `от ${converted.toLocaleString('ru-RU')} ${symbols[currentCurrency]}`;
-} ₽`;
-
 }
 
-</script>
+document.getElementById('step1').style.display = 'block';
+
+</script>                
 
 </body>
 </html>
-
-После этого сайт будет полностью обновлен.
