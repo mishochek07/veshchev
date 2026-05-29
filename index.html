@@ -65,9 +65,9 @@ backdrop-filter:
   brightness(0.92)
   sepia(0.15);
     
-  transition:
-    opacity 1.4s ease,
-    backdrop-filter 1.4s ease;
+transition:
+  opacity 4s cubic-bezier(.19,1,.22,1),
+  backdrop-filter 4s cubic-bezier(.19,1,.22,1);
 
 }
 
@@ -380,21 +380,34 @@ section {
   inset 0 1px 0 rgba(255,255,255,0.08),
   0 10px 40px rgba(0,0,0,0.35);
   transition:
-  transform 0.6s ease,
-  border-color 2s ease,
-  box-shadow 2s ease,
-  background 2s ease;
+
+  transform 0.8s cubic-bezier(.19,1,.22,1),
+
+  border-color 2.8s cubic-bezier(.19,1,.22,1),
+
+  box-shadow 3s cubic-bezier(.19,1,.22,1),
+
+  background 3s cubic-bezier(.19,1,.22,1),
+
+  filter 2s ease;
 }
   
 .card:hover {
 
-  transform: translateY(-10px);
+  transform: translateY(-6px);
 
-  border-color: rgba(138,215,255,0.35);
+  border-color: rgba(255,225,180,0.22);
+
+  background:
+    linear-gradient(
+      to bottom right,
+      rgba(255,245,230,0.07),
+      rgba(255,225,180,0.03)
+    );
 
   box-shadow:
-    0 0 60px rgba(138,215,255,0.12),
-    0 0 120px rgba(199,166,255,0.10);
+    0 0 40px rgba(255,220,180,0.06),
+    0 0 120px rgba(255,240,220,0.04);
 
 }
 
@@ -614,14 +627,34 @@ audio {
   border-radius: 24px;
   padding: 24px;
   cursor: pointer;
-  transition: 0.35s ease;
+  transition:
+
+  transform 0.7s cubic-bezier(.19,1,.22,1),
+
+  border-color 2s ease,
+
+  background 2.5s ease,
+
+  box-shadow 2.5s ease;
   font-size: 15px;
 }
 
 .options button:hover {
-  transform: translateY(-5px);
-  border-color: rgba(126,255,212,0.3);
-  background: rgba(126,255,212,0.08);
+
+  transform: translateY(-4px);
+
+  border-color: rgba(255,225,180,0.22);
+
+  background:
+    linear-gradient(
+      to bottom right,
+      rgba(255,240,220,0.09),
+      rgba(255,225,180,0.04)
+    );
+
+  box-shadow:
+    0 0 30px rgba(255,220,180,0.06);
+
 }
 
 .result {
@@ -996,6 +1029,10 @@ footer {
     width: 100%;
     max-width: 500px;
     height: 600px;
+    transition:
+    box-shadow 4s cubic-bezier(.19,1,.22,1),
+    transform 1s ease,
+    filter 3s ease;
   }
 
   .about-grid {
@@ -1031,9 +1068,11 @@ body.music-active .card {
 
 body.music-active .hero-photo {
 
+  filter: saturate(1.12);
+
   box-shadow:
-    0 0 120px rgba(120,140,255,0.18),
-    0 0 220px rgba(255,0,140,0.12);
+    0 0 120px rgba(255,220,180,0.12),
+    0 0 240px rgba(255,245,220,0.08);
 
 }
 
