@@ -1285,49 +1285,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('pause', handleStop, true);
   document.addEventListener('ended', handleStop, true);
 });
-// ЭФФЕКТ TAPE STOP ПРИ ПАУЗЕ ПЛЕЕРА
-const activeTapeStops = new Map(); // Храним таймеры для каждого трека
-
-function playWithTapeStart(audioElement) {
-  // Если этот трек сейчас тормозил, отменяем торможение
-  if (activeTapeStops.has(audioElement)) {
-    clearInterval(activeTapeStops.get(audioElement));
-    activeTapeStops.delete(audioElement);
-  }
-  
-  // Возвращаем нормальную скорость и запускаем
-  audioElement.playbackRate = 1.0;
-  audioElement.play().catch(()=>{});
-}
-
-function pauseWithTapeStop(audioElement) {
-  if (!audioElement || audioElement.paused) return;
-  
-  // Если вдруг уже запущен процесс торможения, не дублируем
-  if (activeTapeStops.has(audioElement)) return;
-
-  let currentRate = audioElement.playbackRate;
-  const fadeDuration = 400; // Время торможения в миллисекундах (0.4 секунды)
-  const intervalTime = 30;  // Как часто снижаем скорость
-  const steps = fadeDuration / intervalTime;
-  const rateStep = currentRate / steps;
-
-  const interval = setInterval(() => {
-    currentRate -= rateStep;
-    
-    if (currentRate <= 0.1) {
-      // Когда скорость упала почти до нуля — глушим трек окончательно
-      clearInterval(interval);
-      activeTapeStops.delete(audioElement);
-      audioElement.pause();
-      audioElement.playbackRate = 1.0; // Сбрасываем скорость в дефолт для следующего старта
-    } else {
-      audioElement.playbackRate = currentRate;
-    }
-  }, intervalTime);
-
-  activeTapeStops.set(audioElement, interval);
-}
 </script>
 <div class="music-ambient-glow" id="ambientGlow"></div>
 </body>
