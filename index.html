@@ -743,6 +743,86 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 .result h3 { font-size: 54px; margin: 14px 0; }
 .result small { letter-spacing: 0.2em; color: var(--glow); }
 
+  .card.estimator {
+  transition: height 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s ease, box-shadow 1.6s ease;
+  will-change: height;
+}
+
+.quiz-step {
+  display: none;
+  opacity: 0;
+  transform: translateY(15px) scale(.99);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  width: 100%;
+}
+
+.quiz-step.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.result {
+  display: none;
+  opacity: 0;
+  transform: translateY(15px) scale(.99);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  position: relative;
+  z-index: 3;
+}
+
+.result.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.result-currency-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.result-currency-wrapper span {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+}
+
+.result-currency-switcher {
+  display: flex;
+  gap: 8px;
+}
+
+.result-currency-switcher button {
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.result-currency-switcher button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 240, 220, 0.2);
+}
+
+.result-currency-switcher button.active-currency {
+  background: var(--glow);
+  color: black;
+  border-color: var(--glow);
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(255, 220, 140, 0.2);
+}
+
 </style>
 </head>
 <body>
@@ -850,12 +930,39 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   <h2 class="section-title fade">Создай свой<br>идеальный проект</h2>
   <div class="card estimator fade futuristic-estimator">
     <div class="estimator-glow"></div>
-    <div class="currency-switcher">
-      <button onclick="setCurrency('RUB')">₽ RUB</button>
-      <button onclick="setCurrency('USD')">$ USD</button>
-      <button onclick="setCurrency('EUR')">€ EUR</button>
-      <button onclick="setCurrency('AMD')">֏ AMD</button>
+    <!-- ОБНОВЛЕННЫЙ БЛОК РЕЗУЛЬТАТА С ВЫБОРОМ ВАЛЮТЫ ВНУТРИ -->
+<div class="result" id="result">
+  <div class="result-orb"></div>
+  <small>ESTIMATED PRODUCTION COST</small>
+  
+  <!-- ЦЕНА, КОТОРАЯ БУДЕТ КРАСИВО ПЕРЕБИРАТЬСЯ -->
+  <h3 id="price" style="font-variant-numeric: tabular-nums;">от 40 000 ₽</h3>
+  
+  <p id="resultText">Проект выглядит как что-то очень атмосферное.</p>
+  
+  <div class="result-stats">
+    <div><span>АТМОСФЕРА</span><strong>97%</strong></div>
+    <div><span>КОНТРАСТ</span><strong>92%</strong></div>
+    <div><span>ЭКСПЕРИМЕНТАЛЬНОСТЬ</span><strong>88%</strong></div>
+  </div>
+
+  <!-- ВЫБОР ВАЛЮТЫ ТОЛЬКО ТУТ -->
+  <div class="result-currency-wrapper">
+    <span>ИЗМЕНИТЬ ВАЛЮТУ РАСЧЕТА:</span>
+    <div class="result-currency-switcher">
+      <button class="currency-btn active-currency" onclick="setCurrency('RUB', this)">₽ RUB</button>
+      <button class="currency-btn" onclick="setCurrency('USD', this)">$ USD</button>
+      <button class="currency-btn" onclick="setCurrency('EUR', this)">€ EUR</button>
+      <button class="currency-btn" onclick="setCurrency('AMD', this)">֏ AMD</button>
     </div>
+  </div>
+
+  <!-- ТВОИ КНОПКИ СВЯЗИ -->
+  <div class="contacts" style="display: flex; gap: 14px; margin-top: 32px;">
+    <a class="btn btn-primary" href="https://t.me/mishocheks" target="_blank">Telegram</a>
+    <a class="btn btn-secondary" href="mailto:mishocheks@internet.ru">Email</a>
+  </div>
+</div>
 
     <div class="quiz-step active" id="step1">
       <h3>Что нужно создать?</h3>
@@ -951,32 +1058,94 @@ const observer = new IntersectionObserver(entries => {
 });
 document.querySelectorAll('.fade').forEach(el => observer.observe(el));
 
+/* ЗАМЕНИТЬ СТАРЫЙ КОД ВНУТРИ ТЕГА <script> НА ЭТОТ КУСОК */
+
 let currentCurrency = 'RUB';
 let currentPrice = 40000;
+let displayedPrice = 40000; // Хранит текущую цифру на экране для плавного перебора
+let animationFrameId = null;
 
 const rates = { RUB: 1, USD: 0.011, EUR: 0.010, AMD: 4.9 };
 const symbols = { RUB: '₽', USD: '$', EUR: '€', AMD: '֏' };
 
-function playHoverSound() {
-  const hoverSound = document.getElementById('hoverSound');
-  if(hoverSound) { hoverSound.currentTime = 0; hoverSound.play().catch(()=>{}); }
+// Умный замер высоты подстраивающегося блока контента
+function resizeEstimatorContainer(targetBlock) {
+  const container = document.querySelector('.card.estimator');
+  if (!container || !targetBlock) return;
+
+  const currentHeight = container.offsetHeight;
+  container.style.height = currentHeight + 'px';
+
+  const originalDisplay = targetBlock.style.display;
+  targetBlock.style.display = 'block';
+  
+  const targetHeight = targetBlock.scrollHeight + 64; // Учитываем паддинги карточки
+  targetBlock.style.display = originalDisplay;
+
+  requestAnimationFrame(() => {
+    container.style.height = targetHeight + 'px';
+  });
+
+  setTimeout(() => {
+    container.style.height = 'auto';
+  }, 500);
 }
 
-function setCurrency(currency){
+// Переключение валют (теперь вызывается только на финальном экране)
+function setCurrency(currency, buttonElement){
+  if (currentCurrency === currency) return;
+  
   const currencySound = document.getElementById('currencySound');
   if(currencySound) { currencySound.currentTime = 0; currencySound.play().catch(()=>{}); }
+  
   currentCurrency = currency;
-  updatePrice();
+
+  document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active-currency'));
+  if (buttonElement) buttonElement.classList.add('active-currency');
+
+  updatePrice(true); // true включает анимацию цифр
 }
 
-function updatePrice() {
+// Анимация эффекта "бегущих цифр" (Odometer)
+function animateValue(start, end, duration) {
   const priceElement = document.getElementById('price');
-  if (priceElement) {
-    const converted = Math.round(currentPrice * rates[currentCurrency]);
-    priceElement.innerText = `от ${converted.toLocaleString()} ${symbols[currentCurrency]}`;
+  if (!priceElement) return;
+
+  const startTime = performance.now();
+  
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easeProgress = progress * (2 - progress); // Плавное замедление к концу
+    
+    const currentValue = Math.round(start + (end - start) * easeProgress);
+    priceElement.innerText = `от ${currentValue.toLocaleString()} ${symbols[currentCurrency]}`;
+    displayedPrice = currentValue;
+
+    if (progress < 1) {
+      animationFrameId = requestAnimationFrame(update);
+    }
+  }
+  
+  if (animationFrameId) cancelAnimationFrame(animationFrameId);
+  animationFrameId = requestAnimationFrame(update);
+}
+
+function updatePrice(animated = false) {
+  const targetPrice = Math.round(currentPrice * rates[currentCurrency]);
+  
+  if (animated) {
+    animateValue(displayedPrice, targetPrice, 600); // 600мс крутятся цифры
+  } else {
+    const priceElement = document.getElementById('price');
+    if (priceElement) {
+      priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
+      displayedPrice = targetPrice;
+    }
   }
 }
 
+// Плавный переход на следующий шаг
 function nextStep(step, basePrice = null){
   playHoverSound();
   if(basePrice !== null){ currentPrice = basePrice; }
@@ -985,8 +1154,10 @@ function nextStep(step, basePrice = null){
   const next = document.getElementById('step' + step);
 
   if(current && next) {
+    resizeEstimatorContainer(next); // Запускаем плавную подгонку высоты карточки
+
     current.style.opacity = '0';
-    current.style.transform = 'translateY(-20px) scale(0.98)';
+    current.style.transform = 'translateY(-15px) scale(0.98)';
     
     setTimeout(() => {
       current.classList.remove('active');
@@ -995,13 +1166,14 @@ function nextStep(step, basePrice = null){
         next.style.opacity = '1';
         next.style.transform = 'translateY(0) scale(1)';
       }, 30);
-    }, 500);
+    }, 400);
   }
 }
 
+// Плавный переход на экран результатов
 function finishQuiz(multiplier) {
   currentPrice = Math.round(currentPrice * multiplier);
-  updatePrice();
+  updatePrice(false); // Загружаем цену без анимации для мгновенного первого рендера
   
   const resultSound = document.getElementById('resultSound');
   if(resultSound) { resultSound.currentTime = 0; resultSound.play().catch(()=>{}); }
@@ -1010,8 +1182,10 @@ function finishQuiz(multiplier) {
   const resultBlock = document.getElementById('result');
 
   if(current && resultBlock) {
+    resizeEstimatorContainer(resultBlock); // Корректируем высоту карточки под результат
+
     current.style.opacity = '0';
-    current.style.transform = 'translateY(-20px) scale(0.98)';
+    current.style.transform = 'translateY(-15px) scale(0.98)';
     
     setTimeout(() => {
       current.classList.remove('active');
@@ -1020,7 +1194,7 @@ function finishQuiz(multiplier) {
         resultBlock.style.opacity = '1';
         resultBlock.style.transform = 'translateY(0) scale(1)';
       }, 30);
-    }, 500);
+    }, 400);
   }
 }
 </script>
