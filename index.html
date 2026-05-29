@@ -836,40 +836,39 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   transform: translateY(10px);
 }
 
-/* АНИМАЦИЯ ЖИВОГО РАДУЖНОГО ФОНА */
+/* ОБНОВЛЕННЫЙ И БОЛЕЕ НАДЕЖНЫЙ ВАРИАНТ ФОНА */
 
-/* Базовое состояние: когда музыка выключена, фон обычный тёмный */
+/* Делаем сам body готовым к плавной смене фонов */
+body {
+  position: relative;
+  /* Добавляем плавный переход для самого фонового цвета на всякий случай */
+  transition: background 2s ease-in-out; 
+}
+
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  /* Красивый глубокий градиент, который плавно переливается */
-  background: linear-gradient(125deg, #1a1525, #0d1b2a, #1b1116, #0f2027);
-  background-size: 400% 400%;
-  z-index: -1;
-  opacity: 0; /* Изначально радужный фон скрыт */
+  /* Глубокий премиальный градиент */
+  background: linear-gradient(125deg, #1a1525, #0d1b2a, #1b1116, #0f2027) !important;
+  background-size: 400% 400% !important;
+  /* z-index -2 прячет его под контент, но !important не даст перекрыть его базовым фоном body */
+  z-index: -2 !important;
+  opacity: 0;
   pointer-events: none;
-  /* Переход на 2 секунды, чтобы включение/выключение было максимально мягким */
-  transition: opacity 2s ease-in-out;
+  transition: opacity 2s ease-in-out !important;
 }
 
-/* Когда музыка АКТИВНА, плавно проявляем этот фон и запускаем перелив */
+/* Включаем перелив при активной музыке */
 body.music-active::after {
-  opacity: 0.85; /* Проявляем фон за 2 секунды */
-  animation: rainbowGradient 15s ease infinite; /* Анимация на 15 секунд по кругу */
+  opacity: 1 !important;
+  animation: rainbowGradient 15s ease infinite !important;
 }
 
-/* Магия плавного смещения градиента (эффект перелива) */
 @keyframes rainbowGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
   
 </style>
