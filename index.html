@@ -1120,38 +1120,47 @@ function playHoverSound() {
   }
 }
 
-// 3. ЛОГИКА ЭФФЕКТА TAPE STOP ПРИ ПАУЗЕ ПЛЕЕРА
+// 3. БЕЗОПАСНЫЙ ЭФФЕКТ TAPE STOP ПРИ ПАУЗЕ
 const activeTapeStops = new Map();
-let isInternalPause = false; // Флаг, чтобы отличать техническую паузу от клика юзера
 
-function pauseWithTapeStop(audioElement) {
-  if (!audioElement || audioElement.paused || activeTapeStops.has(audioElement)) return;
+function applyTapeStopEffect(audioElement) {
+  if (!audioElement || activeTapeStops.has(audioElement)) return;
 
-  let currentRate = audioElement.playbackRate;
-  const fadeDuration = 400; // 0.4 секунды на торможение
+  // Запоминаем исходные параметры, чтобы вернуть их при новом старте
+  const originalVolume = audioElement.volume || 1.0;
+  let currentRate = 1.0;
+  let currentVolume = originalVolume;
+
+  const fadeDuration = 400; // 0.4 секунды на эффект торможения
   const intervalTime = 30;
   const steps = fadeDuration / intervalTime;
   const rateStep = currentRate / steps;
+  const volumeStep = currentVolume / steps;
+
+  // Включаем воспроизведение на долю секунды, чтобы воспроизвести эффект сползания питча
+  audioElement.play().catch(()=>{});
 
   const interval = setInterval(() => {
     currentRate -= rateStep;
+    currentVolume -= volumeStep;
     
-    if (currentRate <= 0.1) {
+    if (currentRate <= 0.1 || currentVolume <= 0.01) {
       clearInterval(interval);
       activeTapeStops.delete(audioElement);
       
-      isInternalPause = true; // Поднимаем флаг: сейчас скрипт нажмет системную паузу
       audioElement.pause();
-      audioElement.playbackRate = 1.0; // Возвращаем питч и скорость в дефолт
+      audioElement.playbackRate = 1.0;
+      audioElement.volume = originalVolume; // Сбрасываем в дефолт для следующего раза
     } else {
       audioElement.playbackRate = currentRate;
+      audioElement.volume = currentVolume;
     }
   }, intervalTime);
 
   activeTapeStops.set(audioElement, interval);
 }
 
-// 4. ЕДИНЫЙ КОНТРОЛЛЕР ДЛЯ ТРЕКОВ И ЭМБИЕНТ-ФОНА (ОБЪЕДИНЕН И ИСПРАВЛЕН)
+// 4. ЕДИНЫЙ СИНХРОННЫЙ КОНТРОЛЛЕР ТРЕКОВ И ЭМБИЕНТ-ФОНА
 document.addEventListener('DOMContentLoaded', () => {
   const glowLayer = document.getElementById('ambientGlow');
   
@@ -1163,42 +1172,42 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Если этот трек в этот момент тормозил — сбрасываем таймер торможения
+    // Если этот трек в данный момент затухал — очищаем таймер
     if (activeTapeStops.has(target)) {
       clearInterval(activeTapeStops.get(target));
       activeTapeStops.delete(target);
     }
-    target.playbackRate = 1.0;
+    
+    // Останавливаем все ОСТАЛЬНЫЕ играющие плееры на сайте (чтобы каши не было)
+    document.querySelectorAll('audio').forEach(audio => {
+      if (audio !== target && !audio.paused && audio.id !== 'hoverSound' && audio.id !== 'resultSound' && audio.id !== 'currencySound') {
+        audio.pause();
+        audio.playbackRate = 1.0;
+      }
+    });
 
-    // Включаем эмбиент-радугу на фоне сайта
+    target.playbackRate = 1.0;
     if (glowLayer) glowLayer.classList.add('active');
   }, true);
 
-  // Перехватываем нажатие на паузу
+  // Ловим паузу со стороны пользователя
   document.addEventListener('pause', (event) => {
     const target = event.target;
     if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
       return;
     }
 
-    // Если пауза техническая (вызвана концом Tape Stop) — просто гасим фон и выходим
-    if (isInternalPause) {
-      isInternalPause = false; 
-      if (glowLayer) glowLayer.classList.remove('active');
-      return;
-    }
+    // Если этот трек уже обрабатывается нашим эффектом — не зацикливаем
+    if (activeTapeStops.has(target)) return;
 
-    // Если это юзер кликнул на паузу — отменяем дефолтное поведение браузера
-    event.preventDefault();
-    
-    // Возвращаем трек в режим воспроизведения на время торможения ленты
-    target.play().catch(()=>{}); 
-    
-    // Запускаем эффект Tape Stop
-    pauseWithTapeStop(target);
+    // Запускаем безопасный звуковой спуск
+    applyTapeStopEffect(target);
+
+    // Гасим свет фоновой радуги
+    if (glowLayer) glowLayer.classList.remove('active');
   }, true);
 
-  // Если трек просто доиграл до самого конца
+  // Если трек просто доиграл до конца
   document.addEventListener('ended', (event) => {
     const target = event.target;
     if (target.id === 'hoverSound' || target.id === 'resultSound' || target.id === 'currencySound') {
