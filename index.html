@@ -711,9 +711,27 @@ audio {
 }
 
 .quiz-step.active{
-  display:block;
+  animation: fadeStep .7s cubic-bezier(.19,1,.22,1);
+}
 
-  animation: fadeStep 0.9s cubic-bezier(.19,1,.22,1);
+.quiz-step.active .project-card{
+  animation: fadeCard .8s cubic-bezier(.19,1,.22,1) both;
+}
+
+.quiz-step.active .project-card:nth-child(1){
+  animation-delay:.05s;
+}
+
+.quiz-step.active .project-card:nth-child(2){
+  animation-delay:.12s;
+}
+
+.quiz-step.active .project-card:nth-child(3){
+  animation-delay:.19s;
+}
+
+.quiz-step.active .project-card:nth-child(4){
+  animation-delay:.26s;
 }
 
 @keyframes fadeStep{
@@ -721,8 +739,24 @@ audio {
   from{
     opacity:0;
     transform:
-      translateY(40px)
-      scale(.98);
+      translateY(25px);
+  }
+
+  to{
+    opacity:1;
+    transform:
+      translateY(0);
+  }
+
+}
+
+@keyframes fadeCard{
+
+  from{
+    opacity:0;
+    transform:
+      translateY(35px)
+      scale(.97);
   }
 
   to{
@@ -1926,16 +1960,16 @@ function nextStep(step, basePrice = null){
     currentPrice = basePrice;
   }
 
-  document.querySelectorAll('.quiz-step').forEach(el => {
-  });
+document.querySelectorAll('.quiz-step').forEach(el => {
+  el.classList.remove('active');
+  el.style.display = 'none';
+});
 
-  const next = document.getElementById(`step${step}`);
+const next = document.getElementById(`step${step}`);
 
-  if(next){
-    next.classList.add('active');
-    next.style.display = 'block';
-  }
-
+if(next){
+  next.classList.add('active');
+  next.style.display = 'block';
 }
 
 function finishQuiz(multiplier){
