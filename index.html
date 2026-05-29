@@ -706,17 +706,6 @@ audio {
   cursor:pointer;
 }
 
-.quiz-step{
-  display:none;
-}
-
-.quiz-step.active{
-  animation: fadeStep .7s cubic-bezier(.19,1,.22,1);
-}
-
-.quiz-step.active .project-card{
-  animation: fadeCard .8s cubic-bezier(.19,1,.22,1) both;
-}
 
 .quiz-step.active .project-card:nth-child(1){
   animation-delay:.05s;
@@ -732,40 +721,6 @@ audio {
 
 .quiz-step.active .project-card:nth-child(4){
   animation-delay:.26s;
-}
-
-@keyframes fadeStep{
-
-  from{
-    opacity:0;
-    transform:
-      translateY(25px);
-  }
-
-  to{
-    opacity:1;
-    transform:
-      translateY(0);
-  }
-
-}
-
-@keyframes fadeCard{
-
-  from{
-    opacity:0;
-    transform:
-      translateY(35px)
-      scale(.97);
-  }
-
-  to{
-    opacity:1;
-    transform:
-      translateY(0)
-      scale(1);
-  }
-
 }
 
 .result h3 {
@@ -1945,12 +1900,11 @@ const symbols = {
 };
 
 function setCurrency(currency){
-
   currentCurrency = currency;
-
   updatePrice();
-
 }
+
+/* ===== STEP TRANSITION ===== */
 
 function nextStep(step, basePrice = null){
 
@@ -1960,46 +1914,80 @@ function nextStep(step, basePrice = null){
     currentPrice = basePrice;
   }
 
-document.querySelectorAll('.quiz-step').forEach(el => {
-  el.classList.remove('active');
-  el.style.display = 'none';
-});
+  const current =
+    document.querySelector('.quiz-step.active');
 
-const next = document.getElementById(`step${step}`);
+  if(current){
 
-if(next){
-  next.classList.add('active');
-  next.style.display = 'block';
+    current.classList.remove('active');
+
+    setTimeout(() => {
+
+      current.style.display = 'none';
+
+      const next =
+        document.getElementById(`step${step}`);
+
+      if(next){
+
+        next.style.display = 'block';
+
+        requestAnimationFrame(() => {
+          next.classList.add('active');
+        });
+
+      }
+
+    }, 450);
+
+  }
+
 }
+
+/* ===== RESULT ===== */
 
 function finishQuiz(multiplier){
 
   playResultSound();
 
-  currentPrice = Math.round(currentPrice * multiplier);
+  currentPrice =
+    Math.round(currentPrice * multiplier);
 
-document.querySelectorAll('.quiz-step').forEach(el => {
+  const current =
+    document.querySelector('.quiz-step.active');
 
-  el.classList.remove('active');
+  if(current){
 
-  el.style.display = 'none';
+    current.classList.remove('active');
 
-});
+    setTimeout(() => {
 
-  const result = document.getElementById('result');
-  result.classList.add('active');
+      current.style.display = 'none';
 
-  const texts = [
-    'Это может получиться очень кинематографично.',
-    'Проект звучит как что-то атмосферное и дорогое.',
-    'Любим такие задачи. Будет мощно.',
-    'Тут можно сделать действительно уникальный звук.'
-  ];
+      const result =
+        document.getElementById('result');
 
-  document.getElementById('resultText').innerText =
-    texts[Math.floor(Math.random() * texts.length)];
+      result.style.display = 'block';
 
-  updatePrice();
+      requestAnimationFrame(() => {
+        result.classList.add('active');
+      });
+
+      const texts = [
+        'Это может получиться очень кинематографично.',
+        'Проект звучит как что-то атмосферное и дорогое.',
+        'Любим такие задачи. Будет мощно.',
+        'Тут можно сделать действительно уникальный звук.'
+      ];
+
+      document.getElementById('resultText').innerText =
+        texts[Math.floor(Math.random() * texts.length)];
+
+      updatePrice();
+
+    }, 450);
+
+  }
 
 }
 
@@ -2013,7 +2001,14 @@ function updatePrice(){
 
 }
 
+/* ===== INITIAL ===== */
+
 document.getElementById('step1').style.display = 'block';
+
+requestAnimationFrame(() => {
+  document.getElementById('step1')
+    .classList.add('active');
+});
 
 /* ===== SOUNDS ===== */
 
@@ -2026,7 +2021,6 @@ resultSound.volume = 0.3;
 function playHoverSound(){
 
   hoverSound.currentTime = 0;
-
   hoverSound.play();
 
 }
@@ -2034,7 +2028,6 @@ function playHoverSound(){
 function playResultSound(){
 
   resultSound.currentTime = 0;
-
   resultSound.play();
 
 }
@@ -2044,9 +2037,7 @@ function playResultSound(){
 document.querySelectorAll('audio').forEach(audio => {
 
   audio.addEventListener('play', () => {
-
     document.body.classList.add('music-active');
-
   });
 
   audio.addEventListener('pause', () => {
@@ -2056,17 +2047,15 @@ document.querySelectorAll('audio').forEach(audio => {
       .some(a => !a.paused);
 
     if(!playing){
-
       document.body.classList.remove('music-active');
-
     }
 
   });
 
 });
-  
+
 /* ===== ICON PARALLAX ===== */
-  
+
 document.addEventListener('mousemove', e => {
 
   const x = (e.clientX / window.innerWidth - 0.5);
@@ -2088,7 +2077,7 @@ rotate(${x * 8}deg)
   });
 
 });
-  
+
 </script>
   
 </body>
