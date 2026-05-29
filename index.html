@@ -75,16 +75,7 @@ transition:
   background 2.5s ease,
   color 2s ease,
   filter 2s ease;
-}
-
-body.music-active::after {
-
-  opacity: 0;
-
-  transition:
-    opacity 2.8s ease,
-    backdrop-filter 2.8s ease;
-
+  position: relative;
 }
 
 }
@@ -101,6 +92,35 @@ body::before {
   z-index: -1;
 }
 
+  body::after{
+  content:'';
+
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(circle at top left,
+    rgba(255,220,140,0.18),
+    transparent 35%),
+
+    radial-gradient(circle at bottom right,
+    rgba(255,245,210,0.16),
+    transparent 40%);
+
+  opacity:0;
+
+  transition:
+    opacity 2.8s ease;
+
+  z-index:-1;
+}
+
+body.music-active::after{
+  opacity:1;
+}
+  
 nav {
   position: fixed;
   top: 0;
@@ -398,31 +418,32 @@ section {
   position: relative;
   overflow: hidden;
 
-  transition:
-    background 1.2s ease,
-    border-color 1.2s ease,
-    box-shadow 1.2s ease,
-    transform 0.8s ease,
-    filter 1.2s ease;
+transition:
+  transform 0.9s ease,
+  box-shadow 1.6s ease,
+  border-color 1.6s ease,
+  background 1.6s ease,
+  filter 1.6s ease;
 }
   
 .card:hover {
-  transform: translateY(-8px);
 
-  border-color: rgba(255,245,210,0.45);
+  transform: translateY(-8px);
 
   background:
     linear-gradient(
       135deg,
-      rgba(255,255,255,0.14),
-      rgba(255,231,170,0.12)
+      rgba(255,255,255,0.12),
+      rgba(255,235,190,0.08)
     );
 
-  box-shadow:
-    0 0 80px rgba(255,220,140,0.18),
-    0 0 140px rgba(255,245,210,0.08);
+  border-color:
+    rgba(255,240,200,0.32);
 
-  filter: saturate(1.15);
+  box-shadow:
+    0 0 90px rgba(255,220,140,0.16);
+
+  filter:saturate(1.08);
 }
 
 .card h3 {
@@ -1767,9 +1788,7 @@ document.getElementById('step1').style.display = 'block';
 
   /* ===== MUSIC REACTIVE MODE ===== */
 
-const audios = document.querySelectorAll('audio');
-
-audios.forEach(audio => {
+const audios = document.querySelectorAll('audio').forEach(audio => {
 
   audio.addEventListener('play', () => {
 
@@ -1779,11 +1798,17 @@ audios.forEach(audio => {
 
   audio.addEventListener('pause', () => {
 
-    const stillPlaying = [...audios].some(a => !a.paused);
+    const playing =
+      [...document.querySelectorAll('audio')]
+      .some(a => !a.paused);
 
-    if(!stillPlaying){
-
+    if(!playing){
       document.body.classList.remove('music-active');
+    }
+
+  });
+
+});
 
     }
 
