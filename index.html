@@ -662,6 +662,157 @@ footer {
   }
 
 }
+  .futuristic-estimator{
+  position:relative;
+  overflow:hidden;
+}
+
+.estimator-glow{
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle,
+  rgba(138,215,255,0.18),
+  transparent 70%);
+  top:-200px;
+  right:-100px;
+  filter:blur(40px);
+  pointer-events:none;
+}
+
+.question-label{
+  color:var(--glow);
+  letter-spacing:0.25em;
+  font-size:12px;
+  margin-bottom:18px;
+}
+
+.options button{
+
+  min-height:140px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+
+  gap:10px;
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.07),
+      rgba(255,255,255,0.03)
+    );
+
+  backdrop-filter:blur(14px);
+}
+
+.options button::before{
+
+  content:'';
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(138,215,255,0.10),
+      transparent 60%
+    );
+
+  opacity:0;
+
+  transition:0.4s ease;
+}
+
+.options button:hover::before{
+  opacity:1;
+}
+
+.options button span{
+  font-size:28px;
+}
+
+.options button strong{
+  font-size:20px;
+}
+
+.options button small{
+  opacity:0.6;
+  font-size:13px;
+  letter-spacing:0.08em;
+}
+
+.result{
+  position:relative;
+  overflow:hidden;
+}
+
+.result-orb{
+
+  position:absolute;
+
+  width:340px;
+  height:340px;
+
+  right:-80px;
+  top:-80px;
+
+  background:
+    radial-gradient(circle,
+    rgba(199,166,255,0.22),
+    transparent 70%);
+
+  filter:blur(30px);
+}
+
+.result-stats{
+
+  display:flex;
+  gap:20px;
+
+  margin-top:30px;
+  flex-wrap:wrap;
+}
+
+.result-stats div{
+
+  flex:1;
+
+  min-width:140px;
+
+  padding:22px;
+
+  border-radius:22px;
+
+  background:rgba(255,255,255,0.04);
+
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+.result-stats span{
+
+  display:block;
+
+  font-size:11px;
+
+  letter-spacing:0.18em;
+
+  opacity:0.6;
+
+  margin-bottom:10px;
+}
+
+.result-stats strong{
+  font-size:28px;
+}
   
 @media(max-width: 980px) {
 
@@ -903,11 +1054,13 @@ footer {
 <section id="estimator">
 
   <h2 class="section-title fade">
-    Audio Project<br>
-    Constructor
+    Build Your<br>
+    Sound Reality
   </h2>
 
-  <div class="card estimator fade">
+  <div class="card estimator fade futuristic-estimator">
+
+    <div class="estimator-glow"></div>
 
     <div class="currency-switcher">
       <button onclick="setCurrency('RUB')">₽ RUB</button>
@@ -917,45 +1070,137 @@ footer {
     </div>
 
     <div class="quiz-step active" id="step1">
-      <h3>Какой проект вам нужен?</h3>
+
+      <div class="question-label">
+        [ 01 / PROJECT TYPE ]
+      </div>
+
+      <h3>
+        Что нужно создать?
+      </h3>
 
       <div class="options">
-        <button onclick="nextStep(2, 40000)">Музыкальная аранжировка</button>
-        <button onclick="nextStep(2, 30000)">Музыка для видео / кино</button>
-        <button onclick="nextStep(2, 25000)">Саунд-дизайн / игра</button>
-        <button onclick="nextStep(2, 14000)">Сведение / монтаж</button>
+
+        <button onclick="nextStep(2, 40000)">
+          <span>🎼</span>
+          <strong>Аранжировка</strong>
+          <small>emotion / dynamics / harmony</small>
+        </button>
+
+        <button onclick="nextStep(2, 30000)">
+          <span>🎬</span>
+          <strong>Музыка для видео</strong>
+          <small>cinematic / soundtrack / atmosphere</small>
+        </button>
+
+        <button onclick="nextStep(2, 25000)">
+          <span>🧠</span>
+          <strong>Саунд-дизайн</strong>
+          <small>games / abstract / experimental</small>
+        </button>
+
+        <button onclick="nextStep(2, 14000)">
+          <span>🎚</span>
+          <strong>Mix / Master</strong>
+          <small>clarity / loudness / balance</small>
+        </button>
+
       </div>
+
     </div>
 
     <div class="quiz-step" id="step2">
-      <h3>Какой вайб должен быть у проекта?</h3>
+
+      <div class="question-label">
+        [ 02 / EMOTIONAL PROFILE ]
+      </div>
+
+      <h3>
+        Как это должно ощущаться?
+      </h3>
 
       <div class="options">
-        <button onclick="nextStep(3)">Cinematic & Emotional</button>
-        <button onclick="nextStep(3)">Dark & Experimental</button>
-        <button onclick="nextStep(3)">Clean & Commercial</button>
-        <button onclick="nextStep(3)">Aggressive & Loud</button>
+
+        <button onclick="nextStep(3)">
+          🌌 Dreamy & Atmospheric
+        </button>
+
+        <button onclick="nextStep(3)">
+          ⚡ Aggressive & Chaotic
+        </button>
+
+        <button onclick="nextStep(3)">
+          🪞 Emotional & Nostalgic
+        </button>
+
+        <button onclick="nextStep(3)">
+          🧊 Cold & Minimalistic
+        </button>
+
       </div>
+
     </div>
 
     <div class="quiz-step" id="step3">
-      <h3>Насколько срочно?</h3>
+
+      <div class="question-label">
+        [ 03 / DELIVERY MODE ]
+      </div>
+
+      <h3>
+        Насколько срочно?
+      </h3>
 
       <div class="options">
-        <button onclick="finishQuiz(1)">Есть время</button>
-        <button onclick="finishQuiz(1.2)">Нужно быстро</button>
-        <button onclick="finishQuiz(1.5)">Нужно ОЧЕНЬ быстро</button>
+
+        <button onclick="finishQuiz(1)">
+          💤 Спокойно
+        </button>
+
+        <button onclick="finishQuiz(1.2)">
+          ⚠ Нужно быстро
+        </button>
+
+        <button onclick="finishQuiz(1.5)">
+          ☢ DEADLINE MODE
+        </button>
+
       </div>
+
     </div>
 
     <div class="result" id="result">
-      <small>ESTIMATED BUDGET</small>
 
-      <h3 id="price">от 40000 ₽</h3>
+      <div class="result-orb"></div>
+
+      <small>ESTIMATED PRODUCTION COST</small>
+
+      <h3 id="price">
+        от 40000 ₽
+      </h3>
 
       <p id="resultText">
-        Проект звучит как что-то атмосферное.
+        Проект выглядит как что-то очень атмосферное.
       </p>
+
+      <div class="result-stats">
+
+        <div>
+          <span>ATMOSPHERE</span>
+          <strong>97%</strong>
+        </div>
+
+        <div>
+          <span>CINEMATIC</span>
+          <strong>92%</strong>
+        </div>
+
+        <div>
+          <span>EXPERIMENTAL</span>
+          <strong>88%</strong>
+        </div>
+
+      </div>
 
       <div class="contacts">
 
