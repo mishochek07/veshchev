@@ -191,8 +191,90 @@ section {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 28px;
+}
+
+.works-grid {
+  align-items: stretch;
+}
+
+.premium-card {
+  min-height: 620px;
+}
+
+.studio-mini {
+  min-height: 620px;
+  height: 100%;
+  border-radius: 34px;
+  overflow: hidden;
+  position: relative;
+
+  background:
+    linear-gradient(to top, rgba(5,7,11,0.96), rgba(5,7,11,0.55)),
+    url('ableton.jpg') center/cover no-repeat;
+
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.studio-mini-content {
+  position: relative;
+  z-index: 2;
+  padding: 42px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.studio-mini-content h3 {
+  font-size: 64px;
+  line-height: 0.9;
+  margin: 18px 0 24px;
+  max-width: 520px;
+}
+
+.studio-mini-content p {
+  color: var(--text);
+  opacity: 0.9;
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+.timeline {
+  margin-top: 34px;
+}
+
+.timeline-item {
+  margin-top: 18px;
+  padding-left: 18px;
+  border-left: 1px solid rgba(126,255,212,0.2);
+}
+
+.timeline-item h4 {
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+@media(max-width: 1400px){
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media(max-width: 980px){
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .studio-mini-content h3 {
+    font-size: 48px;
+  }
+
 }
 
 .card {
@@ -551,138 +633,118 @@ footer {
     Works
   </h2>
 
-  <div class="grid">
+  <div class="grid works-grid">
 
-    <div class="card fade">
-      <h3>Electronic</h3>
-      <p>Breakcore / Jungle / UK Garage / Experimental</p>
+  <div class="card fade">
+    <h3>Electronic</h3>
+    <p>Breakcore / Jungle / UK Garage / Experimental</p>
 
-      <audio controls>
-        <source src="mishochekAtavism.mp3">
-      </audio>
+    <audio controls>
+      <source src="mishochekAtavism.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="mishochekReminiscence.mp3">
-      </audio>
+    <audio controls>
+      <source src="mishochekReminiscence.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="mishochekAorta.mp3">
-      </audio>
-    </div>
+    <audio controls>
+      <source src="mishochekAorta.mp3">
+    </audio>
+  </div>
 
-    <div class="card fade">
-      <h3>Cinematic</h3>
-      <p>Trailer music / orchestral scoring / ambient atmosphere</p>
+  <div class="card fade">
+    <h3>Cinematic</h3>
+    <p>Trailer music / orchestral scoring / ambient atmosphere</p>
 
-      <audio controls>
-        <source src="VESHCHEV AVENGERS.mp3">
-      </audio>
+    <audio controls>
+      <source src="VESHCHEV AVENGERS.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="VESHCHEV DEBUSSY.mp3">
-      </audio>
+    <audio controls>
+      <source src="VESHCHEV DEBUSSY.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="2.0.mp3">
-      </audio>
-    </div>
+    <audio controls>
+      <source src="2.0.mp3">
+    </audio>
+  </div>
 
-    <div class="card fade">
-      <h3>Live Recording</h3>
-      <p>Classical ensembles / orchestral sessions / chamber music</p>
+  <div class="card fade">
+    <h3>Live Recording</h3>
+    <p>Classical ensembles / orchestral sessions / chamber music</p>
 
-      <audio controls>
-        <source src="STARKOV MIX 150426.mp3">
-      </audio>
+    <audio controls>
+      <source src="STARKOV MIX 150426.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="Fis-moll.mp3">
-      </audio>
+    <audio controls>
+      <source src="Fis-moll.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="VESHCHEV SAINT-SAENS.mp3">
-      </audio>
-    </div>
+    <audio controls>
+      <source src="VESHCHEV SAINT-SAENS.mp3">
+    </audio>
+  </div>
 
-    <div class="card fade">
-      <h3>Commercial</h3>
-      <p>Pop / vocal production / commercial arrangements</p>
+  <div class="card fade">
+    <h3>Commercial</h3>
+    <p>Pop / vocal production / commercial arrangements</p>
 
-      <audio controls>
-        <source src="VESHCHEV CRY.mp3">
-      </audio>
+    <audio controls>
+      <source src="VESHCHEV CRY.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="VESHCHEV NO TIME TO DIE.mp3">
-      </audio>
+    <audio controls>
+      <source src="VESHCHEV NO TIME TO DIE.mp3">
+    </audio>
 
-      <audio controls>
-        <source src="VESHCHEV OCEAN EYES.mp3">
-      </audio>
-    </div>
+    <audio controls>
+      <source src="VESHCHEV OCEAN EYES.mp3">
+    </audio>
+  </div>
 
-    <div class="card promo-card fade">
+  <!-- ЛЕВЫЙ БЛОК -->
+
+  <div class="card promo-card premium-card fade">
+
+    <h3>
+      Premium<br>
+      Audio Production
+    </h3>
+
+    <p>
+      Работа с глубиной, пространством и эмоциональной архитектурой звука.
+      От камерных ансамблей до гибридного cinematic production.
+    </p>
+
+    <ul>
+      <li>• Sound Design</li>
+      <li>• Cinematic Mixing</li>
+      <li>• Experimental Production</li>
+      <li>• Spatial Atmospheres</li>
+      <li>• Audio Identity</li>
+    </ul>
+
+  </div>
+
+  <!-- ПРАВЫЙ БЛОК -->
+
+  <div class="studio-mini fade">
+
+    <div class="studio-overlay"></div>
+
+    <div class="studio-mini-content">
+
+      <span>EDUCATION / EXPERIENCE</span>
+
       <h3>
-        Premium<br>
-        Audio Production
+        Gnesin College<br>
+        & Professional Work
       </h3>
 
       <p>
-        Работа с глубиной, пространством и эмоциональной архитектурой звука.
-        От камерных ансамблей до гибридного cinematic production.
-      </p>
-
-      <ul>
-        <li>• Sound Design</li>
-        <li>• Cinematic Mixing</li>
-        <li>• Experimental Production</li>
-        <li>• Spatial Atmospheres</li>
-        <li>• Audio Identity</li>
-      </ul>
-    </div>
-
-<div class="studio-mini fade">
-
-      <div class="studio-overlay"></div>
-
-      <div class="studio-mini-content">
-        <span>EDUCATION / EXPERIENCE</span>
-
-        <h3>
-          Gnesin College<br>
-          & Professional Work
-        </h3>
-
-        <p>
-          Работа с академическими ансамблями,
-          кинематографичным продакшном и современным саунд-дизайном.
-        </p>
-
-        <div class="stack">
-          <div class="tag">Avid Pro Tools</div>
-          <div class="tag">Ableton Live</div>
-          <div class="tag">Steinberg Dorico</div>
-          <div class="tag">iZotope RX</div>
-        </div>
-
-       </div>
-    </div>
-
-</section>
-
-<section id="about" style="display:none;">
-
-  <div class="studio-block fade">
-
-    <div class="studio-content">
-      <h3>
-        Education & Experience
-      </h3>
-
-      <p>
-        Гнесинский колледж.
-        Музыкальное звукооператорское мастерство.
-        Работа с академическим и современным продакшном.
+        Работа с академическими ансамблями,
+        кинематографичным продакшном и современным саунд-дизайном.
       </p>
 
       <div class="stack">
@@ -717,6 +779,8 @@ footer {
     </div>
 
   </div>
+
+</div>
 
 </section>
 
