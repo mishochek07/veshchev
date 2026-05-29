@@ -1658,6 +1658,146 @@ function draw(){
 draw();
 
 </script>
+  <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
+<audio id="resultSound" src="result.mp3" preload="auto"></audio>
+
+<script>
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+});
+
+document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+
+/* ===== SOUNDS ===== */
+
+const hoverSound = document.getElementById('hoverSound');
+const resultSound = document.getElementById('resultSound');
+
+function playHover(){
+
+  hoverSound.currentTime = 0;
+  hoverSound.volume = 0.12;
+
+  hoverSound.play();
+
+}
+
+document.addEventListener('mouseover', e => {
+
+  if(
+    e.target.closest('.project-card') ||
+    e.target.closest('.options button') ||
+    e.target.closest('.btn') ||
+    e.target.closest('.currency-switcher button')
+  ){
+    playHover();
+  }
+
+});
+
+/* ===== QUIZ ===== */
+
+let currentCurrency = 'RUB';
+let currentPrice = 40000;
+
+const rates = {
+  RUB: 1,
+  USD: 0.011,
+  EUR: 0.010,
+  AMD: 4.9
+};
+
+const symbols = {
+  RUB: '₽',
+  USD: '$',
+  EUR: '€',
+  AMD: '֏'
+};
+
+function setCurrency(currency){
+
+  playHover();
+
+  currentCurrency = currency;
+  updatePrice();
+
+}
+
+function nextStep(step, basePrice = null){
+
+  playHover();
+
+  if(basePrice !== null){
+    currentPrice = basePrice;
+  }
+
+  document.querySelectorAll('.quiz-step').forEach(el => {
+    el.classList.remove('active');
+    el.style.display = 'none';
+  });
+
+  const next = document.getElementById(`step${step}`);
+
+  if(next){
+    next.classList.add('active');
+    next.style.display = 'block';
+  }
+
+}
+
+function finishQuiz(multiplier){
+
+  currentPrice = Math.round(currentPrice * multiplier);
+
+  document.querySelectorAll('.quiz-step').forEach(el => {
+    el.style.display = 'none';
+  });
+
+  const result = document.getElementById('result');
+
+  result.style.display = 'block';
+  result.classList.add('active');
+
+  /* ===== RESULT SOUND ===== */
+
+  resultSound.currentTime = 0;
+  resultSound.volume = 0.22;
+
+  resultSound.play();
+
+  const texts = [
+    'Это может получиться очень кинематографично.',
+    'Проект звучит как что-то атмосферное и дорогое.',
+    'Любим такие задачи. Будет мощно.',
+    'Тут можно сделать действительно уникальный звук.',
+    'Такой проект может звучать как полноценный арт-объект.'
+  ];
+
+  document.getElementById('resultText').innerText =
+    texts[Math.floor(Math.random() * texts.length)];
+
+  updatePrice();
+
+}
+
+function updatePrice(){
+
+  const converted =
+    Math.round(currentPrice * rates[currentCurrency]);
+
+  document.getElementById('price').innerText =
+    `от ${converted.toLocaleString('ru-RU')} ${symbols[currentCurrency]}`;
+
+}
+
+document.getElementById('step1').style.display = 'block';
+
+</script>
   
 </body>
 </html>
