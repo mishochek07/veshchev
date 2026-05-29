@@ -1250,6 +1250,88 @@ body.music-active::after{
   z-index:0;
 
 }
+  /* ===== QUIZ ANIMATIONS ===== */
+
+.quiz-step{
+  opacity:0;
+  transform:
+    translateY(40px)
+    scale(.98);
+
+  pointer-events:none;
+
+  transition:
+    opacity .9s cubic-bezier(.19,1,.22,1),
+    transform .9s cubic-bezier(.19,1,.22,1);
+}
+
+.quiz-step.active{
+  opacity:1;
+  transform:
+    translateY(0)
+    scale(1);
+
+  pointer-events:auto;
+}
+
+/* stagger cards */
+
+.quiz-step .project-card{
+  opacity:0;
+  transform:
+    translateY(30px)
+    scale(.96);
+
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.19,1,.22,1);
+}
+
+.quiz-step.active .project-card{
+  opacity:1;
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+/* delays */
+
+.quiz-step.active .project-card:nth-child(1){
+  transition-delay:.08s;
+}
+
+.quiz-step.active .project-card:nth-child(2){
+  transition-delay:.16s;
+}
+
+.quiz-step.active .project-card:nth-child(3){
+  transition-delay:.24s;
+}
+
+.quiz-step.active .project-card:nth-child(4){
+  transition-delay:.32s;
+}
+  .result{
+  opacity:0;
+  transform:
+    translateY(40px)
+    scale(.98);
+
+  pointer-events:none;
+
+  transition:
+    opacity 1s cubic-bezier(.19,1,.22,1),
+    transform 1s cubic-bezier(.19,1,.22,1);
+}
+
+.result.active{
+  opacity:1;
+  transform:
+    translateY(0)
+    scale(1);
+
+  pointer-events:auto;
+}
   
 </style>
 </head>
@@ -1828,8 +1910,6 @@ function nextStep(step, basePrice = null){
   }
 
   document.querySelectorAll('.quiz-step').forEach(el => {
-    el.classList.remove('active');
-    el.style.display = 'none';
   });
 
   const next = document.getElementById(`step${step}`);
@@ -1852,9 +1932,6 @@ function finishQuiz(multiplier){
   });
 
   const result = document.getElementById('result');
-
-  result.style.display = 'block';
-
   result.classList.add('active');
 
   const texts = [
