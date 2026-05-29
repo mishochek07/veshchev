@@ -49,28 +49,6 @@ background:
 
   overflow-x: hidden;
 
-  body::after {
-
-  content: '';
-
-  position: fixed;
-  inset: 0;
-
-  pointer-events: none;
-  z-index: 999;
-    
-backdrop-filter:
-  grayscale(0.7)
-  saturate(0.5)
-  brightness(0.92)
-  sepia(0.15);
-    
-transition:
-  opacity 4s cubic-bezier(.19,1,.22,1),
-  backdrop-filter 4s cubic-bezier(.19,1,.22,1);
-
-}
-
   transition:
   background 2.5s ease,
   color 2s ease,
@@ -90,35 +68,6 @@ body::before {
   background-size: 60px 60px;
   pointer-events: none;
   z-index: -1;
-}
-
-  body::after{
-  content:'';
-
-  position:fixed;
-  inset:0;
-
-  pointer-events:none;
-
-  background:
-    radial-gradient(circle at top left,
-    rgba(255,220,140,0.18),
-    transparent 35%),
-
-    radial-gradient(circle at bottom right,
-    rgba(255,245,210,0.16),
-    transparent 40%);
-
-  opacity:0;
-
-  transition:
-    opacity 2.8s ease;
-
-  z-index:-1;
-}
-
-body.music-active::after{
-  opacity:1;
 }
   
 nav {
@@ -424,6 +373,12 @@ transition:
   border-color 1.6s ease,
   background 1.6s ease,
   filter 1.6s ease;
+
+  will-change:
+  transform,
+  border-color,
+  background,
+  box-shadow;
 }
   
 .card:hover {
@@ -444,6 +399,7 @@ transition:
     0 0 90px rgba(255,220,140,0.16);
 
   filter:saturate(1.08);
+  transition: all 1.4s ease;
 }
 
 .card h3 {
@@ -1147,6 +1103,39 @@ body.music-active .section-title {
     0 0 24px rgba(120,140,255,0.22);
 
 }
+
+  body::after{
+  content:'';
+
+  position:fixed;
+  inset:0;
+
+  pointer-events:none;
+
+  background:
+
+    radial-gradient(
+      circle at top left,
+      rgba(255,220,120,0.22),
+      transparent 35%
+    ),
+
+    radial-gradient(
+      circle at bottom right,
+      rgba(255,245,210,0.18),
+      transparent 40%
+    );
+
+  opacity:0;
+
+  transition:opacity 3s ease;
+
+  z-index:-1;
+}
+
+body.music-active::after{
+  opacity:1;
+}
   
 </style>
 </head>
@@ -1670,30 +1659,6 @@ line-height:1.8;
 
 <script>
 
-const hoverSound = new Audio('hover.mp3');
-const resultSound = new Audio('result.mp3');
-
-hoverSound.volume = 0.25;
-resultSound.volume = 0.45;
-
-function playHover(){
-  hoverSound.currentTime = 0;
-  hoverSound.play();
-}
-
-function playResult(){
-  resultSound.currentTime = 0;
-  resultSound.play();
-}
-
-document.querySelectorAll('button, .btn, a').forEach(el => {
-
-  el.addEventListener('mouseenter', () => {
-    playHover();
-  });
-
-});
-
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if(entry.isIntersecting){
@@ -1722,13 +1687,16 @@ const symbols = {
 };
 
 function setCurrency(currency){
+
   currentCurrency = currency;
+
   updatePrice();
+
 }
 
 function nextStep(step, basePrice = null){
 
-  playHover();
+  playHoverSound();
 
   if(basePrice !== null){
     currentPrice = basePrice;
@@ -1745,11 +1713,12 @@ function nextStep(step, basePrice = null){
     next.classList.add('active');
     next.style.display = 'block';
   }
+
 }
 
 function finishQuiz(multiplier){
 
-  playResult();
+  playResultSound();
 
   currentPrice = Math.round(currentPrice * multiplier);
 
@@ -1760,6 +1729,7 @@ function finishQuiz(multiplier){
   const result = document.getElementById('result');
 
   result.style.display = 'block';
+
   result.classList.add('active');
 
   const texts = [
@@ -1773,6 +1743,7 @@ function finishQuiz(multiplier){
     texts[Math.floor(Math.random() * texts.length)];
 
   updatePrice();
+
 }
 
 function updatePrice(){
@@ -1782,13 +1753,38 @@ function updatePrice(){
 
   document.getElementById('price').innerText =
     `от ${converted.toLocaleString('ru-RU')} ${symbols[currentCurrency]}`;
+
 }
 
 document.getElementById('step1').style.display = 'block';
 
-  /* ===== MUSIC REACTIVE MODE ===== */
+/* ===== SOUNDS ===== */
 
-const audios = document.querySelectorAll('audio').forEach(audio => {
+const hoverSound = new Audio('hover.mp3');
+hoverSound.volume = 0.15;
+
+const resultSound = new Audio('result.mp3');
+resultSound.volume = 0.3;
+
+function playHoverSound(){
+
+  hoverSound.currentTime = 0;
+
+  hoverSound.play();
+
+}
+
+function playResultSound(){
+
+  resultSound.currentTime = 0;
+
+  resultSound.play();
+
+}
+
+/* ===== MUSIC MODE ===== */
+
+document.querySelectorAll('audio').forEach(audio => {
 
   audio.addEventListener('play', () => {
 
@@ -1803,12 +1799,8 @@ const audios = document.querySelectorAll('audio').forEach(audio => {
       .some(a => !a.paused);
 
     if(!playing){
+
       document.body.classList.remove('music-active');
-    }
-
-  });
-
-});
 
     }
 
