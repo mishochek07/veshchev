@@ -899,29 +899,62 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   border-color: rgba(255, 225, 178, 0.15);
 }
 
+/* ВСТАВЛЯЕМ СЮДА: Стили внутренней структуры плеера */
 .play-btn {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  border: none;
-  background: var(--glow);
-  color: black;
+  border: 1px solid rgba(255, 225, 178, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--glow);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
   flex-shrink: 0;
-}
-
-.play-btn:hover {
-  transform: scale(1.08);
-  filter: drop-shadow(0 0 8px var(--glow));
+  position: relative;
+  
+  /* Ультра-плавные переходы */
+  transition: 
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+    background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s ease;
 }
 
 .play-icon {
-  font-size: 14px;
-  margin-left: 2px; /* Сдвиг для идеальной центровки треугольника */
+  font-size: 13px;
+  margin-left: 2px; /* Идеальная центровка треугольника */
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+}
+
+/* Эффект №1: Плавная реакция, когда навели просто на саму плашку трека */
+.custom-player:hover .play-btn {
+  border-color: var(--glow);
+  background: rgba(255, 225, 178, 0.06);
+  color: #fff;
+}
+
+/* Эффект №2: Фокус конкретно на саму кнопку Play */
+.play-btn:hover {
+  transform: scale(1.08);
+  background: var(--glow) !important; /* Кнопка заливается фирменным цветом */
+  color: #0f0d0a !important; /* Иконка становится темной на светлом фоне */
+  box-shadow: 
+    0 0 20px rgba(255, 225, 178, 0.4),
+    0 0 40px rgba(255, 225, 178, 0.1);
+  border-color: transparent;
+}
+
+.play-btn:hover .play-icon {
+  transform: scale(1.1);
+}
+
+/* Эффект нажатия (тактильный клик) */
+.play-btn:active {
+  transform: scale(0.94);
+  box-shadow: 0 0 10px rgba(255, 225, 178, 0.2);
+  transition: transform 0.05s ease;
 }
 
 .player-info {
@@ -943,7 +976,6 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
-  cursor: pointer;
   position: relative;
 }
 
@@ -958,7 +990,61 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 .audio-element {
   display: none;
 }
-  
+
+/* ==========================================
+   СТИЛИ ДЛЯ КАСТОМНОГО КУРСОРA (ТОЛЬКО ДЛЯ ПК)
+   ========================================== */
+@media (pointer: fine) {
+  /* Полностью прячем дефолтную стрелку на интерактивных элементах */
+  body, a, button, .project-card, .progress-bar, .custom-player, .play-btn, input, select {
+    cursor: none !important;
+  }
+
+  .custom-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--glow);
+    position: fixed;
+    top: -20px;
+    left: -20px;
+    pointer-events: none;
+    z-index: 999999;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  .custom-cursor-outline {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 225, 178, 0.4);
+    position: fixed;
+    top: -40px;
+    left: -40px;
+    pointer-events: none;
+    z-index: 999998;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                background-color 0.3s ease, 
+                border-color 0.3s ease,
+                opacity 0.3s ease;
+    will-change: top, left;
+    opacity: 0;
+  }
+
+  /* Состояние курсора при наведении на кнопки/карточки */
+  .custom-cursor-outline.hovered {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 225, 178, 0.08);
+    border-color: var(--glow);
+    box-shadow: 0 0 15px rgba(255, 220, 140, 0.2);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1567,8 +1653,70 @@ function toggleTrack(audioId, btn) {
     audio.dataset.tracked = "true";
   }
 }
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const dot = document.querySelector('.custom-cursor-dot');
+  const outline = document.querySelector('.custom-cursor-outline');
+
+  if (dot && outline) {
+    let mouseX = -100, mouseY = -100;
+    let outlineX = -100, outlineY = -100;
+    let isMoving = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      if (!isMoving) {
+        // Проявляем курсор при первом движении мыши
+        dot.style.opacity = '1';
+        outline.style.opacity = '1';
+        isMoving = true;
+      }
+      
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+    });
+
+    function animateCursor() {
+      // Плавный догон (LERP)
+      outlineX += (mouseX - outlineX) * 0.16;
+      outlineY += (mouseY - outlineY) * 0.16;
+
+      outline.style.left = outlineX + 'px';
+      outline.style.top = outlineY + 'px';
+
+      requestAnimationFrame(animateCursor);
+    }
+    requestAnimationFrame(animateCursor);
+
+    // Функция обновления обработчиков ховера (чтобы работало на кнопках плеера)
+    function updateCursorHovers() {
+      const targets = document.querySelectorAll('a, button, .project-card, .progress-bar, .custom-player, .play-btn');
+      targets.forEach(target => {
+        // Убираем старые, чтобы не дублировать
+        target.removeEventListener('mouseenter', addHover);
+        target.removeEventListener('mouseleave', removeHover);
+        // Ставим новые
+        target.addEventListener('mouseenter', addHover);
+        target.addEventListener('mouseleave', removeHover);
+      });
+    }
+
+    function addHover() { outline.classList.add('hovered'); }
+    function removeHover() { outline.classList.remove('hovered'); }
+
+    // Запускаем сразу
+    updateCursorHovers();
+    
+    // Перезапускаем через секунду на случай, если квиз или плееры рендерились скриптом
+    setTimeout(updateCursorHovers, 1000);
+  }
+});
   
 </script>
 <div class="music-ambient-glow" id="ambientGlow"></div>
+  <div class="custom-cursor-dot"></div>
+<div class="custom-cursor-outline"></div>
 </body>
 </html>
