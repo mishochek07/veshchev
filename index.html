@@ -1038,6 +1038,282 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
     box-shadow: 0 0 15px rgba(255, 220, 140, 0.2);
   }
 }
+
+  /* ==========================================
+   СТИЛИ ДЛЯ ПЛАВАЮЩЕГО МИНИ-ПЛЕЕРА
+   ========================================== */
+.bottom-player {
+  position: fixed;
+  bottom: -100px; /* Изначально спрятан внизу */
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 500px;
+  background: rgba(15, 13, 10, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 225, 178, 0.15);
+  border-radius: 24px;
+  z-index: 9999;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 225, 178, 0.05);
+  transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.bottom-player.active {
+  bottom: 25px; /* Выплывает при активации */
+}
+
+.bp-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.bp-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Анимированные полоски спектра (как в эквалайзере) */
+.bp-icon-animate {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  width: 16px;
+  height: 16px;
+}
+
+.bp-icon-animate span {
+  display: block;
+  width: 3px;
+  height: 100%;
+  background: var(--glow);
+  border-radius: 1px;
+  animation: bp-bounce 0.8s ease infinite alternate;
+}
+.bp-icon-animate span:nth-child(2) { animation-delay: 0.2s; }
+.bp-icon-animate span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bp-bounce {
+  0% { height: 30%; }
+  100% { height: 100%; }
+}
+
+.bp-track-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.bp-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.bp-category {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.bp-play-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--text);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.bp-play-btn:hover {
+  transform: scale(1.05);
+}
+
+.bp-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.bp-progress {
+  width: 0%;
+  height: 100%;
+  background: var(--glow);
+}
+
+/* ==========================================
+   СТИЛИ ДЛЯ СТИЛЬНОГО ФУТЕРА
+   ========================================== */
+.site-footer {
+  background: linear-gradient(to top, #080705, #0f0d0a);
+  border-top: 1px solid var(--border);
+  padding: 80px 0 30px 0;
+  margin-top: 120px;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-hero h2 {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.glow-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,225,178,0.6);
+  text-shadow: 0 0 30px rgba(255, 225, 178, 0.15);
+}
+
+.studio-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-pulse {
+  width: 8px;
+  height: 8px;
+  background-color: #55efc4;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #55efc4;
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(85, 239, 196, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(85, 239, 196, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(85, 239, 196, 0); }
+}
+
+.status-text {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.footer-col h4 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.footer-col ul {
+  list-style: none;
+}
+
+.footer-col ul li {
+  margin-bottom: 12px;
+}
+
+.footer-col ul li a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  opacity: 0.7;
+}
+
+.footer-col ul li a:hover {
+  color: var(--glow);
+  opacity: 1;
+}
+
+.footer-location {
+  font-size: 14px;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  margin-top: 60px;
+  padding-top: 30px;
+}
+
+.fb-inside {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  font-size: 12px;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+/* ==========================================
+   ОПТИМИЗАЦИЯ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА (MOBILE)
+   ========================================== */
+@media (max-width: 768px) {
+  /* Сетки перестраиваем в одну колонку */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .fb-inside {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  /* Увеличиваем кликабельность элементов на тач-экранах */
+  .footer-col ul li {
+    margin-bottom: 16px;
+  }
+  
+  /* Адаптация плавающего плеера под мобилки */
+  .bottom-player {
+    width: 100%;
+    bottom: -100px;
+    border-radius: 20px 20px 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+  
+  .bottom-player.active {
+    bottom: 0px; /* Прилипает к самому низу экрана без зазоров */
+  }
+  
+  /* Делаем отступы секций на мобилках чуть мягче */
+  .site-footer {
+    padding: 60px 0 20px 0;
+    margin-top: 80px;
+  }
+}
   
 </style>
 </head>
@@ -1594,23 +1870,40 @@ window.addEventListener('scroll', () => {
 let currentActiveAudio = null;
 let currentActiveButton = null;
 
+let currentActiveAudio = null;
+let currentActiveButton = null;
+
+// Переменные для нижнего мини-плеера
+const bottomPlayer = document.getElementById('bottomPlayer');
+const bpPlayBtn = document.getElementById('bpPlayBtn');
+const bpTitle = document.getElementById('bpTitle');
+const bpCategory = document.getElementById('bpCategory');
+const bpProgress = document.getElementById('bpProgress');
+
 function toggleTrack(audioId, btn) {
   const audio = document.getElementById(audioId);
   const icon = btn.querySelector('.play-icon');
+  
+  // Вытаскиваем метаданные трека из карточки для мини-плеера
+  const card = btn.closest('.card');
+  const categoryTitle = card ? card.querySelector('h3').innerText : 'Production';
+  const trackName = btn.closest('.custom-player').querySelector('.track-title').innerText;
 
-  // Если кликнули на уже играющий трек — ставим на паузу
   if (currentActiveAudio === audio) {
     if (audio.paused) {
       audio.play().catch(()=>{});
       icon.innerText = '⏸';
+      bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+      document.querySelector('.bp-icon-animate').style.display = 'flex';
     } else {
       audio.pause();
       icon.innerText = '▶';
+      bpPlayBtn.innerHTML = '<span class="bp-play-icon">▶</span>';
+      document.querySelector('.bp-icon-animate').style.display = 'none';
     }
     return;
   }
 
-  // Если играет другой трек — выключаем его
   if (currentActiveAudio) {
     currentActiveAudio.pause();
     if (currentActiveButton) {
@@ -1618,27 +1911,40 @@ function toggleTrack(audioId, btn) {
     }
   }
 
-  // Включаем новый трек
   audio.play().catch(()=>{});
   icon.innerText = '⏸';
+  
+  // Загоняем данные в мини-плеер
+  bpTitle.innerText = trackName;
+  bpCategory.innerText = categoryTitle;
+  bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+  document.querySelector('.bp-icon-animate').style.display = 'flex';
   
   currentActiveAudio = audio;
   currentActiveButton = btn;
 
-  // Навешиваем обновление прогресс-бара, если еще не навешено
+  // Проверяем скролл, чтобы понять, нужно ли показать мини-плеер прямо сейчас
+  checkPlayerVisibility();
+
   if (!audio.dataset.tracked) {
     audio.addEventListener('timeupdate', () => {
+      const percentage = (audio.currentTime / audio.duration) * 100;
+      
+      // Обновляем прогресс основного плеера
       const progress = document.getElementById(`progress-${audioId}`);
-      if (progress && audio.duration) {
-        const percentage = (audio.currentTime / audio.duration) * 100;
-        progress.style.width = percentage + '%';
+      if (progress && audio.duration) progress.style.width = percentage + '%';
+      
+      // Обновляем прогресс мини-плеера, если играет этот трек
+      if (currentActiveAudio === audio) {
+        bpProgress.style.width = percentage + '%';
       }
     });
 
-    // Когда трек закончился — возвращаем иконку «Play»
     audio.addEventListener('ended', () => {
       icon.innerText = '▶';
       document.getElementById(`progress-${audioId}`).style.width = '0%';
+      bpProgress.style.width = '0%';
+      bottomPlayer.classList.remove('active');
       if (currentActiveAudio === audio) {
         currentActiveAudio = null;
         currentActiveButton = null;
@@ -1648,6 +1954,37 @@ function toggleTrack(audioId, btn) {
     audio.dataset.tracked = "true";
   }
 }
+
+// Клик по кнопке в нижнем мини-плеере
+bpPlayBtn.addEventListener('click', () => {
+  if (currentActiveAudio && currentActiveButton) {
+    toggleTrack(currentActiveAudio.id, currentActiveButton);
+  }
+});
+
+// Умное отслеживание скролла: прячем мини-плеер, когда юзер видит секцию с релизами
+function checkPlayerVisibility() {
+  if (!currentActiveAudio || currentActiveAudio.paused) {
+    bottomPlayer.classList.remove('active');
+    return;
+  }
+  
+  const worksSection = document.getElementById('works');
+  if (!worksSection) return;
+  
+  const rect = worksSection.getBoundingClientRect();
+  
+  // Если секция с плеерами вышла за пределы экрана (сверху или снизу), 
+  // и при этом музыка ИГРАЕТ — выводим мини-плеер
+  if (rect.bottom < 0 || rect.top > window.innerHeight) {
+    bottomPlayer.classList.add('active');
+  } else {
+    bottomPlayer.classList.remove('active');
+  }
+}
+
+// Слушаем скролл страницы
+window.addEventListener('scroll', checkPlayerVisibility);
 
 const dot = document.querySelector('.custom-cursor-dot');
 const outline = document.querySelector('.custom-cursor-outline');
@@ -1743,5 +2080,73 @@ if (dot && outline) {
 <div class="music-ambient-glow" id="ambientGlow"></div>
   <div class="custom-cursor-dot"></div>
 <div class="custom-cursor-outline"></div>
+  <div class="bottom-player" id="bottomPlayer">
+  <div class="bp-content">
+    <div class="bp-info">
+      <div class="bp-icon-animate">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="bp-track-details">
+        <span class="bp-title" id="bpTitle">Название трека</span>
+        <span class="bp-category" id="bpCategory">Категория</span>
+      </div>
+    </div>
+    
+    <button class="bp-play-btn" id="bpPlayBtn">
+      <span class="bp-play-icon">⏸</span>
+    </button>
+  </div>
+  <div class="bp-progress-bar">
+    <div class="bp-progress" id="bpProgress"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container footer-container">
+    <div class="footer-hero">
+      <h2>Let's create something<br><span class="glow-text">resonant</span> together.</h2>
+      <div class="studio-status">
+        <span class="status-pulse"></span>
+        <span class="status-text">Available for new projects & scoring</span>
+      </div>
+    </div>
+    
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#works">Portfolio</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#quiz">Calculate Project</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Socials</h4>
+        <ul>
+          <li><a href="https://instagram.com/" target="_blank" class="hover-target">Instagram</a></li>
+          <li><a href="https://t.me/" target="_blank" class="hover-target">Telegram</a></li>
+          <li><a href="#" target="_blank" class="hover-target">SoundCloud</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacts</h4>
+        <ul>
+          <li><a href="mailto:your-email@example.com">your-email@example.com</a></li>
+          <li><span class="footer-location">Yerevan / Remote</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="container fb-inside">
+      <p class="copyright">&copy; 2026 Михаил Вещев. All rights reserved.</p>
+      <p class="developer-credit">Sound Engineering & Production</p>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
