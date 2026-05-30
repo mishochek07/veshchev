@@ -1665,334 +1665,346 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 <audio id="resultSound" src="result.mp3" preload="auto"></audio>
 <audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
 
-  <script>
-  // ==========================================
-  // 1. ИНТЕРАКТИВНЫЙ ТЕСТ (КВИЗ)
-  // ==========================================
-  let currentStep = 1;
-  const totalSteps = 4;
-  let selectedBudget = 1; 
-  let selectedCurrency = 'USD';
-
-  const rates = { 'USD': 1, 'EUR': 0.92, 'RUB': 92, 'AMD': 388 };
-  const symbols = { 'USD': '$', 'EUR': '€', 'RUB': '₽', 'AMD': '֏' };
-
-  function updateQuizStep() {
-    // Скрываем все шаги квиза
-    for (let i = 1; i <= totalSteps; i++) {
-      const stepEl = document.getElementById(`step${i}`);
-      if (stepEl) {
-        stepEl.classList.remove('active');
-        stepEl.style.opacity = '0';
-        stepEl.style.transform = 'translateY(15px) scale(0.98)';
-      }
-    }
+<div class="bottom-player" id="bottomPlayer">
+  <div class="bp-content">
+    <div class="bp-info">
+      <div class="bp-icon-animate">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="bp-track-details">
+        <span class="bp-title" id="bpTitle">Название трека</span>
+        <span class="bp-category" id="bpCategory">Категория</span>
+      </div>
+    </div>
     
-    const resultBlock = document.getElementById('resultBlock');
-    if (resultBlock) {
-      resultBlock.classList.remove('active');
-      resultBlock.style.opacity = '0';
-      resultBlock.style.transform = 'translateY(15px) scale(0.98)';
-    }
+    <button class="bp-play-btn" id="bpPlayBtn">
+      <span class="bp-play-icon">⏸</span>
+    </button>
+  </div>
+  <div class="bp-progress-bar">
+    <div class="bp-progress" id="bpProgress"></div>
+  </div>
+</div>
 
-    // Показываем текущий шаг
-    if (currentStep <= totalSteps) {
-      const currentStepEl = document.getElementById(`step${currentStep}`);
-      if (currentStepEl) {
-        currentStepEl.classList.add('active');
+<script>
+// ==========================================
+// 1. ОРИГИНАЛЬНАЯ ЛОГИКА КВИЗА (ВОЗВРАЩАЕМ АНИМАЦИИ)
+// ==========================================
+let currentStep = 1;
+const totalSteps = 4;
+let selectedBudget = 1; 
+let selectedCurrency = 'USD';
+
+const rates = { 'USD': 1, 'EUR': 0.92, 'RUB': 92, 'AMD': 388 };
+const symbols = { 'USD': '$', 'EUR': '€', 'RUB': '₽', 'AMD': '֏' };
+
+function updateQuizStep() {
+  // Находим текущий активный шаг и следующий
+  const current = document.querySelector('.quiz-step.active');
+  const next = document.getElementById(`step${currentStep}`);
+  const resultBlock = document.getElementById('resultBlock');
+
+  if (current) {
+    // Красивая плавная анимация ухода старого шага, которая была изначально
+    current.style.opacity = '0';
+    current.style.transform = 'translateY(-15px) scale(0.98)';
+    
+    setTimeout(() => {
+      current.classList.remove('active');
+      
+      if (currentStep <= totalSteps && next) {
+        next.classList.add('active');
         setTimeout(() => {
-          currentStepEl.style.opacity = '1';
-          currentStepEl.style.transform = 'translateY(0) scale(1)';
-        }, 50);
-      }
-    } else {
-      // Экран результата
-      if (resultBlock) {
+          next.style.opacity = '1';
+          next.style.transform = 'translateY(0) scale(1)';
+        }, 30);
+      } else if (resultBlock) {
         resultBlock.classList.add('active');
         setTimeout(() => {
           resultBlock.style.opacity = '1';
           resultBlock.style.transform = 'translateY(0) scale(1)';
-        }, 50);
+        }, 30);
         calculateResult();
-        
         const resSound = document.getElementById('resultSound');
         if (resSound) resSound.play().catch(()=>{});
       }
-    }
+    }, 400); // Время совпадает с CSS transition
+  } else {
+    // На случай первого запуска
+    if (next) next.classList.add('active');
   }
+}
 
-  function nextStep(budgetMultiplier) {
-    if (budgetMultiplier) selectedBudget = budgetMultiplier;
-    currentStep++;
-    updateQuizStep();
+function nextStep(budgetMultiplier) {
+  if (budgetMultiplier) selectedBudget = budgetMultiplier;
+  currentStep++;
+  updateQuizStep();
+}
+
+function selectOption(optionMultiplier) {
+  // Играем звук клика ТОЛЬКО при выборе варианта в тесте!
+  const clickSound = document.getElementById('hoverSound');
+  if (clickSound) {
+    clickSound.currentTime = 0;
+    clickSound.play().catch(()=>{});
   }
+  
+  selectedBudget *= optionMultiplier;
+  currentStep++;
+  updateQuizStep();
+}
 
-  function selectOption(optionMultiplier) {
-    selectedBudget *= optionMultiplier;
-    currentStep++;
-    updateQuizStep();
-  }
+function calculateResult() {
+  const basePrice = 400; 
+  let finalPrice = basePrice * selectedBudget;
+  
+  let deadline = "5-7 days";
+  if (selectedBudget > 2) deadline = "10-14 days";
+  if (selectedBudget < 1) deadline = "2-4 days";
 
-  function calculateResult() {
-    const basePrice = 400; 
-    let finalPrice = basePrice * selectedBudget;
+  const daysEl = document.getElementById('resultDays');
+  if (daysEl) daysEl.innerText = deadline;
+
+  updatePriceDisplay(finalPrice);
+}
+
+function updatePriceDisplay(priceInUSD) {
+  const priceEl = document.getElementById('price');
+  if (!priceEl) return;
+
+  priceEl.classList.add('price-changing');
+  
+  setTimeout(() => {
+    let converted = priceInUSD * rates[selectedCurrency];
     
-    let deadline = "5-7 days";
-    if (selectedBudget > 2) deadline = "10-14 days";
-    if (selectedBudget < 1) deadline = "2-4 days";
+    if (selectedCurrency === 'RUB') converted = Math.round(converted / 500) * 500;
+    else if (selectedCurrency === 'AMD') converted = Math.round(converted / 2000) * 2000;
+    else converted = Math.round(converted);
 
-    const daysEl = document.getElementById('resultDays');
-    if (daysEl) daysEl.innerText = deadline;
+    priceEl.innerText = converted.toLocaleString() + ' ' + symbols[selectedCurrency];
+    priceEl.classList.remove('price-changing');
+  }, 200);
+}
 
-    updatePriceDisplay(finalPrice);
-  }
-
-  function updatePriceDisplay(priceInUSD) {
-    const priceEl = document.getElementById('price');
-    if (!priceEl) return;
-
-    priceEl.classList.add('price-changing');
-    
-    setTimeout(() => {
-      let converted = priceInUSD * rates[selectedCurrency];
-      
-      if (selectedCurrency === 'RUB') converted = Math.round(converted / 500) * 500;
-      else if (selectedCurrency === 'AMD') converted = Math.round(converted / 2000) * 2000;
-      else converted = Math.round(converted);
-
-      priceEl.innerText = converted.toLocaleString() + ' ' + symbols[selectedCurrency];
-      priceEl.classList.remove('price-changing');
-    }, 200);
-  }
-
-  // Безопасное переключение валюты
-  function setCurrency(curr, clickedButton) {
-    selectedCurrency = curr;
-    
-    document.querySelectorAll('.currency-tabs button, .result-currency-switcher button').forEach(btn => {
-      btn.classList.remove('active', 'active-currency');
-    });
-    
-    if (clickedButton) {
-      if (clickedButton.classList.contains('currency-tab-btn')) {
-        clickedButton.classList.add('active');
-      } else {
-        clickedButton.classList.add('active-currency');
-      }
-    }
-    
-    const currSound = document.getElementById('currencySound');
-    if (currSound) {
-      currSound.currentTime = 0;
-      currSound.play().catch(()=>{});
-    }
-
-    calculateResult();
-  }
-
-
-  // ==========================================
-  // 2. АУДИОПЛЕЕРЫ И НИЖНИЙ МИНИ-ПЛЕЕР
-  // ==========================================
-  let currentActiveAudio = null;
-  let currentActiveButton = null;
-
-  function toggleTrack(audioId, btn) {
-    const audio = document.getElementById(audioId);
-    if (!audio) return;
-    
-    const icon = btn.querySelector('.play-icon');
-    
-    const bottomPlayer = document.getElementById('bottomPlayer');
-    const bpPlayBtn = document.getElementById('bpPlayBtn');
-    const bpTitle = document.getElementById('bpTitle');
-    const bpCategory = document.getElementById('bpCategory');
-    const bpProgress = document.getElementById('bpProgress');
-    
-    const card = btn.closest('.card');
-    const categoryTitle = card && card.querySelector('h3') ? card.querySelector('h3').innerText : 'Production';
-    const titleEl = btn.closest('.custom-player') ? btn.closest('.custom-player').querySelector('.track-title') : null;
-    const trackName = titleEl ? titleEl.innerText : 'Track';
-
-    if (currentActiveAudio === audio) {
-      if (audio.paused) {
-        audio.play().catch(()=>{});
-        if (icon) icon.innerText = '⏸';
-        if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
-        const animIcon = document.querySelector('.bp-icon-animate');
-        if (animIcon) animIcon.style.display = 'flex';
-      } else {
-        audio.pause();
-        if (icon) icon.innerText = '▶';
-        if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">▶</span>';
-        const animIcon = document.querySelector('.bp-icon-animate');
-        if (animIcon) animIcon.style.display = 'none';
-      }
-      return;
-    }
-
-    if (currentActiveAudio) {
-      currentActiveAudio.pause();
-      if (currentActiveButton) {
-        const prevIcon = currentActiveButton.querySelector('.play-icon');
-        if (prevIcon) prevIcon.innerText = '▶';
-      }
-    }
-
-    audio.play().catch(()=>{});
-    if (icon) icon.innerText = '⏸';
-    
-    if (bpTitle) bpTitle.innerText = trackName;
-    if (bpCategory) bpCategory.innerText = categoryTitle;
-    if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
-    const animIcon = document.querySelector('.bp-icon-animate');
-    if (animIcon) animIcon.style.display = 'flex';
-    
-    currentActiveAudio = audio;
-    currentActiveButton = btn;
-
-    checkPlayerVisibility();
-
-    if (!audio.dataset.tracked) {
-      audio.addEventListener('timeupdate', () => {
-        const percentage = (audio.currentTime / audio.duration) * 100;
-        const progress = document.getElementById(`progress-${audioId}`);
-        if (progress && audio.duration) progress.style.width = percentage + '%';
-        if (currentActiveAudio === audio && bpProgress) {
-          bpProgress.style.width = percentage + '%';
-        }
-      });
-
-      audio.addEventListener('ended', () => {
-        if (icon) icon.innerText = '▶';
-        const progress = document.getElementById(`progress-${audioId}`);
-        if (progress) progress.style.width = '0%';
-        if (bpProgress) bpProgress.style.width = '0%';
-        if (bottomPlayer) bottomPlayer.classList.remove('active');
-        if (currentActiveAudio === audio) {
-          currentActiveAudio = null;
-          currentActiveButton = null;
-        }
-      });
-      audio.dataset.tracked = "true";
-    }
-  }
-
-  function checkPlayerVisibility() {
-    const bottomPlayer = document.getElementById('bottomPlayer');
-    if (!bottomPlayer) return;
-
-    if (!currentActiveAudio || currentActiveAudio.paused) {
-      bottomPlayer.classList.remove('active');
-      return;
-    }
-    
-    const worksSection = document.getElementById('works');
-    if (!worksSection) return;
-    
-    const rect = worksSection.getBoundingClientRect();
-    if (rect.bottom < 0 || rect.top > window.innerHeight) {
-      bottomPlayer.classList.add('active');
+function setCurrency(curr, clickedButton) {
+  selectedCurrency = curr;
+  
+  document.querySelectorAll('.currency-tabs button, .result-currency-switcher button').forEach(btn => {
+    btn.classList.remove('active', 'active-currency');
+  });
+  
+  if (clickedButton) {
+    if (clickedButton.classList.contains('currency-tab-btn')) {
+      clickedButton.classList.add('active');
     } else {
-      bottomPlayer.classList.remove('active');
+      clickedButton.classList.add('active-currency');
+    }
+  }
+  
+  const currSound = document.getElementById('currencySound');
+  if (currSound) {
+    currSound.currentTime = 0;
+    currSound.play().catch(()=>{});
+  }
+
+  calculateResult();
+}
+
+
+// ==========================================
+// 2. УПРАВЛЕНИЕ АУДИОПЛЕЕРАМИ И МИНИ-ПЛЕЕРОМ
+// ==========================================
+let currentActiveAudio = null;
+let currentActiveButton = null;
+
+function toggleTrack(audioId, btn) {
+  const audio = document.getElementById(audioId);
+  if (!audio) return;
+  
+  const icon = btn.querySelector('.play-icon');
+  
+  const bottomPlayer = document.getElementById('bottomPlayer');
+  const bpPlayBtn = document.getElementById('bpPlayBtn');
+  const bpTitle = document.getElementById('bpTitle');
+  const bpCategory = document.getElementById('bpCategory');
+  const bpProgress = document.getElementById('bpProgress');
+  
+  const card = btn.closest('.card');
+  const categoryTitle = card && card.querySelector('h3') ? card.querySelector('h3').innerText : 'Production';
+  const titleEl = btn.closest('.custom-player') ? btn.closest('.custom-player').querySelector('.track-title') : null;
+  const trackName = titleEl ? titleEl.innerText : 'Track';
+
+  if (currentActiveAudio === audio) {
+    if (audio.paused) {
+      audio.play().catch(()=>{});
+      if (icon) icon.innerText = '⏸';
+      if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+      const animIcon = document.querySelector('.bp-icon-animate');
+      if (animIcon) animIcon.style.display = 'flex';
+    } else {
+      audio.pause();
+      if (icon) icon.innerText = '▶';
+      if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">▶</span>';
+      const animIcon = document.querySelector('.bp-icon-animate');
+      if (animIcon) animIcon.style.display = 'none';
+    }
+    return;
+  }
+
+  if (currentActiveAudio) {
+    currentActiveAudio.pause();
+    if (currentActiveButton) {
+      const prevIcon = currentActiveButton.querySelector('.play-icon');
+      if (prevIcon) prevIcon.innerText = '▶';
     }
   }
 
-  window.addEventListener('scroll', checkPlayerVisibility);
+  audio.play().catch(()=>{});
+  if (icon) icon.innerText = '⏸';
+  
+  if (bpTitle) bpTitle.innerText = trackName;
+  if (bpCategory) bpCategory.innerText = categoryTitle;
+  if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+  const animIcon = document.querySelector('.bp-icon-animate');
+  if (animIcon) animIcon.style.display = 'flex';
+  
+  currentActiveAudio = audio;
+  currentActiveButton = btn;
 
+  checkPlayerVisibility();
 
-  // ==========================================
-  // 3. АТМОСФЕРНОЕ СВЕЧЕНИЕ (AMBIENT GLOW)
-  // ==========================================
-  document.addEventListener('DOMContentLoaded', () => {
-    const glowLayer = document.getElementById('ambientGlow');
-    
-    document.addEventListener('play', (e) => {
-      if (!e.target || !e.target.id) return;
-      if (['hoverSound', 'resultSound', 'currencySound'].includes(e.target.id)) return;
-      if (glowLayer) glowLayer.classList.add('active');
-    }, true);
-
-    const handleStop = (e) => {
-      if (!e.target || !e.target.id) return;
-      if (['hoverSound', 'resultSound', 'currencySound'].includes(e.target.id)) return;
-      if (glowLayer) glowLayer.classList.remove('active');
-    };
-
-    document.addEventListener('pause', handleStop, true);
-    document.addEventListener('ended', handleStop, true);
-  });
-
-
-  // ==========================================
-  // 4. ИНИЦИАЛИЗАЦИЯ ИНТЕРФЕЙСА И КУРСОРА
-  // ==========================================
-  document.addEventListener('DOMContentLoaded', () => {
-    updateQuizStep();
-
-    const dot = document.querySelector('.custom-cursor-dot');
-    const outline = document.querySelector('.custom-cursor-outline');
-    const hoverSound = document.getElementById('hoverSound');
-
-    const bpPlayBtn = document.getElementById('bpPlayBtn');
-    if (bpPlayBtn) {
-      bpPlayBtn.addEventListener('click', () => {
-        if (currentActiveAudio && currentActiveButton) {
-          toggleTrack(currentActiveAudio.id, currentActiveButton);
-        }
-      });
-    }
-
-    if (dot && outline) {
-      let mouseX = -100, mouseY = -100;
-      let outlineX = -100, outlineY = -100;
-      let isMoving = false;
-
-      window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        if (!isMoving) {
-          dot.style.opacity = '1';
-          outline.style.opacity = '1';
-          isMoving = true;
-        }
-        
-        dot.style.left = mouseX + 'px';
-        dot.style.top = mouseY + 'px';
-      });
-
-      function animateCursor() {
-        outlineX += (mouseX - outlineX) * 0.16;
-        outlineY += (mouseY - outlineY) * 0.16;
-        outline.style.left = outlineX + 'px';
-        outline.style.top = outlineY + 'px';
-        requestAnimationFrame(animateCursor);
+  if (!audio.dataset.tracked) {
+    audio.addEventListener('timeupdate', () => {
+      const percentage = (audio.currentTime / audio.duration) * 100;
+      const progress = document.getElementById(`progress-${audioId}`);
+      if (progress && audio.duration) progress.style.width = percentage + '%';
+      if (currentActiveAudio === audio && bpProgress) {
+        bpProgress.style.width = percentage + '%';
       }
-      requestAnimationFrame(animateCursor);
+    });
 
-      function initInterfaceInteractions() {
-        const targets = document.querySelectorAll('a, button, .project-card, .progress-bar, .custom-player, .play-btn, input, select');
-        targets.forEach(target => {
-          target.addEventListener('mouseenter', () => {
-            outline.classList.add('hovered');
-            if (hoverSound) {
-              hoverSound.currentTime = 0;
-              hoverSound.play().catch(()=>{});
-            }
-          });
-          target.addEventListener('mouseleave', () => {
-            outline.classList.remove('hovered');
-          });
-        });
+    audio.addEventListener('ended', () => {
+      if (icon) icon.innerText = '▶';
+      const progress = document.getElementById(`progress-${audioId}`);
+      if (progress) progress.style.width = '0%';
+      if (bpProgress) bpProgress.style.width = '0%';
+      if (bottomPlayer) bottomPlayer.classList.remove('active');
+      if (currentActiveAudio === audio) {
+        currentActiveAudio = null;
+        currentActiveButton = null;
+      }
+    });
+    audio.dataset.tracked = "true";
+  }
+}
+
+function checkPlayerVisibility() {
+  const bottomPlayer = document.getElementById('bottomPlayer');
+  if (!bottomPlayer) return;
+
+  if (!currentActiveAudio || currentActiveAudio.paused) {
+    bottomPlayer.classList.remove('active');
+    return;
+  }
+  
+  const worksSection = document.getElementById('works');
+  if (!worksSection) return;
+  
+  const rect = worksSection.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) {
+    bottomPlayer.classList.add('active');
+  } else {
+    bottomPlayer.classList.remove('active');
+  }
+}
+
+window.addEventListener('scroll', checkPlayerVisibility);
+
+
+// ==========================================
+// 3. АТМОСФЕРНОЕ СВЕЧЕНИЕ (AMBIENT GLOW)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const glowLayer = document.getElementById('ambientGlow');
+  
+  document.addEventListener('play', (e) => {
+    if (!e.target || !e.target.id) return;
+    if (['hoverSound', 'resultSound', 'currencySound'].includes(e.target.id)) return;
+    if (glowLayer) glowLayer.classList.add('active');
+  }, true);
+
+  const handleStop = (e) => {
+    if (!e.target || !e.target.id) return;
+    if (['hoverSound', 'resultSound', 'currencySound'].includes(e.target.id)) return;
+    if (glowLayer) glowLayer.classList.remove('active');
+  };
+
+  document.addEventListener('pause', handleStop, true);
+  document.addEventListener('ended', handleStop, true);
+});
+
+
+// ==========================================
+// 4. ОРИГИНАЛЬНЫЙ ПЛАВНЫЙ КУРСОР (БЕЗ ЛИШНИХ КЛИКОВ)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const dot = document.querySelector('.custom-cursor-dot');
+  const outline = document.querySelector('.custom-cursor-outline');
+
+  const bpPlayBtn = document.getElementById('bpPlayBtn');
+  if (bpPlayBtn) {
+    bpPlayBtn.addEventListener('click', () => {
+      if (currentActiveAudio && currentActiveButton) {
+        toggleTrack(currentActiveAudio.id, currentActiveButton);
+      }
+    });
+  }
+
+  if (dot && outline) {
+    let mouseX = -100, mouseY = -100;
+    let outlineX = -100, outlineY = -100;
+    let isMoving = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      if (!isMoving) {
+        dot.style.opacity = '1';
+        outline.style.opacity = '1';
+        isMoving = true;
       }
       
-      initInterfaceInteractions();
-      setTimeout(initInterfaceInteractions, 1000);
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+    });
+
+    function animateCursor() {
+      outlineX += (mouseX - outlineX) * 0.16;
+      outlineY += (mouseY - outlineY) * 0.16;
+      outline.style.left = outlineX + 'px';
+      outline.style.top = outlineY + 'px';
+      requestAnimationFrame(animateCursor);
     }
-  });
-  </script>
-  <div class="custom-cursor-dot"></div>
-  <div class="custom-cursor-outline"></div>
+    requestAnimationFrame(animateCursor);
+
+    // Только добавляем класс увеличения курсора, никаких левых звуков клика!
+    function initInterfaceInteractions() {
+      const targets = document.querySelectorAll('a, button, .project-card, .progress-bar, .custom-player, .play-btn, input, select');
+      targets.forEach(target => {
+        target.addEventListener('mouseenter', () => outline.classList.add('hovered'));
+        target.addEventListener('mouseleave', () => outline.classList.remove('hovered'));
+      });
+    }
+    
+    initInterfaceInteractions();
+    setTimeout(initInterfaceInteractions, 1000);
+  }
+});
+</script>
+
+<div class="custom-cursor-dot"></div>
+<div class="custom-cursor-outline"></div>
+
 </body>
 </html>
