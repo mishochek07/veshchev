@@ -1665,488 +1665,275 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 <audio id="resultSound" src="result.mp3" preload="auto"></audio>
 <audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
 
-<script>
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){ entry.target.classList.add('visible'); }
-  });
-});
-document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+<div class="custom-cursor-dot"></div>
+  <div class="custom-cursor-outline"></div>
 
-let currentCurrency = 'RUB';
-let currentPrice = 40000;
-let displayedPrice = 40000; // Хранит текущую цифру на экране для плавного перебора
-let animationFrameId = null;
+  <script>
+  // ==========================================
+  // 1. БЕЗОПАСНАЯ ЛОГИКА КАСТОМНЫХ ПЛЕЕРОВ
+  // ==========================================
+  let currentActiveAudio = null;
+  let currentActiveButton = null;
 
-const rates = { RUB: 1, USD: 0.011, EUR: 0.010, AMD: 4.9 };
-const symbols = { RUB: '₽', USD: '$', EUR: '€', AMD: '֏' };
-
-function playHoverSound() {
-  const hoverSound = document.getElementById('hoverSound');
-  if(hoverSound) { 
-    hoverSound.currentTime = 0; 
-    hoverSound.play().catch(()=>{}); 
-  }
-}
-
-// ЗАМЕНИ СТАРУЮ ФУНКЦИЮ РАСЧЕТА ВЫСОТЫ НА ЭТУ:
-
-function resizeEstimatorContainer(targetBlock) {
-  const container = document.querySelector('.card.estimator');
-  if (!container || !targetBlock) return;
-
-  container.style.overflow = 'visible';
-
-  const currentHeight = container.getBoundingClientRect().height;
-  container.style.height = currentHeight + 'px';
-
-  const originalDisplay = targetBlock.style.display;
-  targetBlock.style.display = 'block';
-  
-  const computedStyle = window.getComputedStyle(container);
-  const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
-  const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
-  
-  const targetHeight = targetBlock.scrollHeight + paddingTop + paddingBottom;
-  targetBlock.style.display = originalDisplay;
-
-  requestAnimationFrame(() => {
-    container.style.transition = 'height 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-    container.style.height = targetHeight + 'px';
-  });
-
-  setTimeout(() => {
-    container.style.height = 'auto';
-    container.style.overflow = 'visible';
-  }, 650);
-}
-
-function setCurrency(currency, buttonElement){
-  if (currentCurrency === currency) return;
-  
-  const currencySound = document.getElementById('currencySound');
-  if(currencySound) { currencySound.currentTime = 0; currencySound.play().catch(()=>{}); }
-  
-  currentCurrency = currency;
-
-  document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active-currency'));
-  if (buttonElement) buttonElement.classList.add('active-currency');
-
-  updatePrice(true);
-}
-
-// ТЕПЕРЬ ЭТА ФУНКЦИЯОТВЕЧАЕТ ЗА ПЛАВНЫЙ СДВИГ И ЗАТУХАНИЕ ТЕКСТА
-function animateValue(targetPrice) {
-  const priceElement = document.getElementById('price');
-  if (!priceElement) return;
-
-  // 1. Добавляем класс затухания и увода текста вниз
-  priceElement.classList.add('price-changing');
-
-  // 2. Ждем 200 миллисекунд, пока текст полностью станет невидимым
-  setTimeout(() => {
-    // Меняем текст на новую валюту, пока никто не видит
-    priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
+  function toggleTrack(audioId, btn) {
+    const audio = document.getElementById(audioId);
+    if (!audio) return;
     
-    // Перемещаем невидимый текст наверх, чтобы он выплывал сверху вниз
-    priceElement.style.transform = 'translateY(-10px)';
+    const icon = btn.querySelector('.play-icon');
     
-    // Форсируем перерисовку браузера
-    priceElement.offsetHeight; 
-
-    // 3. Убираем класс затухания, возвращаем текст в центр и плавно проявляем
-    priceElement.classList.remove('price-changing');
-    priceElement.style.transform = 'translateY(0)';
-  }, 200);
-}
-
-function updatePrice(animated = false) {
-  const targetPrice = Math.round(currentPrice * rates[currentCurrency]);
-  
-  if (animated) {
-    // Запускаем плавный сдвиг текста
-    animateValue(targetPrice);
-  } else {
-    // Самый первый показ цены (без анимаций)
-    const priceElement = document.getElementById('price');
-    if (priceElement) {
-      priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
-    }
-  }
-  // Запоминаем текущую цену
-  displayedPrice = targetPrice;
-}
-
-// Плавный переход на следующий шаг
-function nextStep(step, basePrice = null){
-  playHoverSound();
-  if(basePrice !== null){ currentPrice = basePrice; }
-
-  const current = document.querySelector('.quiz-step.active');
-  const next = document.getElementById('step' + step);
-
-  if(current && next) {
-    resizeEstimatorContainer(next); // Запускаем плавную подгонку высоты карточки
-
-    current.style.opacity = '0';
-    current.style.transform = 'translateY(-15px) scale(0.98)';
+    // Элементы мини-плеера
+    const bottomPlayer = document.getElementById('bottomPlayer');
+    const bpPlayBtn = document.getElementById('bpPlayBtn');
+    const bpTitle = document.getElementById('bpTitle');
+    const bpCategory = document.getElementById('bpCategory');
+    const bpProgress = document.getElementById('bpProgress');
     
-    setTimeout(() => {
-      current.classList.remove('active');
-      next.classList.add('active');
-      setTimeout(() => {
-        next.style.opacity = '1';
-        next.style.transform = 'translateY(0) scale(1)';
-      }, 30);
-    }, 400);
-  }
-}
+    // Безопасное извлечение метаданных (без падения в Error)
+    const card = btn.closest('.card');
+    const categoryTitle = card && card.querySelector('h3') ? card.querySelector('h3').innerText : 'Production';
+    const titleEl = btn.closest('.custom-player') ? btn.closest('.custom-player').querySelector('.track-title') : null;
+    const trackName = titleEl ? titleEl.innerText : 'Track';
 
-// Плавный переход на экран результатов
-function finishQuiz(multiplier) {
-  currentPrice = Math.round(currentPrice * multiplier);
-  updatePrice(false); // Загружаем цену без анимации для мгновенного первого рендера
-  
-  const resultSound = document.getElementById('resultSound');
-  if(resultSound) { resultSound.currentTime = 0; resultSound.play().catch(()=>{}); }
-
-  const current = document.querySelector('.quiz-step.active');
-  const resultBlock = document.getElementById('result');
-
-  if(current && resultBlock) {
-    resizeEstimatorContainer(resultBlock); // Корректируем высоту карточки под результат
-
-    current.style.opacity = '0';
-    current.style.transform = 'translateY(-15px) scale(0.98)';
-    
-    setTimeout(() => {
-      current.classList.remove('active');
-      resultBlock.classList.add('active');
-      setTimeout(() => {
-        resultBlock.style.opacity = '1';
-        resultBlock.style.transform = 'translateY(0) scale(1)';
-      }, 30);
-    }, 400);
-  }
-}
-  // АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ НА САЙТЕ
-document.addEventListener('DOMContentLoaded', () => {
-  const glowLayer = document.getElementById('ambientGlow');
-  
-  // Перехватываем событие старта любого звука на странице
-  document.addEventListener('play', (event) => {
-    // Игнорируем системные звуки квиза (hover, клики валюты, результат)
-    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
-      return;
-    }
-    // Если включили реальный трек в плеере — зажигаем атмосферу
-    if (glowLayer) glowLayer.classList.add('active');
-  }, true);
-
-  // Перехватываем событие паузы или окончания трека
-  const handleStop = (event) => {
-    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
-      return;
-    }
-    if (glowLayer) glowLayer.classList.remove('active');
-  };
-
-  document.addEventListener('pause', handleStop, true);
-  document.addEventListener('ended', handleStop, true);
-});
-  
-  let lastScrollY = window.scrollY;
-const navbar = document.querySelector('nav');
-
-window.addEventListener('scroll', () => {
-  if (window.scrollY > lastScrollY && window.scrollY > 100) {
-    navbar.classList.add('nav-hidden');
-  } else {
-    navbar.classList.remove('nav-hidden');
-  }
-  lastScrollY = window.scrollY;
-});
-
-let currentActiveAudio = null;
-let currentActiveButton = null;
-
-let currentActiveAudio = null;
-let currentActiveButton = null;
-
-// Переменные для нижнего мини-плеера
-const bottomPlayer = document.getElementById('bottomPlayer');
-const bpPlayBtn = document.getElementById('bpPlayBtn');
-const bpTitle = document.getElementById('bpTitle');
-const bpCategory = document.getElementById('bpCategory');
-const bpProgress = document.getElementById('bpProgress');
-
-function toggleTrack(audioId, btn) {
-  const audio = document.getElementById(audioId);
-  const icon = btn.querySelector('.play-icon');
-  
-  // Вытаскиваем метаданные трека из карточки для мини-плеера
-  const card = btn.closest('.card');
-  const categoryTitle = card ? card.querySelector('h3').innerText : 'Production';
-  const trackName = btn.closest('.custom-player').querySelector('.track-title').innerText;
-
-  if (currentActiveAudio === audio) {
-    if (audio.paused) {
-      audio.play().catch(()=>{});
-      icon.innerText = '⏸';
-      bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
-      document.querySelector('.bp-icon-animate').style.display = 'flex';
-    } else {
-      audio.pause();
-      icon.innerText = '▶';
-      bpPlayBtn.innerHTML = '<span class="bp-play-icon">▶</span>';
-      document.querySelector('.bp-icon-animate').style.display = 'none';
-    }
-    return;
-  }
-
-  if (currentActiveAudio) {
-    currentActiveAudio.pause();
-    if (currentActiveButton) {
-      currentActiveButton.querySelector('.play-icon').innerText = '▶';
-    }
-  }
-
-  audio.play().catch(()=>{});
-  icon.innerText = '⏸';
-  
-  // Загоняем данные в мини-плеер
-  bpTitle.innerText = trackName;
-  bpCategory.innerText = categoryTitle;
-  bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
-  document.querySelector('.bp-icon-animate').style.display = 'flex';
-  
-  currentActiveAudio = audio;
-  currentActiveButton = btn;
-
-  // Проверяем скролл, чтобы понять, нужно ли показать мини-плеер прямо сейчас
-  checkPlayerVisibility();
-
-  if (!audio.dataset.tracked) {
-    audio.addEventListener('timeupdate', () => {
-      const percentage = (audio.currentTime / audio.duration) * 100;
-      
-      // Обновляем прогресс основного плеера
-      const progress = document.getElementById(`progress-${audioId}`);
-      if (progress && audio.duration) progress.style.width = percentage + '%';
-      
-      // Обновляем прогресс мини-плеера, если играет этот трек
-      if (currentActiveAudio === audio) {
-        bpProgress.style.width = percentage + '%';
+    if (currentActiveAudio === audio) {
+      if (audio.paused) {
+        audio.play().catch(()=>{});
+        if (icon) icon.innerText = '⏸';
+        if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+        const animIcon = document.querySelector('.bp-icon-animate');
+        if (animIcon) animIcon.style.display = 'flex';
+      } else {
+        audio.pause();
+        if (icon) icon.innerText = '▶';
+        if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">▶</span>';
+        const animIcon = document.querySelector('.bp-icon-animate');
+        if (animIcon) animIcon.style.display = 'none';
       }
-    });
+      return;
+    }
 
-    audio.addEventListener('ended', () => {
-      icon.innerText = '▶';
-      document.getElementById(`progress-${audioId}`).style.width = '0%';
-      bpProgress.style.width = '0%';
+    if (currentActiveAudio) {
+      currentActiveAudio.pause();
+      if (currentActiveButton) {
+        const prevIcon = currentActiveButton.querySelector('.play-icon');
+        if (prevIcon) prevIcon.innerText = '▶';
+      }
+    }
+
+    audio.play().catch(()=>{});
+    if (icon) icon.innerText = '⏸';
+    
+    if (bpTitle) bpTitle.innerText = trackName;
+    if (bpCategory) bpCategory.innerText = categoryTitle;
+    if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+    const animIcon = document.querySelector('.bp-icon-animate');
+    if (animIcon) animIcon.style.display = 'flex';
+    
+    currentActiveAudio = audio;
+    currentActiveButton = btn;
+
+    checkPlayerVisibility();
+
+    if (!audio.dataset.tracked) {
+      audio.addEventListener('timeupdate', () => {
+        const percentage = (audio.currentTime / audio.duration) * 100;
+        const progress = document.getElementById(`progress-${audioId}`);
+        if (progress && audio.duration) progress.style.width = percentage + '%';
+        if (currentActiveAudio === audio && bpProgress) {
+          bpProgress.style.width = percentage + '%';
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        if (icon) icon.innerText = '▶';
+        const progress = document.getElementById(`progress-${audioId}`);
+        if (progress) progress.style.width = '0%';
+        if (bpProgress) bpProgress.style.width = '0%';
+        if (bottomPlayer) bottomPlayer.classList.remove('active');
+        if (currentActiveAudio === audio) {
+          currentActiveAudio = null;
+          currentActiveButton = null;
+        }
+      });
+      audio.dataset.tracked = "true";
+    }
+  }
+
+  function checkPlayerVisibility() {
+    const bottomPlayer = document.getElementById('bottomPlayer');
+    if (!bottomPlayer) return;
+
+    if (!currentActiveAudio || currentActiveAudio.paused) {
       bottomPlayer.classList.remove('active');
-      if (currentActiveAudio === audio) {
-        currentActiveAudio = null;
-        currentActiveButton = null;
-      }
-    });
+      return;
+    }
     
-    audio.dataset.tracked = "true";
-  }
-}
-
-// Клик по кнопке в нижнем мини-плеере
-bpPlayBtn.addEventListener('click', () => {
-  if (currentActiveAudio && currentActiveButton) {
-    toggleTrack(currentActiveAudio.id, currentActiveButton);
-  }
-});
-
-// Умное отслеживание скролла: прячем мини-плеер, когда юзер видит секцию с релизами
-function checkPlayerVisibility() {
-  if (!currentActiveAudio || currentActiveAudio.paused) {
-    bottomPlayer.classList.remove('active');
-    return;
-  }
-  
-  const worksSection = document.getElementById('works');
-  if (!worksSection) return;
-  
-  const rect = worksSection.getBoundingClientRect();
-  
-  // Если секция с плеерами вышла за пределы экрана (сверху или снизу), 
-  // и при этом музыка ИГРАЕТ — выводим мини-плеер
-  if (rect.bottom < 0 || rect.top > window.innerHeight) {
-    bottomPlayer.classList.add('active');
-  } else {
-    bottomPlayer.classList.remove('active');
-  }
-}
-
-// Слушаем скролл страницы
-window.addEventListener('scroll', checkPlayerVisibility);
-
-const dot = document.querySelector('.custom-cursor-dot');
-const outline = document.querySelector('.custom-cursor-outline');
-
-if (dot && outline) {
-  let mouseX = 0, mouseY = 0; // Координаты мыши
-  let outlineX = 0, outlineY = 0; // Координаты внешнего круга
-
-  window.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    const worksSection = document.getElementById('works');
+    if (!worksSection) return;
     
-    // Точка следует за мышью мгновенно
-    dot.style.left = mouseX + 'px';
-    dot.style.top = mouseY + 'px';
-  });
-
-  // Функция плавного догона (анимационный цикл)
-  function animateCursor() {
-    // Формула: текущая позиция + (цель - текущая позиция) * скорость догона (0.15)
-    outlineX += (mouseX - outlineX) * 0.15;
-    outlineY += (mouseY - outlineY) * 0.15;
-
-    outline.style.left = outlineX + 'px';
-    outline.style.top = outlineY + 'px';
-
-    requestAnimationFrame(animateCursor);
+    const rect = worksSection.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) {
+      bottomPlayer.classList.add('active');
+    } else {
+      bottomPlayer.classList.remove('active');
+    }
   }
-  requestAnimationFrame(animateCursor);
 
-  // Навешиваем события увеличения на все ссылки, кнопки и карточки
-  const hoverTargets = document.querySelectorAll('a, button, .project-card, .progress-bar, audio');
-  
-  hoverTargets.forEach(target => {
-    target.addEventListener('mouseenter', () => outline.classList.add('hovered'));
-    target.addEventListener('mouseleave', () => outline.classList.remove('hovered'));
-  });
-}
+  window.addEventListener('scroll', checkPlayerVisibility);
 
+  // ==========================================
+  // 2. ЖЕЛЕЗНЫЙ КАСТОМНЫЙ КУРСОР
+  // ==========================================
   document.addEventListener('DOMContentLoaded', () => {
-          const dot = document.querySelector('.custom-cursor-dot');
-          const outline = document.querySelector('.custom-cursor-outline');
+    const dot = document.querySelector('.custom-cursor-dot');
+    const outline = document.querySelector('.custom-cursor-outline');
 
-          if (dot && outline) {
-            let mouseX = -100, mouseY = -100;
-            let outlineX = -100, outlineY = -100;
-            let isMoving = false;
+    if (dot && outline) {
+      let mouseX = -100, mouseY = -100;
+      let outlineX = -100, outlineY = -100;
+      let isMoving = false;
 
-            window.addEventListener('mousemove', (e) => {
-              mouseX = e.clientX;
-              mouseY = e.clientY;
-              
-              if (!isMoving) {
-                dot.style.opacity = '1';
-                outline.style.opacity = '1';
-                isMoving = true;
-              }
-              
-              dot.style.left = mouseX + 'px';
-              dot.style.top = mouseY + 'px';
-            });
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        if (!isMoving) {
+          dot.style.opacity = '1';
+          outline.style.opacity = '1';
+          isMoving = true;
+        }
+        
+        dot.style.left = mouseX + 'px';
+        dot.style.top = mouseY + 'px';
+      });
 
-            function animateCursor() {
-              outlineX += (mouseX - outlineX) * 0.16;
-              outlineY += (mouseY - outlineY) * 0.16;
+      function animateCursor() {
+        outlineX += (mouseX - outlineX) * 0.16;
+        outlineY += (mouseY - outlineY) * 0.16;
+        outline.style.left = outlineX + 'px';
+        outline.style.top = outlineY + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      requestAnimationFrame(animateCursor);
 
-              outline.style.left = outlineX + 'px';
-              outline.style.top = outlineY + 'px';
-
-              requestAnimationFrame(animateCursor);
-            }
-            requestAnimationFrame(animateCursor);
-
-            function updateCursorHovers() {
-              const targets = document.querySelectorAll('a, button, .project-card, .progress-bar, .custom-player, .play-btn');
-              targets.forEach(target => {
-                target.removeEventListener('mouseenter', addHover);
-                target.removeEventListener('mouseleave', removeHover);
-                target.addEventListener('mouseenter', addHover);
-                target.addEventListener('mouseleave', removeHover);
-              });
-            }
-
-            function addHover() { outline.classList.add('hovered'); }
-            function removeHover() { outline.classList.remove('hovered'); }
-
-            updateCursorHovers();
-            setTimeout(updateCursorHovers, 1000);
-          }
+      function updateCursorHovers() {
+        const targets = document.querySelectorAll('a, button, .project-card, .progress-bar, .custom-player, .play-btn, input, select');
+        targets.forEach(target => {
+          target.addEventListener('mouseenter', () => outline.classList.add('hovered'));
+          target.addEventListener('mouseleave', () => outline.classList.remove('hovered'));
         });
-  
-</script>
-<div class="music-ambient-glow" id="ambientGlow"></div>
-  <div class="custom-cursor-dot"></div>
-<div class="custom-cursor-outline"></div>
-  <div class="bottom-player" id="bottomPlayer">
-  <div class="bp-content">
-    <div class="bp-info">
-      <div class="bp-icon-animate">
-        <span></span><span></span><span></span>
-      </div>
-      <div class="bp-track-details">
-        <span class="bp-title" id="bpTitle">Название трека</span>
-        <span class="bp-category" id="bpCategory">Категория</span>
-      </div>
-    </div>
-    
-    <button class="bp-play-btn" id="bpPlayBtn">
-      <span class="bp-play-icon">⏸</span>
-    </button>
-  </div>
-  <div class="bp-progress-bar">
-    <div class="bp-progress" id="bpProgress"></div>
-  </div>
-</div>
+      }
+      updateCursorHovers();
+    }
+  });
 
-<footer class="site-footer">
-  <div class="container footer-container">
-    <div class="footer-hero">
-      <h2>Let's create something<br><span class="glow-text">resonant</span> together.</h2>
-      <div class="studio-status">
-        <span class="status-pulse"></span>
-        <span class="status-text">Available for new projects & scoring</span>
-      </div>
-    </div>
+  // ==========================================
+  // 3. АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ
+  // ==========================================
+  document.addEventListener('DOMContentLoaded', () => {
+    const glowLayer = document.getElementById('ambientGlow');
     
-    <div class="footer-grid">
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#works">Portfolio</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#quiz">Calculate Project</a></li>
-        </ul>
-      </div>
+    document.addEventListener('play', (event) => {
+      if (['hoverSound', 'resultSound', 'currencySound'].includes(event.target.id)) return;
+      if (glowLayer) glowLayer.classList.add('active');
+    }, true);
+
+    const handleStop = (event) => {
+      if (['hoverSound', 'resultSound', 'currencySound'].includes(event.target.id)) return;
+      if (glowLayer) glowLayer.classList.remove('active');
+    };
+
+    document.addEventListener('pause', handleStop, true);
+    document.addEventListener('ended', handleStop, true);
+  });
+
+  // ==========================================
+  // 4. БЕЗОПАСНАЯ ЛОГИКА КВИЗА (НЕ ЛОМАЕТ СТРАНИЦУ)
+  // ==========================================
+  let currentStep = 1;
+  const totalSteps = 4;
+  let selectedBudget = 1; 
+  let selectedCurrency = 'USD';
+
+  const rates = { 'USD': 1, 'EUR': 0.92, 'RUB': 92, 'AMD': 388 };
+  const symbols = { 'USD': '$', 'EUR': '€', 'RUB': '₽', 'AMD': '֏' };
+
+  function updateQuizStep() {
+    // Безопасно скрываем все шаги
+    for (let i = 1; i <= totalSteps; i++) {
+      const stepEl = document.getElementById(`step${i}`);
+      if (stepEl) stepEl.classList.remove('active');
+    }
+    const resultEl = document.getElementById('resultBlock');
+    if (resultEl) resultEl.classList.remove('active');
+
+    // Показываем текущий
+    if (currentStep <= totalSteps) {
+      const currentStepEl = document.getElementById(`step${currentStep}`);
+      if (currentStepEl) currentStepEl.classList.add('active');
+    } else {
+      if (resultEl) resultEl.classList.add('active');
+      calculateResult();
+    }
+  }
+
+  function nextStep(budgetMultiplier) {
+    if (budgetMultiplier) selectedBudget = budgetMultiplier;
+    currentStep++;
+    updateQuizStep();
+  }
+
+  function selectOption(optionMultiplier) {
+    selectedBudget *= optionMultiplier;
+    currentStep++;
+    updateQuizStep();
+  }
+
+  function calculateResult() {
+    const basePrice = 400; 
+    let finalPrice = basePrice * selectedBudget;
+    
+    let deadline = "5-7 days";
+    if (selectedBudget > 2) deadline = "10-14 days";
+    if (selectedBudget < 1) deadline = "2-4 days";
+
+    const daysEl = document.getElementById('resultDays');
+    if (daysEl) daysEl.innerText = deadline;
+
+    updatePriceDisplay(finalPrice);
+  }
+
+  function updatePriceDisplay(priceInUSD) {
+    const priceEl = document.getElementById('price');
+    if (!priceEl) return;
+
+    priceEl.classList.add('price-changing');
+    
+    setTimeout(() => {
+      let converted = priceInUSD * rates[selectedCurrency];
       
-      <div class="footer-col">
-        <h4>Socials</h4>
-        <ul>
-          <li><a href="https://instagram.com/" target="_blank" class="hover-target">Instagram</a></li>
-          <li><a href="https://t.me/" target="_blank" class="hover-target">Telegram</a></li>
-          <li><a href="#" target="_blank" class="hover-target">SoundCloud</a></li>
-        </ul>
-      </div>
+      if (selectedCurrency === 'RUB') converted = Math.round(converted / 500) * 500;
+      else if (selectedCurrency === 'AMD') converted = Math.round(converted / 2000) * 2000;
+      else converted = Math.round(converted);
 
-      <div class="footer-col">
-        <h4>Contacts</h4>
-        <ul>
-          <li><a href="mailto:your-email@example.com">your-email@example.com</a></li>
-          <li><span class="footer-location">Yerevan / Remote</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  
-  <div class="footer-bottom">
-    <div class="container fb-inside">
-      <p class="copyright">&copy; 2026 Михаил Вещев. All rights reserved.</p>
-      <p class="developer-credit">Sound Engineering & Production</p>
-    </div>
-  </div>
-</footer>
+      priceEl.innerText = converted.toLocaleString() + ' ' + symbols[selectedCurrency];
+      priceEl.classList.remove('price-changing');
+    }, 200);
+  }
+
+  // Запуск первичной проверки при загрузке
+  document.addEventListener('DOMContentLoaded', () => {
+    updateQuizStep();
+    
+    // Привязываем клик к нижней кнопке мини-плеера
+    const bpPlayBtn = document.getElementById('bpPlayBtn');
+    if (bpPlayBtn) {
+      bpPlayBtn.addEventListener('click', () => {
+        if (currentActiveAudio && currentActiveButton) {
+          toggleTrack(currentActiveAudio.id, currentActiveButton);
+        }
+      });
+    }
+  });
+  </script>
 </body>
 </html>
