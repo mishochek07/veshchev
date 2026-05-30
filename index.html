@@ -868,10 +868,12 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
   .project-card:active, .options button:active, .btn:active {
   transform: scale(0.97) translateY(0);
   transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
 }
+
   nav {
   position: fixed; /* Чтобы навигация всегда была под рукой */
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease;
@@ -898,60 +900,28 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 }
 
 .play-btn {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 225, 178, 0.3);
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--glow);
+  border: none;
+  background: var(--glow);
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
   flex-shrink: 0;
-  position: relative;
-  
-  /* Ультра-плавные переходы */
-  transition: 
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-    background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.3s ease;
+}
+
+.play-btn:hover {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 8px var(--glow));
 }
 
 .play-icon {
-  font-size: 13px;
-  margin-left: 2px; /* Идеальная центровка треугольника */
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
-}
-
-/* Эффект №1: Плавная реакция, когда навели просто на саму плашку трека */
-.custom-player:hover .play-btn {
-  border-color: var(--glow);
-  background: rgba(255, 225, 178, 0.06);
-  color: #fff;
-}
-
-/* Эффект №2: Фокус конкретно на саму кнопку Play */
-.play-btn:hover {
-  transform: scale(1.08);
-  background: var(--glow) !important; /* Кнопка заливается фирменным цветом */
-  color: #0f0d0a !important; /* Иконка становится темной на светлом фоне */
-  box-shadow: 
-    0 0 20px rgba(255, 225, 178, 0.4),
-    0 0 40px rgba(255, 225, 178, 0.1);
-  border-color: transparent;
-}
-
-.play-btn:hover .play-icon {
-  transform: scale(1.1);
-}
-
-/* Эффект нажатия (тактильный клик) */
-.play-btn:active {
-  transform: scale(0.94);
-  box-shadow: 0 0 10px rgba(255, 225, 178, 0.2);
-  transition: transform 0.05s ease;
+  font-size: 14px;
+  margin-left: 2px; /* Сдвиг для идеальной центровки треугольника */
 }
 
 .player-info {
@@ -973,6 +943,7 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
+  cursor: pointer;
   position: relative;
 }
 
@@ -986,333 +957,6 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 /* Скрываем нативный плеер */
 .audio-element {
   display: none;
-}
-
-  @media (pointer: fine) {
-  /* Скрываем дефолтный курсор у всей страницы */
-  body, a, button, .project-card, .progress-bar, .custom-player, .play-btn {
-    cursor: none !important;
-  }
-
-  .custom-cursor-dot {
-    width: 6px;
-    height: 6px;
-    background-color: var(--glow);
-    position: fixed;
-    top: -20px; /* Прячем за экран до первого движения */
-    left: -20px;
-    pointer-events: none;
-    z-index: 999999;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s ease, height 0.2s ease, opacity 0.3s ease;
-    opacity: 0; /* Проявится при старте движения */
-  }
-
-  .custom-cursor-outline {
-    width: 30px;
-    height: 30px;
-    border: 1px solid rgba(255, 225, 178, 0.4);
-    position: fixed;
-    top: -40px;
-    left: -40px;
-    pointer-events: none;
-    z-index: 999998;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                background-color 0.3s ease, 
-                border-color 0.3s ease,
-                opacity 0.3s ease;
-    will-change: top, left;
-    opacity: 0;
-  }
-
-  /* Состояние при наведении */
-  .custom-cursor-outline.hovered {
-    width: 50px;
-    height: 50px;
-    background-color: rgba(255, 225, 178, 0.08);
-    border-color: var(--glow);
-    box-shadow: 0 0 15px rgba(255, 220, 140, 0.2);
-  }
-}
-
-  /* ==========================================
-   СТИЛИ ДЛЯ ПЛАВАЮЩЕГО МИНИ-ПЛЕЕРА
-   ========================================== */
-.bottom-player {
-  position: fixed;
-  bottom: -100px; /* Изначально спрятан внизу */
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  max-width: 500px;
-  background: rgba(15, 13, 10, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 225, 178, 0.15);
-  border-radius: 24px;
-  z-index: 9999;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 225, 178, 0.05);
-  transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
-.bottom-player.active {
-  bottom: 25px; /* Выплывает при активации */
-}
-
-.bp-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-}
-
-.bp-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-/* Анимированные полоски спектра (как в эквалайзере) */
-.bp-icon-animate {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  width: 16px;
-  height: 16px;
-}
-
-.bp-icon-animate span {
-  display: block;
-  width: 3px;
-  height: 100%;
-  background: var(--glow);
-  border-radius: 1px;
-  animation: bp-bounce 0.8s ease infinite alternate;
-}
-.bp-icon-animate span:nth-child(2) { animation-delay: 0.2s; }
-.bp-icon-animate span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes bp-bounce {
-  0% { height: 30%; }
-  100% { height: 100%; }
-}
-
-.bp-track-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.bp-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.bp-category {
-  font-size: 11px;
-  color: var(--muted);
-}
-
-.bp-play-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: var(--text);
-  color: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.bp-play-btn:hover {
-  transform: scale(1.05);
-}
-
-.bp-progress-bar {
-  width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.bp-progress {
-  width: 0%;
-  height: 100%;
-  background: var(--glow);
-}
-
-/* ==========================================
-   СТИЛИ ДЛЯ СТИЛЬНОГО ФУТЕРА
-   ========================================== */
-.site-footer {
-  background: linear-gradient(to top, #080705, #0f0d0a);
-  border-top: 1px solid var(--border);
-  padding: 80px 0 30px 0;
-  margin-top: 120px;
-}
-
-.footer-container {
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.footer-hero h2 {
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  color: var(--text);
-  margin-bottom: 20px;
-}
-
-.glow-text {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,225,178,0.6);
-  text-shadow: 0 0 30px rgba(255, 225, 178, 0.15);
-}
-
-.studio-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 8px 16px;
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.status-pulse {
-  width: 8px;
-  height: 8px;
-  background-color: #55efc4;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #55efc4;
-  animation: pulse-green 2s infinite;
-}
-
-@keyframes pulse-green {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(85, 239, 196, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(85, 239, 196, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(85, 239, 196, 0); }
-}
-
-.status-text {
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 500;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-}
-
-.footer-col h4 {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--muted);
-  margin-bottom: 20px;
-  font-weight: 700;
-}
-
-.footer-col ul {
-  list-style: none;
-}
-
-.footer-col ul li {
-  margin-bottom: 12px;
-}
-
-.footer-col ul li a {
-  color: var(--text);
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.3s ease;
-  opacity: 0.7;
-}
-
-.footer-col ul li a:hover {
-  color: var(--glow);
-  opacity: 1;
-}
-
-.footer-location {
-  font-size: 14px;
-  color: var(--muted);
-  opacity: 0.7;
-}
-
-.footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  margin-top: 60px;
-  padding-top: 30px;
-}
-
-.fb-inside {
-  display: flex;
-  justify-content: space-between;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-  font-size: 12px;
-  color: var(--muted);
-  opacity: 0.5;
-}
-
-/* ==========================================
-   ОПТИМИЗАЦИЯ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА (MOBILE)
-   ========================================== */
-@media (max-width: 768px) {
-  /* Сетки перестраиваем в одну колонку */
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  
-  .fb-inside {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-  
-  /* Увеличиваем кликабельность элементов на тач-экранах */
-  .footer-col ul li {
-    margin-bottom: 16px;
-  }
-  
-  /* Адаптация плавающего плеера под мобилки */
-  .bottom-player {
-    width: 100%;
-    bottom: -100px;
-    border-radius: 20px 20px 0 0;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-  }
-  
-  .bottom-player.active {
-    bottom: 0px; /* Прилипает к самому низу экрана без зазоров */
-  }
-  
-  /* Делаем отступы секций на мобилках чуть мягче */
-  .site-footer {
-    padding: 60px 0 20px 0;
-    margin-top: 80px;
-  }
 }
   
 </style>
@@ -1350,8 +994,7 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 
 <section id="works">
   <h2 class="section-title fade">Selected<br>Works</h2>
-  <div class="grid works-grid">
-    <div class="card fade">
+  <div class="card fade">
   <h3>Электронная музыка</h3>
   <p style="margin-bottom: 20px;">Breakcore / Jungle / UK Garage / Experimental</p>
   
@@ -1563,7 +1206,7 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 
   <!-- ВЫБОР ВАЛЮТЫ ТОЛЬКО ТУТ -->
   <div class="result-currency-wrapper">
-    <span>СВЯЗАТЬСЯ:</span>
+    <span>ИЗМЕНИТЬ ВАЛЮТУ РАСЧЕТА:</span>
     <div class="result-currency-switcher">
       <button class="currency-btn active-currency" onclick="setCurrency('RUB', this)">₽ RUB</button>
       <button class="currency-btn" onclick="setCurrency('USD', this)">$ USD</button>
@@ -1665,235 +1308,267 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 <audio id="resultSound" src="result.mp3" preload="auto"></audio>
 <audio id="currencySound" src="valuta.mp3" preload="auto"></audio>
 
-<div class="bottom-player" id="bottomPlayer">
-  <div class="bp-content">
-    <div class="bp-info">
-      <div class="bp-icon-animate">
-        <span></span><span></span><span></span>
-      </div>
-      <div class="bp-track-details">
-        <span class="bp-title" id="bpTitle">Название трека</span>
-        <span class="bp-category" id="bpCategory">Категория</span>
-      </div>
-    </div>
-    
-    <button class="bp-play-btn" id="bpPlayBtn">
-      <span class="bp-play-icon">⏸</span>
-    </button>
-  </div>
-  <div class="bp-progress-bar">
-    <div class="bp-progress" id="bpProgress"></div>
-  </div>
-</div>
-
 <script>
-  // АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ НА САЙТЕ
-  document.addEventListener('DOMContentLoaded', () => {
-    const glowLayer = document.getElementById('ambientGlow');
-    
-    document.addEventListener('play', (event) => {
-      if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
-        return;
-      }
-      if (glowLayer) glowLayer.classList.add('active');
-    }, true);
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){ entry.target.classList.add('visible'); }
+  });
+});
+document.querySelectorAll('.fade').forEach(el => observer.observe(el));
 
-    const handleStop = (event) => {
-      if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
-        return;
-      }
-      if (glowLayer) glowLayer.classList.remove('active');
-    };
+let currentCurrency = 'RUB';
+let currentPrice = 40000;
+let displayedPrice = 40000; // Хранит текущую цифру на экране для плавного перебора
+let animationFrameId = null;
 
-    document.addEventListener('pause', handleStop, true);
-    document.addEventListener('ended', handleStop, true);
+const rates = { RUB: 1, USD: 0.011, EUR: 0.010, AMD: 4.9 };
+const symbols = { RUB: '₽', USD: '$', EUR: '€', AMD: '֏' };
+
+function playHoverSound() {
+  const hoverSound = document.getElementById('hoverSound');
+  if(hoverSound) { 
+    hoverSound.currentTime = 0; 
+    hoverSound.play().catch(()=>{}); 
+  }
+}
+
+// ЗАМЕНИ СТАРУЮ ФУНКЦИЮ РАСЧЕТА ВЫСОТЫ НА ЭТУ:
+
+function resizeEstimatorContainer(targetBlock) {
+  const container = document.querySelector('.card.estimator');
+  if (!container || !targetBlock) return;
+
+  container.style.overflow = 'visible';
+
+  const currentHeight = container.getBoundingClientRect().height;
+  container.style.height = currentHeight + 'px';
+
+  const originalDisplay = targetBlock.style.display;
+  targetBlock.style.display = 'block';
+  
+  const computedStyle = window.getComputedStyle(container);
+  const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
+  const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
+  
+  const targetHeight = targetBlock.scrollHeight + paddingTop + paddingBottom;
+  targetBlock.style.display = originalDisplay;
+
+  requestAnimationFrame(() => {
+    container.style.transition = 'height 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    container.style.height = targetHeight + 'px';
   });
 
-  // ЛОГИКА КАСТОМНЫХ АУДИОПЛЕЕРОВ
-  let currentActiveAudio = null;
-  let currentActiveButton = null;
+  setTimeout(() => {
+    container.style.height = 'auto';
+    container.style.overflow = 'visible';
+  }, 650);
+}
 
-  function toggleTrack(audioId, btn) {
-    const audio = document.getElementById(audioId);
-    const icon = btn.querySelector('.play-icon');
+function setCurrency(currency, buttonElement){
+  if (currentCurrency === currency) return;
+  
+  const currencySound = document.getElementById('currencySound');
+  if(currencySound) { currencySound.currentTime = 0; currencySound.play().catch(()=>{}); }
+  
+  currentCurrency = currency;
 
-    if (currentActiveAudio === audio) {
-      if (audio.paused) {
-        audio.play().catch(() => {});
-        icon.innerText = '⏸';
-      } else {
-        audio.pause();
-        icon.innerText = '▶';
-      }
-      return;
-    }
+  document.querySelectorAll('.currency-btn').forEach(btn => btn.classList.remove('active-currency'));
+  if (buttonElement) buttonElement.classList.add('active-currency');
 
-    if (currentActiveAudio) {
-      currentActiveAudio.pause();
-      if (currentActiveButton) {
-        currentActiveButton.querySelector('.play-icon').innerText = '▶';
-      }
-    }
+  updatePrice(true);
+}
 
-    audio.play().catch(() => {});
-    icon.innerText = '⏸';
-    currentActiveAudio = audio;
-    currentActiveButton = btn;
+// ТЕПЕРЬ ЭТА ФУНКЦИЯОТВЕЧАЕТ ЗА ПЛАВНЫЙ СДВИГ И ЗАТУХАНИЕ ТЕКСТА
+function animateValue(targetPrice) {
+  const priceElement = document.getElementById('price');
+  if (!priceElement) return;
 
-    if (!audio.dataset.tracked) {
-      audio.addEventListener('timeupdate', () => {
-        const percentage = (audio.currentTime / audio.duration) * 100;
-        const progress = document.getElementById(`progress-${audioId}`);
-        if (progress && audio.duration) {
-          progress.style.width = percentage + '%';
-        }
-      });
+  // 1. Добавляем класс затухания и увода текста вниз
+  priceElement.classList.add('price-changing');
 
-      audio.addEventListener('ended', () => {
-        icon.innerText = '▶';
-        document.getElementById(`progress-${audioId}`).style.width = '0%';
-        if (currentActiveAudio === audio) {
-          currentActiveAudio = null;
-          currentActiveButton = null;
-        }
-      });
-      audio.dataset.tracked = "true";
-    }
-  }
-
-  // ОРИГИНАЛЬНАЯ ЛОГИКА ИНТЕРАКТИВНОГО ТЕСТА (КВИЗА)
-  let currentStep = 1;
-  const totalSteps = 4;
-  let selectedBudget = 1; 
-  let selectedCurrency = 'USD';
-
-  const rates = { 'USD': 1, 'EUR': 0.92, 'RUB': 92, 'AMD': 388 };
-  const symbols = { 'USD': '$', 'EUR': '€', 'RUB': '₽', 'AMD': '֏' };
-
-  function nextStep(budgetMultiplier) {
-    if (budgetMultiplier) {
-      selectedBudget = budgetMultiplier;
-    }
+  // 2. Ждем 200 миллисекунд, пока текст полностью станет невидимым
+  setTimeout(() => {
+    // Меняем текст на новую валюту, пока никто не видит
+    priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
     
-    const current = document.querySelector('.quiz-step.active');
-    currentStep++;
-    const next = document.getElementById(`step${currentStep}`);
-    const resultBlock = document.getElementById('resultBlock');
-
-    if (current) {
-      current.style.opacity = '0';
-      current.style.transform = 'translateY(-15px) scale(0.98)';
-      
-      setTimeout(() => {
-        current.classList.remove('active');
-        if (currentStep <= totalSteps && next) {
-          next.classList.add('active');
-          setTimeout(() => {
-            next.style.opacity = '1';
-            next.style.transform = 'translateY(0) scale(1)';
-          }, 30);
-        } else if (resultBlock) {
-          resultBlock.classList.add('active');
-          setTimeout(() => {
-            resultBlock.style.opacity = '1';
-            resultBlock.style.transform = 'translateY(0) scale(1)';
-          }, 30);
-          calculateResult();
-        }
-      }, 400);
-    }
-  }
-
-  function selectOption(optionMultiplier) {
-    const hoverSound = document.getElementById('hoverSound');
-    if (hoverSound) {
-      hoverSound.currentTime = 0;
-      hoverSound.play().catch(() => {});
-    }
-
-    selectedBudget *= optionMultiplier;
+    // Перемещаем невидимый текст наверх, чтобы он выплывал сверху вниз
+    priceElement.style.transform = 'translateY(-10px)';
     
-    const current = document.querySelector('.quiz-step.active');
-    currentStep++;
-    const next = document.getElementById(`step${currentStep}`);
-    const resultBlock = document.getElementById('resultBlock');
+    // Форсируем перерисовку браузера
+    priceElement.offsetHeight; 
 
-    if (current) {
-      current.style.opacity = '0';
-      current.style.transform = 'translateY(-15px) scale(0.98)';
-      
-      setTimeout(() => {
-        current.classList.remove('active');
-        if (currentStep <= totalSteps && next) {
-          next.classList.add('active');
-          setTimeout(() => {
-            next.style.opacity = '1';
-            next.style.transform = 'translateY(0) scale(1)';
-          }, 30);
-        } else if (resultBlock) {
-          resultBlock.classList.add('active');
-          setTimeout(() => {
-            resultBlock.style.opacity = '1';
-            resultBlock.style.transform = 'translateY(0) scale(1)';
-          }, 30);
-          calculateResult();
-          const resultSound = document.getElementById('resultSound');
-          if (resultSound) resultSound.play().catch(() => {});
-        }
-      }, 400);
+    // 3. Убираем класс затухания, возвращаем текст в центр и плавно проявляем
+    priceElement.classList.remove('price-changing');
+    priceElement.style.transform = 'translateY(0)';
+  }, 200);
+}
+
+function updatePrice(animated = false) {
+  const targetPrice = Math.round(currentPrice * rates[currentCurrency]);
+  
+  if (animated) {
+    // Запускаем плавный сдвиг текста
+    animateValue(targetPrice);
+  } else {
+    // Самый первый показ цены (без анимаций)
+    const priceElement = document.getElementById('price');
+    if (priceElement) {
+      priceElement.innerText = `от ${targetPrice.toLocaleString()} ${symbols[currentCurrency]}`;
     }
   }
+  // Запоминаем текущую цену
+  displayedPrice = targetPrice;
+}
 
-  function calculateResult() {
-    const basePrice = 400; 
-    let finalPrice = basePrice * selectedBudget;
-    
-    let deadline = "5-7 days";
-    if (selectedBudget > 2) deadline = "10-14 days";
-    if (selectedBudget < 1) deadline = "2-4 days";
+// Плавный переход на следующий шаг
+function nextStep(step, basePrice = null){
+  playHoverSound();
+  if(basePrice !== null){ currentPrice = basePrice; }
 
-    document.getElementById('resultDays').innerText = deadline;
-    updatePriceDisplay(finalPrice);
-  }
+  const current = document.querySelector('.quiz-step.active');
+  const next = document.getElementById('step' + step);
 
-  function updatePriceDisplay(priceInUSD) {
-    const priceEl = document.getElementById('price');
-    if (!priceEl) return;
+  if(current && next) {
+    resizeEstimatorContainer(next); // Запускаем плавную подгонку высоты карточки
 
-    priceEl.classList.add('price-changing');
+    current.style.opacity = '0';
+    current.style.transform = 'translateY(-15px) scale(0.98)';
     
     setTimeout(() => {
-      let converted = priceInUSD * rates[selectedCurrency];
-      
-      if (selectedCurrency === 'RUB') {
-        converted = Math.round(converted / 500) * 500;
-      } else if (selectedCurrency === 'AMD') {
-        converted = Math.round(converted / 2000) * 2000;
-      } else {
-        converted = Math.round(converted);
-      }
+      current.classList.remove('active');
+      next.classList.add('active');
+      setTimeout(() => {
+        next.style.opacity = '1';
+        next.style.transform = 'translateY(0) scale(1)';
+      }, 30);
+    }, 400);
+  }
+}
 
-      priceEl.innerText = converted.toLocaleString() + ' ' + symbols[selectedCurrency];
-      priceEl.classList.remove('price-changing');
-    }, 200);
+// Плавный переход на экран результатов
+function finishQuiz(multiplier) {
+  currentPrice = Math.round(currentPrice * multiplier);
+  updatePrice(false); // Загружаем цену без анимации для мгновенного первого рендера
+  
+  const resultSound = document.getElementById('resultSound');
+  if(resultSound) { resultSound.currentTime = 0; resultSound.play().catch(()=>{}); }
+
+  const current = document.querySelector('.quiz-step.active');
+  const resultBlock = document.getElementById('result');
+
+  if(current && resultBlock) {
+    resizeEstimatorContainer(resultBlock); // Корректируем высоту карточки под результат
+
+    current.style.opacity = '0';
+    current.style.transform = 'translateY(-15px) scale(0.98)';
+    
+    setTimeout(() => {
+      current.classList.remove('active');
+      resultBlock.classList.add('active');
+      setTimeout(() => {
+        resultBlock.style.opacity = '1';
+        resultBlock.style.transform = 'translateY(0) scale(1)';
+      }, 30);
+    }, 400);
+  }
+}
+  // АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ НА САЙТЕ
+document.addEventListener('DOMContentLoaded', () => {
+  const glowLayer = document.getElementById('ambientGlow');
+  
+  // Перехватываем событие старта любого звука на странице
+  document.addEventListener('play', (event) => {
+    // Игнорируем системные звуки квиза (hover, клики валюты, результат)
+    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
+      return;
+    }
+    // Если включили реальный трек в плеере — зажигаем атмосферу
+    if (glowLayer) glowLayer.classList.add('active');
+  }, true);
+
+  // Перехватываем событие паузы или окончания трека
+  const handleStop = (event) => {
+    if (event.target.id === 'hoverSound' || event.target.id === 'resultSound' || event.target.id === 'currencySound') {
+      return;
+    }
+    if (glowLayer) glowLayer.classList.remove('active');
+  };
+
+  document.addEventListener('pause', handleStop, true);
+  document.addEventListener('ended', handleStop, true);
+});
+
+  let lastScrollY = window.scrollY;
+const navbar = document.querySelector('nav');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > lastScrollY && window.scrollY > 100) {
+    navbar.classList.add('nav-hidden');
+  } else {
+    navbar.classList.remove('nav-hidden');
+  }
+  lastScrollY = window.scrollY;
+});
+
+let currentActiveAudio = null;
+let currentActiveButton = null;
+
+function toggleTrack(audioId, btn) {
+  const audio = document.getElementById(audioId);
+  const icon = btn.querySelector('.play-icon');
+
+  // Если кликнули на уже играющий трек — ставим на паузу
+  if (currentActiveAudio === audio) {
+    if (audio.paused) {
+      audio.play().catch(()=>{});
+      icon.innerText = '⏸';
+    } else {
+      audio.pause();
+      icon.innerText = '▶';
+    }
+    return;
   }
 
-  function setCurrency(curr) {
-    selectedCurrency = curr;
-    
-    document.querySelectorAll('.currency-tabs button, .result-currency-switcher button').forEach(btn => {
-      btn.classList.remove('active');
-      btn.classList.remove('active-currency');
+  // Если играет другой трек — выключаем его
+  if (currentActiveAudio) {
+    currentActiveAudio.pause();
+    if (currentActiveButton) {
+      currentActiveButton.querySelector('.play-icon').innerText = '▶';
+    }
+  }
+
+  // Включаем новый трек
+  audio.play().catch(()=>{});
+  icon.innerText = '⏸';
+  
+  currentActiveAudio = audio;
+  currentActiveButton = btn;
+
+  // Навешиваем обновление прогресс-бара, если еще не навешено
+  if (!audio.dataset.tracked) {
+    audio.addEventListener('timeupdate', () => {
+      const progress = document.getElementById(`progress-${audioId}`);
+      if (progress && audio.duration) {
+        const percentage = (audio.currentTime / audio.duration) * 100;
+        progress.style.width = percentage + '%';
+      }
+    });
+
+    // Когда трек закончился — возвращаем иконку «Play»
+    audio.addEventListener('ended', () => {
+      icon.innerText = '▶';
+      document.getElementById(`progress-${audioId}`).style.width = '0%';
+      if (currentActiveAudio === audio) {
+        currentActiveAudio = null;
+        currentActiveButton = null;
+      }
     });
     
-    const currencySound = document.getElementById('currencySound');
-    if (currencySound) {
-      currencySound.currentTime = 0;
-      currencySound.play().catch(() => {});
-    }
-
-    calculateResult();
+    audio.dataset.tracked = "true";
   }
-  </script>
+}
+  
+</script>
+<div class="music-ambient-glow" id="ambientGlow"></div>
 </body>
 </html>
