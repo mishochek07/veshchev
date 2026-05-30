@@ -365,6 +365,7 @@ audio {
   position: relative;
   overflow: visible;
 }
+  </footer>
   
 .cards-mode{
   grid-template-columns:repeat(4,1fr);
@@ -774,7 +775,7 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   object-fit:contain;
   opacity:0.82;
   pointer-events:none;
-  z-index:20;
+  z-index:1;
   filter: drop-shadow(0 0 12px rgba(255,255,255,0.12));
   animation: floatIcon 7s ease-in-out infinite;
   transition: transform 0.5s ease, filter 0.5s ease;
@@ -850,12 +851,16 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 .quiz-step.active .project-card:nth-child(4){ transition-delay:.32s; }
 .result h3 { font-size: 54px; margin: 14px 0; }
 .result small { letter-spacing: 0.2em; color: var(--glow); }
-
- /* ЖЕЛЕЙНЫЕ СТИЛИ ДЛЯ КОНТЕЙНЕРА И ШАГОВ */
+  
 .card.estimator {
   /* Эффект пружины: за счет 0.6s и специального безье блок будет сочно "отскакивать" */
   transition: height 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.9s ease, box-shadow 1.6s ease;
   will-change: height;
+  
+  /* ФИКС: Делаем фон калькулятора полностью глухим и плотным, чтобы подвал не просвечивал */
+  background: #0f0d0a !important; 
+  position: relative;
+  z-index: 10;
 }
 
 .quiz-step {
@@ -1030,13 +1035,16 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
 
   /* === НОВЫЕ СТИЛИ ДЛЯ ЭФФЕКТА ШТОРКИ И ФУТЕРА === */
   
-  /* Калькулятор перекрывает футер при скролле */
+/* Калькулятор перекрывает футер при скролле */
   #estimator {
     position: relative;
-    z-index: 2;
+    z-index: 5 !important; 
     background: #0f0d0a; 
     box-shadow: 0 40px 100px rgba(0,0,0,0.8);
     margin-bottom: 100vh; /* Место под подвал, рассчитывается динамически в JS */
+    
+    /* ФИКС: Прячет все вылетающие за пределы калькулятора софтверные иконки */
+    overflow: hidden; 
   }
 
   /* Фиксируем футер на самом дне */
