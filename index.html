@@ -1027,6 +1027,152 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
     box-shadow: 0 0 15px rgba(255, 220, 140, 0.2);
   }
 }
+
+  /* === НОВЫЕ СТИЛИ ДЛЯ ЭФФЕКТА ШТОРКИ И ФУТЕРА === */
+  
+  /* Калькулятор перекрывает футер при скролле */
+  #estimator {
+    position: relative;
+    z-index: 2;
+    background: #0f0d0a; 
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+    margin-bottom: 100vh; /* Место под подвал, рассчитывается динамически в JS */
+  }
+
+  /* Фиксируем футер на самом дне */
+  #contact {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; 
+    min-height: 600px;
+    z-index: 1;
+    background: linear-gradient(to bottom, #070605, #110e0a);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10vh 6vw 40px;
+    overflow: hidden;
+  }
+
+  .footer-hero {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .giant-strike {
+    font-size: clamp(50px, 11vw, 150px);
+    line-height: 0.85;
+    letter-spacing: -0.06em;
+    font-weight: 900;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #f8f4ee 0%, rgba(248,244,238,0.15) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    user-select: none;
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    transform-style: preserve-3d;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--glow);
+    margin-bottom: 12px;
+  }
+
+  .status-pulse {
+    width: 6px;
+    height: 6px;
+    background: var(--glow);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--glow);
+    animation: pulseGlow 2s infinite;
+  }
+
+  @keyframes pulseGlow {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px var(--glow); }
+    100% { transform: scale(0.9); opacity: 0.6; }
+  }
+
+  .footer-location {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .local-time {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--text);
+    opacity: 0.8;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 60px;
+    justify-content: flex-end;
+  }
+
+  .link-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .link-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+  }
+
+  .magnetic-link {
+    font-size: clamp(18px, 2vw, 24px);
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
+  }
+
+  .magnetic-link:hover {
+    color: var(--glow);
+    transform: translateX(8px);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.3);
+    border-top: 1px solid rgba(255,255,255,0.03);
+    padding-top: 24px;
+  }
+
+  /* На мобилках отключаем шторку, чтобы не ломать скролл */
+  @media(max-width: 1024px) {
+    #estimator { margin-bottom: 0 !important; }
+    #contact { position: relative; height: auto; padding: 80px 6vw 40px; min-height: auto; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-links { justify-content: flex-start; flex-direction: column; gap: 24px; }
+  }
   
 </style>
 </head>
@@ -1364,15 +1510,37 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   </div>
 </section>
 
-<section id="contact">
-  <h2 class="section-title fade">Давайте сделаем<br>что-то новое.</h2>
-  <div class="contacts fade">
-    <a href="https://t.me/mishocheks" target="_blank">Telegram</a>
-    <a href="mailto:mishocheks@internet.ru">Email</a>
+<section id="contact" class="fade">
+  <div class="footer-hero">
+    <h2 class="giant-strike">ДАВАЙТЕ ДЕЛАТЬ ШУМ</h2>
+  </div>
+
+  <div class="footer-grid">
+    <div class="footer-info">
+      <div class="status-tag">
+        <span class="status-pulse"></span> СТУДИЯ ОТКРЫТА ДЛЯ ПРОЕКТОВ
+      </div>
+      <p class="footer-location">Локация: Удаленно / Студия</p>
+      <div class="local-time" id="studioTime">TIME: 00:00:00</div>
+    </div>
+
+    <div class="footer-links">
+      <div class="link-wrapper">
+        <span class="link-label">СВЯЗАТЬСЯ</span>
+        <a href="https://t.me/mishocheks" target="_blank" class="magnetic-link">TG: @mishocheks</a>
+      </div>
+      <div class="link-wrapper">
+        <span class="link-label">ПОЧТА</span>
+        <a href="mailto:mishocheks@internet.ru" class="magnetic-link">mishocheks@internet.ru</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 МИХАИЛ ВЕЩЕВ</span>
+    <span class="footer-meta">DESIGN & CODE IN-HOUSE</span>
   </div>
 </section>
-
-<footer>© 2026 Михаил Вещев</footer>
   
 <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
 <audio id="resultSound" src="result.mp3" preload="auto"></audio>
@@ -1409,7 +1577,6 @@ function resizeEstimatorContainer(targetBlock) {
   if (!container || !targetBlock) return;
 
   container.style.overflow = 'visible';
-
   const currentHeight = container.getBoundingClientRect().height;
   container.style.height = currentHeight + 'px';
 
@@ -1431,6 +1598,8 @@ function resizeEstimatorContainer(targetBlock) {
   setTimeout(() => {
     container.style.height = 'auto';
     container.style.overflow = 'visible';
+    // КРИТИЧЕСКИЙ ФИКС ДЛЯ ШТОРКИ: пересчитываем отступ, когда квиз меняет высоту
+    updateFooterSpacer();
   }, 650);
 }
 
@@ -1683,6 +1852,58 @@ function toggleTrack(audioId, btn) {
     
     // Перезапускаем через секунду на случай, если квиз или плееры рендерились скриптом
     setTimeout(updateCursorHovers, 1000);
+  }
+});
+
+  // === ЛОГИКА ДЛЯ ИНТЕРАКТИВНОГО ФУТЕРА ===
+
+// Автоматический расчет высоты подвала для эффекта шторки
+function updateFooterSpacer() {
+  if (window.innerWidth > 1024) {
+    const contactSection = document.getElementById('contact');
+    const estimatorSection = document.getElementById('estimator');
+    if (contactSection && estimatorSection) {
+      const footerHeight = contactSection.offsetHeight;
+      estimatorSection.style.marginBottom = footerHeight + 'px';
+    }
+  }
+}
+window.addEventListener('resize', updateFooterSpacer);
+window.addEventListener('load', updateFooterSpacer);
+setTimeout(updateFooterSpacer, 1000); // на всякий случай после рендера страницы
+
+// Живые цифровые часы
+function updateStudioTime() {
+  const timeElement = document.getElementById('studioTime');
+  if(timeElement) {
+    const now = new Date();
+    timeElement.innerText = 'TIME: ' + now.toTimeString().split(' ')[0];
+  }
+}
+setInterval(updateStudioTime, 1000);
+updateStudioTime();
+
+// Интерактивный 3D наклон текста "ДАВАЙТЕ ДЕЛАТЬ ШУМ" за мышкой
+window.addEventListener('mousemove', (e) => {
+  const giantText = document.querySelector('.giant-strike');
+  if(giantText) {
+    const depthX = (window.innerWidth / 2 - e.clientX) * 0.015;
+    const depthY = (window.innerHeight / 2 - e.clientY) * 0.015;
+    giantText.style.transform = `rotateY(${depthX}deg) rotateX(${-depthY}deg)`;
+  }
+});
+
+// Добавляем новые ссылки футера в трекер кастомного курсора
+document.addEventListener('DOMContentLoaded', () => {
+  const outline = document.querySelector('.custom-cursor-outline');
+  if (outline) {
+    const addHover = () => outline.classList.add('hovered');
+    const removeHover = () => outline.classList.remove('hovered');
+    
+    document.querySelectorAll('.magnetic-link').forEach(link => {
+      link.addEventListener('mouseenter', addHover);
+      link.addEventListener('mouseleave', removeHover);
+    });
   }
 });
   
