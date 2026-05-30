@@ -471,7 +471,6 @@ audio {
   border-color: rgba(255, 225, 178, 0.15);
 }
 
-/* Базовое состояние кнопки */
 .play-btn {
   width: 42px;
   height: 42px;
@@ -482,45 +481,42 @@ audio {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
   
-  /* Важно: настраиваем очень мягкий тайминг анимации */
+  /* Ультра-плавные переходы */
   transition: 
     transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
     background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
     border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
     box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
     color 0.3s ease;
-  flex-shrink: 0;
-  position: relative;
 }
 
-/* Иконка внутри кнопки */
 .play-icon {
   font-size: 13px;
-  margin-left: 2px;
+  margin-left: 2px; /* Идеальная центровка треугольника */
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
 }
 
-/* Эффект №1: Плавная реакция, когда навели просто на карточку трека */
+/* Эффект №1: Плавная реакция, когда навели просто на саму плашку трека */
 .custom-player:hover .play-btn {
   border-color: var(--glow);
   background: rgba(255, 225, 178, 0.06);
   color: #fff;
 }
 
-/* Эффект №2: Максимальный фокус конкретно на саму кнопку Play */
+/* Эффект №2: Фокус конкретно на саму кнопку Play */
 .play-btn:hover {
   transform: scale(1.08);
   background: var(--glow) !important; /* Кнопка заливается фирменным цветом */
-  color: #0f0d0a !important; /* Текст/иконка становится темной на светлом фоне */
+  color: #0f0d0a !important; /* Иконка становится темной на светлом фоне */
   box-shadow: 
     0 0 20px rgba(255, 225, 178, 0.4),
     0 0 40px rgba(255, 225, 178, 0.1);
   border-color: transparent;
 }
 
-/* Эффект микро-смещения иконки при ховере */
 .play-btn:hover .play-icon {
   transform: scale(1.1);
 }
@@ -529,7 +525,14 @@ audio {
 .play-btn:active {
   transform: scale(0.94);
   box-shadow: 0 0 10px rgba(255, 225, 178, 0.2);
-  transition: transform 0.05s ease; /* Мгновенный отклик на нажатие */
+  transition: transform 0.05s ease;
+}
+
+.player-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .track-title {
@@ -544,7 +547,6 @@ audio {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
-  cursor: pointer;
   position: relative;
 }
 
