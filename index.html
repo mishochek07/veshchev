@@ -1826,28 +1826,12 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
     }
   });
 
-  // ==========================================
-  // 3. АВТОМАТИЧЕСКИЙ ТРЕКЕР АКТИВНОСТИ МУЗЫКИ
-  // ==========================================
-  document.addEventListener('DOMContentLoaded', () => {
-    const glowLayer = document.getElementById('ambientGlow');
-    
-    document.addEventListener('play', (event) => {
-      if (['hoverSound', 'resultSound', 'currencySound'].includes(event.target.id)) return;
-      if (glowLayer) glowLayer.classList.add('active');
-    }, true);
+  <div class="custom-cursor-dot"></div>
+  <div class="custom-cursor-outline"></div>
 
-    const handleStop = (event) => {
-      if (['hoverSound', 'resultSound', 'currencySound'].includes(event.target.id)) return;
-      if (glowLayer) glowLayer.classList.remove('active');
-    };
-
-    document.addEventListener('pause', handleStop, true);
-    document.addEventListener('ended', handleStop, true);
-  });
-
+  <script>
   // ==========================================
-  // 4. БЕЗОПАСНАЯ ЛОГИКА КВИЗА (НЕ ЛОМАЕТ СТРАНИЦУ)
+  // 1. ЛОГИКА КВИЗА (ИНТЕРАКТИВНЫЙ ТЕСТ)
   // ==========================================
   let currentStep = 1;
   const totalSteps = 4;
@@ -1858,21 +1842,47 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
   const symbols = { 'USD': '$', 'EUR': '€', 'RUB': '₽', 'AMD': '֏' };
 
   function updateQuizStep() {
-    // Безопасно скрываем все шаги
+    // Безопасно скрываем все шаги квиза
     for (let i = 1; i <= totalSteps; i++) {
       const stepEl = document.getElementById(`step${i}`);
-      if (stepEl) stepEl.classList.remove('active');
+      if (stepEl) {
+        stepEl.classList.remove('active');
+        stepEl.style.opacity = '0';
+        stepEl.style.transform = 'translateY(15px) scale(0.98)';
+      }
     }
-    const resultEl = document.getElementById('resultBlock');
-    if (resultEl) resultEl.classList.remove('active');
+    
+    const resultBlock = document.getElementById('resultBlock');
+    if (resultBlock) {
+      resultBlock.classList.remove('active');
+      resultBlock.style.opacity = '0';
+      resultBlock.style.transform = 'translateY(15px) scale(0.98)';
+    }
 
-    // Показываем текущий
+    // Показываем текущий шаг
     if (currentStep <= totalSteps) {
       const currentStepEl = document.getElementById(`step${currentStep}`);
-      if (currentStepEl) currentStepEl.classList.add('active');
+      if (currentStepEl) {
+        currentStepEl.classList.add('active');
+        setTimeout(() => {
+          currentStepEl.style.opacity = '1';
+          currentStepEl.style.transform = 'translateY(0) scale(1)';
+        }, 50);
+      }
     } else {
-      if (resultEl) resultEl.classList.add('active');
-      calculateResult();
+      // Если шаги кончились — выводим экран результата
+      if (resultBlock) {
+        resultBlock.classList.add('active');
+        setTimeout(() => {
+          resultBlock.style.opacity = '1';
+          resultBlock.style.transform = 'translateY(0) scale(1)';
+        }, 50);
+        calculateResult();
+        
+        // Воспроизводим звук финиша, если он есть
+        const resSound = document.getElementById('resultSound');
+        if (resSound) resSound.play().catch(()=>{});
+      }
     }
   }
 
@@ -1920,11 +1930,172 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
     }, 200);
   }
 
-  // Запуск первичной проверки при загрузке
-  document.addEventListener('DOMContentLoaded', () => {
-    updateQuizStep();
+  // Переключение валюты в квизе
+  function setCurrency(curr) {
+    selectedCurrency = curr;
     
-    // Привязываем клик к нижней кнопке мини-плеера
+    // Переключаем активный класс на кнопках валют
+    document.querySelectorAll('.currency-tabs button').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    // Находим кликнутую кнопку по тексту или атрибуту
+    const eventTarget = event ? event.target : null;
+    if (eventTarget) eventTarget.classList.add('active');
+    
+    // Играем звук переключения валюты
+    const currSound = document.getElementById('currencySound');
+    if (currSound) currSound.play().catch(()=>{});
+
+    calculateResult();
+  }
+
+
+  // ==========================================
+  // 2. УПРАВЛЕНИЕ АУДИОПЛЕЕРАМИ И МИНИ-ПЛЕЕРОМ
+  // ==========================================
+  let currentActiveAudio = null;
+  let currentActiveButton = null;
+
+  function toggleTrack(audioId, btn) {
+    const audio = document.getElementById(audioId);
+    if (!audio) return;
+    
+    const icon = btn.querySelector('.play-icon');
+    
+    const bottomPlayer = document.getElementById('bottomPlayer');
+    const bpPlayBtn = document.getElementById('bpPlayBtn');
+    const bpTitle = document.getElementById('bpTitle');
+    const bpCategory = document.getElementById('bpCategory');
+    const bpProgress = document.getElementById('bpProgress');
+    
+    // Вытаскиваем метаданные трека
+    const card = btn.closest('.card');
+    const categoryTitle = card && card.querySelector('h3') ? card.querySelector('h3').innerText : 'Production';
+    const titleEl = btn.closest('.custom-player') ? btn.closest('.custom-player').querySelector('.track-title') : null;
+    const trackName = titleEl ? titleEl.innerText : 'Track';
+
+    if (currentActiveAudio === audio) {
+      if (audio.paused) {
+        audio.play().catch(()=>{});
+        if (icon) icon.innerText = '⏸';
+        if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+        const animIcon = document.querySelector('.bp-icon-animate');
+        if (animIcon) animIcon.style.display = 'flex';
+      } else {
+        audio.pause();
+        if (icon) icon.innerText = '▶';
+        if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">▶</span>';
+        const animIcon = document.querySelector('.bp-icon-animate');
+        if (animIcon) animIcon.style.display = 'none';
+      }
+      return;
+    }
+
+    // Если играет другой трек — останавливаем его
+    if (currentActiveAudio) {
+      currentActiveAudio.pause();
+      if (currentActiveButton) {
+        const prevIcon = currentActiveButton.querySelector('.play-icon');
+        if (prevIcon) prevIcon.innerText = '▶';
+      }
+    }
+
+    audio.play().catch(()=>{});
+    if (icon) icon.innerText = '⏸';
+    
+    if (bpTitle) bpTitle.innerText = trackName;
+    if (bpCategory) bpCategory.innerText = categoryTitle;
+    if (bpPlayBtn) bpPlayBtn.innerHTML = '<span class="bp-play-icon">⏸</span>';
+    const animIcon = document.querySelector('.bp-icon-animate');
+    if (animIcon) animIcon.style.display = 'flex';
+    
+    currentActiveAudio = audio;
+    currentActiveButton = btn;
+
+    checkPlayerVisibility();
+
+    if (!audio.dataset.tracked) {
+      audio.addEventListener('timeupdate', () => {
+        const percentage = (audio.currentTime / audio.duration) * 100;
+        const progress = document.getElementById(`progress-${audioId}`);
+        if (progress && audio.duration) progress.style.width = percentage + '%';
+        if (currentActiveAudio === audio && bpProgress) {
+          bpProgress.style.width = percentage + '%';
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        if (icon) icon.innerText = '▶';
+        const progress = document.getElementById(`progress-${audioId}`);
+        if (progress) progress.style.width = '0%';
+        if (bpProgress) bpProgress.style.width = '0%';
+        if (bottomPlayer) bottomPlayer.classList.remove('active');
+        if (currentActiveAudio === audio) {
+          currentActiveAudio = null;
+          currentActiveButton = null;
+        }
+      });
+      audio.dataset.tracked = "true";
+    }
+  }
+
+  function checkPlayerVisibility() {
+    const bottomPlayer = document.getElementById('bottomPlayer');
+    if (!bottomPlayer) return;
+
+    if (!currentActiveAudio || currentActiveAudio.paused) {
+      bottomPlayer.classList.remove('active');
+      return;
+    }
+    
+    const worksSection = document.getElementById('works');
+    if (!worksSection) return;
+    
+    const rect = worksSection.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) {
+      bottomPlayer.classList.add('active');
+    } else {
+      bottomPlayer.classList.remove('active');
+    }
+  }
+
+  window.addEventListener('scroll', checkPlayerVisibility);
+
+
+  // ==========================================
+  // 3. ЭФФЕКТ СВЕЧЕНИЯ СТРАНИЦЫ (AMBIENT GLOW)
+  // ==========================================
+  document.addEventListener('DOMContentLoaded', () => {
+    const glowLayer = document.getElementById('ambientGlow');
+    
+    document.addEventListener('play', (event) => {
+      if (['hoverSound', 'resultSound', 'currencySound'].includes(event.target.id)) return;
+      if (glowLayer) glowLayer.classList.add('active');
+    }, true);
+
+    const handleStop = (event) => {
+      if (['hoverSound', 'resultSound', 'currencySound'].includes(event.target.id)) return;
+      if (glowLayer) glowLayer.classList.remove('active');
+    };
+
+    document.addEventListener('pause', handleStop, true);
+    document.addEventListener('ended', handleStop, true);
+  });
+
+
+  // ==========================================
+  // 4. ТАКТИЛЬНЫЙ КАСТОМНЫЙ КУРСОР И СИСТЕМНЫЕ ЗВУКИ КНОПОК
+  // ==========================================
+  document.addEventListener('DOMContentLoaded', () => {
+    // Первичный запуск квиза
+    updateQuizStep();
+
+    const dot = document.querySelector('.custom-cursor-dot');
+    const outline = document.querySelector('.custom-cursor-outline');
+    const hoverSound = document.getElementById('hoverSound');
+
+    // Клик по нижнему мини-плееру
     const bpPlayBtn = document.getElementById('bpPlayBtn');
     if (bpPlayBtn) {
       bpPlayBtn.addEventListener('click', () => {
@@ -1932,6 +2103,56 @@ body.music-active::after{ opacity:.85; filter:blur(0px); }
           toggleTrack(currentActiveAudio.id, currentActiveButton);
         }
       });
+    }
+
+    if (dot && outline) {
+      let mouseX = -100, mouseY = -100;
+      let outlineX = -100, outlineY = -100;
+      let isMoving = false;
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        if (!isMoving) {
+          dot.style.opacity = '1';
+          outline.style.opacity = '1';
+          isMoving = true;
+        }
+        
+        dot.style.left = mouseX + 'px';
+        dot.style.top = mouseY + 'px';
+      });
+
+      function animateCursor() {
+        outlineX += (mouseX - outlineX) * 0.16;
+        outlineY += (mouseY - outlineY) * 0.16;
+        outline.style.left = outlineX + 'px';
+        outline.style.top = outlineY + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      requestAnimationFrame(animateCursor);
+
+      // Озвучка интерфейса + анимация курсора при ховере
+      function initInterfaceInteractions() {
+        const targets = document.querySelectorAll('a, button, .project-card, .progress-bar, .custom-player, .play-btn, input, select');
+        targets.forEach(target => {
+          target.addEventListener('mouseenter', () => {
+            outline.classList.add('hovered');
+            // Воспроизводим мягкий щелчок интерфейса при наведении
+            if (hoverSound) {
+              hoverSound.currentTime = 0;
+              hoverSound.play().catch(()=>{});
+            }
+          });
+          target.addEventListener('mouseleave', () => {
+            outline.classList.remove('hovered');
+          });
+        });
+      }
+      
+      initInterfaceInteractions();
+      setTimeout(initInterfaceInteractions, 1000);
     }
   });
   </script>
